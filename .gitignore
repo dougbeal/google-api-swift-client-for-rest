@@ -6,3 +6,5 @@ Source/Tools/ServiceGenerator/build
 
 # Any place they exist.
 .DS_Store
+Logs/*
+Output/*
