@@ -21,12 +21,12 @@
 #import "SGUtils.h"
 #import "GTLRUtilities.h"
 
-static NSString *kProjectPrefix         = @"GTLR";
-static NSString *kServiceBaseClass      = @"GTLRService";
-static NSString *kQueryBaseClass        = @"GTLRQuery";
-static NSString *kBaseObjectClass       = @"GTLRObject";
-static NSString *kCollectionObjectClass = @"GTLRCollectionObject";
-static NSString *kResultArrayClass      = @"GTLRResultArray";
+static NSString *kProjectPrefix         = @"";
+static NSString *kServiceBaseClass      = @"Service";
+static NSString *kQueryBaseClass        = @"Query";
+static NSString *kBaseObjectClass       = @"Object";
+static NSString *kCollectionObjectClass = @"CollectionObject";
+static NSString *kResultArrayClass      = @"ResultArray";
 static NSString *kExternPrefix          = @"GTLR_EXTERN";
 static NSString *kFrameworkIncludeGate  = @"GTLR_BUILT_AS_FRAMEWORK";
 
@@ -341,28 +341,19 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
 
   // Generate all the files...
 
-  NSString *serviceHeader = self.serviceHeader;
   NSString *serviceSource = self.serviceSource;
   NSString *serviceFileNameBase = self.objcServiceClassName;
 
-  NSString *queryHeader = self.queryHeader;
   NSString *querySource = self.querySource;
   NSString *queryFileNameBase = self.objcQueryBaseClassName;
 
-  NSString *objectsHeader = self.objectsHeader;
   NSString *objectsSource = self.objectsSource;
   NSString *objectsFileNameBase = self.objcObjectsBaseFileName;
 
-  NSString *umbrellaHeader = [self umbrellaHeader];
-  NSString *umbrellaHeaderName = self.umbrellaHeaderName;
 
   NSDictionary *result = @{
-    umbrellaHeaderName : umbrellaHeader,
-    [serviceFileNameBase stringByAppendingPathExtension:@"h"] : serviceHeader,
     [serviceFileNameBase stringByAppendingPathExtension:@"m"] : serviceSource,
-    [queryFileNameBase stringByAppendingPathExtension:@"h"] : queryHeader,
     [queryFileNameBase stringByAppendingPathExtension:@"m"] : querySource,
-    [objectsFileNameBase stringByAppendingPathExtension:@"h"] : objectsHeader,
     [objectsFileNameBase stringByAppendingPathExtension:@"m"] : objectsSource,
   };
 
@@ -740,6 +731,12 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
   return result;
 }
 
+- (NSString *)serviceEnumName {
+  NSString *result = [NSString stringWithFormat:@"%@%@",
+                      kProjectPrefix, self.formattedAPIName];
+  return result;
+}
+
 - (NSString *)headerVersionCheck {
   NSMutableString *result = [NSMutableString string];
 
@@ -771,7 +768,7 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
     [parts addObjectsFromArray:scopesConstants];
 
     NSMutableString *classHeader = [NSMutableString string];
-    [classHeader appendString:@"// ----------------------------------------------------------------------------\n"];
+    [classHeader appendString:@"// ---------------------------------------------------------------------------- serviceHeader \n"];
     [classHeader appendFormat:@"//   %@\n", self.objcServiceClassName];
     [classHeader appendString:@"//\n"];
     [parts addObject:classHeader];
@@ -833,25 +830,32 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
 
   [parts addObject:[self generatedInfo]];
 
-  NSString *headerImport = [NSString stringWithFormat:@"#import \"%@\"\n",
-                            self.umbrellaHeaderName];
-  [parts addObject:headerImport];
+  // NSString *headerImport = [NSString stringWithFormat:@"#import \"%@\"\n",
+  //                           self.umbrellaHeaderName];
+  // [parts addObject:headerImport];
+
+  NSMutableString *serviceEnum = [NSMutableString string];
+
+  [serviceEnum appendString:@"// ------------------------------------------------------------------ serviceEnum\n"];
+  [serviceEnum appendFormat:@"public enum %@ { /* serviceEnum */ \n", self.serviceEnumName];
+
 
   NSArray *scopesConstants =
     [self oauth2ScopesConstantsBlocksForMode:kGenerateImplementation];
   if (scopesConstants) {
-    [parts addObjectsFromArray:scopesConstants];
+      [serviceEnum appendFormat:@"  public enum Scope {\n"];
+      [serviceEnum appendString: [scopesConstants componentsJoinedByString:@""]];
 
-    NSMutableString *classHeader = [NSMutableString string];
-    [classHeader appendString:@"// ----------------------------------------------------------------------------\n"];
-    [classHeader appendFormat:@"//   %@\n", self.objcServiceClassName];
-    [classHeader appendString:@"//\n"];
-    [parts addObject:classHeader];
+    // NSMutableString *classHeader = [NSMutableString string];
+    // [classHeader appendString:@"// ------------------------------------------------------------------ serviceSource\n"];
+    // [classHeader appendFormat:@"//   %@\n", self.objcServiceClassName];
+    // [classHeader appendString:@"//\n"];
+    [serviceEnum appendFormat:@"  } // Scope\n"];    
+    // [parts addObject:classHeader];
 }
 
-  NSString *interfaceDecl = [NSString stringWithFormat:@"@implementation %@\n",
-                             self.objcServiceClassName];
-  [parts addObject:interfaceDecl];
+
+  //[parts addObject:interfaceDecl];
 
   NSString *rootURLString = [self.api sg_cleanedRootURLString];
   NSString *servicePath = self.api.servicePath;
@@ -881,45 +885,41 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
   NSString *simpleUploadPath = self.api.sg_simpleUploadPath;
 
   // Provide -init to set the default values.
-  NSMutableString *initMethod = [NSMutableString string];
-  [initMethod appendString:@"- (instancetype)init {\n"];
-  [initMethod appendString:@"  self = [super init];\n"];
-  [initMethod appendString:@"  if (self) {\n"];
+  NSMutableString *initMethod = serviceEnum;
   if ((rootURLString.length > 0) || (servicePath.length > 0) ||
       (resumableUploadPath.length > 0) || (simpleUploadPath.length > 0) ||
       (batchPath.length > 0)) {
     [initMethod appendString:@"    // From discovery.\n"];
     if (rootURLString.length) {
-      [initMethod appendFormat:@"    self.rootURLString = @\"%@\";\n", rootURLString];
+      [initMethod appendFormat:@"  public static let rootURLString = \"%@\";\n", rootURLString];
     }
     if (servicePath.length) {
-      [initMethod appendFormat:@"    self.servicePath = @\"%@\";\n", servicePath];
+      [initMethod appendFormat:@"  public static let servicePath = \"%@\";\n", servicePath];
     }
     if (resumableUploadPath.length) {
-      [initMethod appendFormat:@"    self.resumableUploadPath = @\"%@\";\n", resumableUploadPath];
+      [initMethod appendFormat:@"  public static let resumableUploadPath = \"%@\";\n", resumableUploadPath];
     }
     if (simpleUploadPath.length) {
-      [initMethod appendFormat:@"    self.simpleUploadPath = @\"%@\";\n", simpleUploadPath];
+      [initMethod appendFormat:@"  public static let simpleUploadPath = \"%@\";\n", simpleUploadPath];
     }
     if (batchPath.length) {
-      [initMethod appendFormat:@"    self.batchPath = @\"%@\";\n", batchPath];
+      [initMethod appendFormat:@"  public static let batchPath = \"%@\";\n", batchPath];
     }
   }
   NSArray *prettyPrintParams = [self apiPrettyPrintQueryParamNames];
   if (prettyPrintParams.count > 0) {
-    [initMethod appendFormat:@"    self.prettyPrintQueryParameterNames = @[ @\"%@\" ];\n",
-     [prettyPrintParams componentsJoinedByString:@"\", @\""]];
+    [initMethod appendFormat:@"  public static let prettyPrintQueryParameterNames = @[ \"%@\" ];\n",
+     [prettyPrintParams componentsJoinedByString:@"\", \""]];
   }
   if ([self.api.features containsObject:@"dataWrapper"]) {
     [initMethod appendString:@"\n"];
-    [initMethod appendString:@"    // This service uses the 'data' wrapper on results.\n"];
-    [initMethod appendString:@"    self.dataWrapperRequired = YES;\n"];
+    [initMethod appendString:@"  // This service uses the 'data' wrapper on results.\n"];
+    [initMethod appendString:@"  public static let dataWrapperRequired = YES;\n"];
   }
-  [initMethod appendString:@"  }\n"];
-  [initMethod appendString:@"  return self;\n"];
-  [initMethod appendString:@"}\n"];
-  [parts addObject:initMethod];
 
+
+  [serviceEnum appendFormat:@"} /* enum %@ */\n", self.serviceEnumName];  
+  [parts addObject:serviceEnum];  
   // Build up the kind mappings.
   NSMutableDictionary *kindMap = [NSMutableDictionary dictionary];
   NSMutableDictionary *overloadedKindMap = [NSMutableDictionary dictionary];
@@ -1236,9 +1236,9 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
   [parts addObject:[self generatedInfo]];
 
   NSMutableString *apiImports = [NSMutableString string];
-  [apiImports appendFormat:@"#import \"%@.h\"\n", self.objcObjectsBaseFileName];
-  [apiImports appendFormat:@"#import \"%@.h\"\n", self.objcQueryBaseClassName];
-  [apiImports appendFormat:@"#import \"%@.h\"\n", self.objcServiceClassName];
+  [apiImports appendFormat:@"//#import \"%@.h\"\n", self.objcObjectsBaseFileName];
+  [apiImports appendFormat:@"//#import \"%@.h\"\n", self.objcQueryBaseClassName];
+  [apiImports appendFormat:@"//#import \"%@.h\"\n", self.objcServiceClassName];
   [parts addObject:apiImports];
 
   NSString *result = [parts componentsJoinedByString:@"\n"];
@@ -2630,11 +2630,11 @@ static NSString *MappedParamName(NSString *name) {
   }
 
   NSMutableString *header = [NSMutableString string];
-  [header appendString:@"// ----------------------------------------------------------------------------\n"];
+  [header appendString:@"    // ---------------------------------------------------------------- header\n"];
   if (authScopesMap.count > 1) {
-    [header appendString:@"// Authorization scopes\n"];
+    [header appendString:@"    // Authorization scopes\n"];
   } else {
-    [header appendString:@"// Authorization scope\n"];
+    [header appendString:@"    // Authorization scope\n"];
   }
 
   NSMutableArray *subParts = [NSMutableArray array];
@@ -2667,7 +2667,7 @@ static NSString *MappedParamName(NSString *name) {
          kExternPrefix, name];
     } else {
       aScope =
-        [NSString stringWithFormat:@"NSString * const %-*s = @\"%@\";\n",
+        [NSString stringWithFormat:@"    case %*s: =\"%@\";\n",
          (int)maxLen, name.UTF8String, scope];
     }
 
@@ -2754,8 +2754,8 @@ static NSString *MappedParamName(NSString *name) {
 - (NSString *)authorizationScopeToConstant:(NSString *)scope {
   NSString *result = nil;
 
-  NSString *prefix = [NSString stringWithFormat:@"k%@AuthScope%@",
-                      kProjectPrefix, self.formattedAPIName];
+  NSString *prefix = [NSString stringWithFormat:@"%@",
+                      self.formattedAPIName];
 
   NSString *scopeName;
   NSRange lastSlash = [scope rangeOfString:@"/" options:NSBackwardsSearch];
