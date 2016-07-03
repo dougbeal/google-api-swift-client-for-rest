@@ -344,6 +344,9 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
   NSString *serviceSource = self.serviceSource;
   NSString *serviceFileNameBase = self.objcServiceClassName;
 
+  NSString *serviceNetworkSource = self.serviceNetworkSource;
+  NSString *serviceNetworkFileNameBase = [self.objcServiceClassName stringByAppendingString:@"+Moya"];
+
   NSString *querySource = self.querySource;
   NSString *queryFileNameBase = self.objcQueryBaseClassName;
 
@@ -352,9 +355,10 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
 
 
   NSDictionary *result = @{
-    [serviceFileNameBase stringByAppendingPathExtension:@"m"] : serviceSource,
-    [queryFileNameBase stringByAppendingPathExtension:@"m"] : querySource,
-    [objectsFileNameBase stringByAppendingPathExtension:@"m"] : objectsSource,
+    [serviceFileNameBase stringByAppendingPathExtension:@"swift"] : serviceSource,
+    [serviceNetworkFileNameBase stringByAppendingPathExtension:@"swift"] : serviceNetworkSource,    
+    [queryFileNameBase stringByAppendingPathExtension:@"swift"] : querySource,
+    [objectsFileNameBase stringByAppendingPathExtension:@"swift"] : objectsSource,
   };
 
   // Report any infos/warnings added during generation.
@@ -918,8 +922,7 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
   }
 
 
-  [serviceEnum appendFormat:@"} /* enum %@ */\n", self.serviceEnumName];  
-  [parts addObject:serviceEnum];  
+
   // Build up the kind mappings.
   NSMutableDictionary *kindMap = [NSMutableDictionary dictionary];
   NSMutableDictionary *overloadedKindMap = [NSMutableDictionary dictionary];
@@ -969,7 +972,8 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
       for (GTLRDiscovery_JsonSchema *schema in schemaSortedByKind) {
         NSString *kind = schema.sg_kindToRegister;
         if ([overloadedKindMap objectForKey:kind] == nil) {
-          [kindMappingsMethod appendFormat:@"    @\"%@\" : [%@ class],\n", kind, schema.sg_objcClassName];
+            [serviceEnum appendFormat:@"    enum %@ { // %@\n", schema.sg_objcClassName, kind];
+          [serviceEnum appendFormat:@"    } // %@ %@\n", schema.sg_objcClassName, kind];          
         } else {
           NSArray *overloadedSchema = [overloadedKindMap objectForKey:kind];
           NSArray *classNames = [overloadedSchema valueForKey:@"sg_objcClassName"];
@@ -997,6 +1001,99 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
   }
 
   [parts addObject:@"@end\n"];
+  [serviceEnum appendFormat:@"} /* enum %@ */\n", self.serviceEnumName];  
+  [parts addObject:serviceEnum];  
+  return [parts componentsJoinedByString:@"\n"];
+}
+
+// Generates the service networking body.
+- (NSString *)serviceNetworkSource {
+  NSMutableArray *parts = [NSMutableArray array];
+
+  [parts addObject:[self generatedInfo]];
+
+  NSMutableString *serviceEnum = [NSMutableString string];
+
+  [serviceEnum appendString:@"// ------------------------------------------------------------------ serviceEnum\n"];
+  //[serviceEnum appendFormat:@"extension %@ { /* Moya extension to serviceEnum */ \n", self.serviceEnumName];
+
+  
+  // Build up the kind mappings.
+  NSMutableDictionary *kindMap = [NSMutableDictionary dictionary];
+  NSMutableDictionary *overloadedKindMap = [NSMutableDictionary dictionary];
+  for (GTLRDiscovery_JsonSchema *schema in self.api.sg_allSchemas) {
+    NSString *kindToRegister = schema.sg_kindToRegister;
+    if (!kindToRegister) continue;
+
+    // Some services end up with >1 class using the same kind string. So there
+    // is no way to make a registry for that.
+    GTLRDiscovery_JsonSchema *otherSchema = [kindMap objectForKey:kindToRegister];
+    if (otherSchema) {
+      NSMutableArray *worker = [overloadedKindMap objectForKey:kindToRegister];
+      if (!worker) {
+        worker = [NSMutableArray arrayWithObject:otherSchema];
+        [overloadedKindMap setObject:worker forKey:kindToRegister];
+      }
+      [worker addObject:schema];
+      continue;
+    }
+    [kindMap setObject:schema forKey:kindToRegister];
+  }
+  if (kindMap.count) {
+    NSMutableString *kindMappingsMethod = [NSMutableString string];
+    if (kindMap.count == overloadedKindMap.count) {
+      NSString *rawComment =
+        @"Not generating a +kindMappings method to register the kind strings"
+        @" because they are not unique per class.";
+      [kindMappingsMethod sg_appendWrappedLinesFromString:rawComment
+                                               linePrefix:@"// "];
+
+      NSArray *sortedKinds =
+        [overloadedKindMap.allKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+      for (NSString *kind in sortedKinds) {
+        NSArray *overloadedSchema = [overloadedKindMap objectForKey:kind];
+        NSArray *classNames = [overloadedSchema valueForKey:@"sg_objcClassName"];
+        NSArray *sortedClassNames =
+          [classNames sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+        [kindMappingsMethod appendFormat:@"    //   \"%@\"\n", kind];
+        for (NSString *className in sortedClassNames) {
+          [kindMappingsMethod appendFormat:@"    //     %@\n", className];
+        }
+      }
+    } else {
+        //[kindMappingsMethod appendString:@"+ (NSDictionary<`NSString *, Class> *)kindStringToClassMap {\n"];
+        //[kindMappingsMethod appendString:@"  return @{\n"];
+        NSArray *schemaSortedByKind = DictionaryObjectsSortedByKeys(kindMap);
+      for (GTLRDiscovery_JsonSchema *schema in schemaSortedByKind) {
+        NSString *kind = schema.sg_kindToRegister;
+        if ([overloadedKindMap objectForKey:kind] == nil) {
+            [serviceEnum appendFormat:@"extension %@.%@: TargetType { // %@\n", self.serviceEnumName, schema.sg_objcClassName, kind];
+          [serviceEnum appendFormat:@"    public var baseURL: NSURL { \n"];
+          [serviceEnum appendFormat:@"        return NSURL(string: %@.rootURLString)\n", self.serviceEnumName];
+          [serviceEnum appendFormat:@"    } \n"];          
+          [serviceEnum appendFormat:@"} // %@ %@\n", schema.sg_objcClassName, kind];          
+        } else {
+          NSArray *overloadedSchema = [overloadedKindMap objectForKey:kind];
+          NSArray *classNames = [overloadedSchema valueForKey:@"sg_objcClassName"];
+          NSArray *sortedClassNames =
+            [classNames sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+          [kindMappingsMethod appendFormat:@"    // Skipping \"%@\", was used on multiple classes:\n", kind];
+          for (NSString *className in sortedClassNames) {
+            [kindMappingsMethod appendFormat:@"    //     %@\n", className];
+          }
+
+          NSArray *schemaNames = [overloadedSchema valueForKey:@"sg_fullSchemaName"];
+          NSString *warning =
+            [NSString stringWithFormat:@"Won't add the kind '%@' to the kind registry: it is used on multiple schema: %@",
+             kind, [schemaNames componentsJoinedByString:@", "]];
+          [self addWarning:warning];
+        }
+      }
+    }
+  }
+
+  [serviceEnum appendFormat:@"} /* enum %@ */\n", self.serviceEnumName];  
+  [parts addObject:serviceEnum];    
 
   return [parts componentsJoinedByString:@"\n"];
 }
@@ -1201,9 +1298,6 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
 
   [parts addObject:[self generatedInfo]];
 
-  NSString *headerImport = [NSString stringWithFormat:@"#import \"%@.h\"\n",
-                            self.objcObjectsBaseFileName];
-  [parts addObject:headerImport];
 
   NSArray *blocks = [self constantsBlocksForMode:kGenerateImplementation
                                         enumsMap:self.api.sg_objectEnumsMap
@@ -1325,7 +1419,7 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
             [[allNeededClasses allObjects] sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
           NSMutableArray *atClasses = [NSMutableArray array];
           for (NSString *className in sortedAllNeededClasses) {
-            NSString *aLine = [NSString stringWithFormat:@"@class %@;\n", className];
+            NSString *aLine = [NSString stringWithFormat:@"public class %@ {\n", className];
             [atClasses addObject:aLine];
           }
           [aBlock addObject:[atClasses componentsJoinedByString:@""]];
@@ -1501,7 +1595,7 @@ static NSString *MappedParamName(NSString *name) {
       NSString *methodImpl = [SGUtils classMapForMethodNamed:@"parameterNameMap"
                                                        pairs:pairs
                                                  quoteValues:YES
-                                                valueTypeStr:@"NSString *"];
+                                                valueTypeStr:@"String"];
       [parts addObject:@"\n"];
       [parts addObject:methodImpl];
     }
@@ -1524,7 +1618,7 @@ static NSString *MappedParamName(NSString *name) {
           itemsClassName = @"NSObject";
         }
         NSString *getClassStr =
-          [NSString stringWithFormat:@"[%@ class]", itemsClassName];
+          [NSString stringWithFormat:@"%@", itemsClassName];
         [pairs setObject:getClassStr forKey:param.sg_name];
       }
     }
@@ -1666,7 +1760,7 @@ static NSString *MappedParamName(NSString *name) {
     [builder appendFormat:@"@interface %@ : %@\n", self.objcQueryBaseClassName, kQueryBaseClass];
     atBlock = builder;
   } else {
-    atBlock = [NSString stringWithFormat:@"@implementation %@\n",
+    atBlock = [NSString stringWithFormat:@"public class %@ {\n",
                self.objcQueryBaseClassName];
   }
   [parts addObject:atBlock];
@@ -1679,7 +1773,8 @@ static NSString *MappedParamName(NSString *name) {
   }
 
   // Close the base query.
-  [parts addObject:@"@end\n"];
+  [parts addObject:[NSString stringWithFormat:@"} // %@\n",
+                             self.objcQueryBaseClassName]];
 
   // Loop over all the query methods.
   for (GTLRDiscovery_RestMethod *method in self.api.sg_allMethods) {
@@ -2097,11 +2192,11 @@ static NSString *MappedParamName(NSString *name) {
         [self addWarning:msg];
       }
 
-      [methodStr appendFormat:@"  NSString *pathURITemplate = @\"%@\";\n", methodPath];
-      [methodStr appendFormat:@"  %@ *query =\n", [self objcQueryClassName:method]];
-      [methodStr appendString:@"    [[self alloc] initWithPathURITemplate:pathURITemplate\n"];
+      [methodStr appendFormat:@"  let pathURITemplate: String = @\"%@\";\n", methodPath];
+      [methodStr appendFormat:@"  let query = %@(\n", [self objcQueryClassName:method]];
+      [methodStr appendString:@"    initWithPathURITemplate:pathURITemplate\n"];
       [methodStr appendFormat:@"                               HTTPMethod:%@\n", httpMethod];
-      [methodStr appendFormat:@"                       pathParameterNames:%@];\n", pathParamsValue];
+      [methodStr appendFormat:@"                       pathParameterNames:%@)\n", pathParamsValue];
 
       if (doesQueryTakeObject) {
         [methodStr appendString:@"  query.bodyObject = object;\n"];
@@ -2113,7 +2208,7 @@ static NSString *MappedParamName(NSString *name) {
           if (param.required.boolValue) {
             NSString *name = param.sg_objcName;
             NSString *nameAsValue = MappedParamName(name);
-            [methodStr appendFormat:@"  query.%@ = %@;\n", name, nameAsValue];
+            [methodStr appendFormat:@"  query.%@ = %@\n", name, nameAsValue];
           }
         }
       }
@@ -2137,7 +2232,7 @@ static NSString *MappedParamName(NSString *name) {
          returnsSchema.sg_objcClassName];
       }
 
-      [methodStr appendFormat:@"  query.loggingName = @\"%@\";\n", method.identifier];
+      [methodStr appendFormat:@"  query.loggingName = \"%@\";\n", method.identifier];
       [methodStr appendString:@"  return query;\n}\n"];
     }
 
@@ -2192,7 +2287,7 @@ static NSString *MappedParamName(NSString *name) {
       if (method.useMediaDownloadService.boolValue) {
         [downloadMethodStr appendString:@"  query.useMediaDownloadService = YES;\n"];
       }
-      [downloadMethodStr appendFormat:@"  query.loggingName = @\"Download %@\";\n", method.identifier];
+      [downloadMethodStr appendFormat:@"  query.loggingName = \"Download %@\";\n", method.identifier];
       [downloadMethodStr appendString:@"  return query;\n}\n"];
     }
 
@@ -2524,7 +2619,7 @@ static NSString *MappedParamName(NSString *name) {
       NSString *methodImpl = [SGUtils classMapForMethodNamed:@"propertyToJSONKeyMap"
                                                        pairs:pairs
                                                  quoteValues:YES
-                                                valueTypeStr:@"NSString *"];
+                                                valueTypeStr:@"String"];
       [methodParts addObject:methodImpl];
     }
 
@@ -2702,14 +2797,11 @@ static NSString *MappedParamName(NSString *name) {
   for (NSString *constantsGroup in constantsGroups) {
     NSDictionary *enumGroup = [enumsMap objectForKey:constantsGroup];
 
-    NSString *commentLine = [NSString stringWithFormat:@"// %@\n", constantsGroup];
-    if (mode == kGenerateInterface) {
-      [subParts addObject:@"// ----------------------------------------------------------------------------\n"];
-      [subParts addObject:commentLine];
-      [subParts addObject:@"\n"];
-    } else {
-      [subParts addObject:commentLine];
-    }
+    NSString *enumName = [SGUtils objcName:constantsGroup shouldCapitalize:YES];
+    NSString *enumLine = [NSString stringWithFormat:@"enum %@ {\n", enumName];
+
+    [subParts addObject:enumLine];
+
 
     NSArray *names =
       [enumGroup.allKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
@@ -2734,12 +2826,14 @@ static NSString *MappedParamName(NSString *name) {
                 kExternPrefix, name];
 
       } else {
-        line = [NSString stringWithFormat:@"NSString * const %-*s = @\"%@\";\n",
+        line = [NSString stringWithFormat:@"    case %*s: = \"%@\"\n",
                 (int)maxLen, name.UTF8String, value];
       }
 
       [subParts addObject:line];
     }
+    NSString *enumEnd = [NSString stringWithFormat:@"} // enum %@\n", enumName];
+    [subParts addObject:enumEnd];    
 
     [result addObject:[subParts componentsJoinedByString:@""]];
     [subParts removeAllObjects];
