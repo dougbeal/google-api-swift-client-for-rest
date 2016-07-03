@@ -341,23 +341,31 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
 
   // Generate all the files...
 
+  NSString *serviceHeader = self.serviceHeader;
   NSString *serviceSource = self.serviceSource;
   NSString *serviceFileNameBase = self.objcServiceClassName;
 
   NSString *serviceNetworkSource = self.serviceNetworkSource;
   NSString *serviceNetworkFileNameBase = [self.objcServiceClassName stringByAppendingString:@"+Moya"];
 
+  NSString *queryHeader = self.queryHeader;
   NSString *querySource = self.querySource;
   NSString *queryFileNameBase = self.objcQueryBaseClassName;
 
+  NSString *objectsHeader = self.objectsHeader;
   NSString *objectsSource = self.objectsSource;
   NSString *objectsFileNameBase = self.objcObjectsBaseFileName;
 
 
   NSDictionary *result = @{
+    [serviceFileNameBase stringByAppendingPathExtension:@"h"] : serviceHeader,
     [serviceFileNameBase stringByAppendingPathExtension:@"swift"] : serviceSource,
     [serviceNetworkFileNameBase stringByAppendingPathExtension:@"swift"] : serviceNetworkSource,
+
+    [queryFileNameBase stringByAppendingPathExtension:@"h"] : queryHeader,    
     [queryFileNameBase stringByAppendingPathExtension:@"swift"] : querySource,
+
+    [objectsFileNameBase stringByAppendingPathExtension:@"h"] : objectsHeader,    
     [objectsFileNameBase stringByAppendingPathExtension:@"swift"] : objectsSource,
   };
 
