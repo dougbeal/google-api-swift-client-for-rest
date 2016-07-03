@@ -356,7 +356,7 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
 
   NSDictionary *result = @{
     [serviceFileNameBase stringByAppendingPathExtension:@"swift"] : serviceSource,
-    [serviceNetworkFileNameBase stringByAppendingPathExtension:@"swift"] : serviceNetworkSource,    
+    [serviceNetworkFileNameBase stringByAppendingPathExtension:@"swift"] : serviceNetworkSource,
     [queryFileNameBase stringByAppendingPathExtension:@"swift"] : querySource,
     [objectsFileNameBase stringByAppendingPathExtension:@"swift"] : objectsSource,
   };
@@ -847,14 +847,14 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
   NSArray *scopesConstants =
     [self oauth2ScopesConstantsBlocksForMode:kGenerateImplementation];
   if (scopesConstants) {
-      [serviceEnum appendFormat:@"  public enum Scope {\n"];
+      [serviceEnum appendFormat:@"    public enum Scope {\n"];
       [serviceEnum appendString: [scopesConstants componentsJoinedByString:@""]];
 
     // NSMutableString *classHeader = [NSMutableString string];
     // [classHeader appendString:@"// ------------------------------------------------------------------ serviceSource\n"];
     // [classHeader appendFormat:@"//   %@\n", self.objcServiceClassName];
     // [classHeader appendString:@"//\n"];
-    [serviceEnum appendFormat:@"  } // Scope\n"];    
+    [serviceEnum appendFormat:@"    } // Scope\n"];
     // [parts addObject:classHeader];
 }
 
@@ -895,30 +895,30 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
       (batchPath.length > 0)) {
     [initMethod appendString:@"    // From discovery.\n"];
     if (rootURLString.length) {
-      [initMethod appendFormat:@"  public static let rootURLString = \"%@\";\n", rootURLString];
+      [initMethod appendFormat:@"    public static let rootURLString = \"%@\";\n", rootURLString];
     }
     if (servicePath.length) {
-      [initMethod appendFormat:@"  public static let servicePath = \"%@\";\n", servicePath];
+      [initMethod appendFormat:@"    public static let servicePath = \"%@\";\n", servicePath];
     }
     if (resumableUploadPath.length) {
-      [initMethod appendFormat:@"  public static let resumableUploadPath = \"%@\";\n", resumableUploadPath];
+      [initMethod appendFormat:@"    public static let resumableUploadPath = \"%@\";\n", resumableUploadPath];
     }
     if (simpleUploadPath.length) {
-      [initMethod appendFormat:@"  public static let simpleUploadPath = \"%@\";\n", simpleUploadPath];
+      [initMethod appendFormat:@"    public static let simpleUploadPath = \"%@\";\n", simpleUploadPath];
     }
     if (batchPath.length) {
-      [initMethod appendFormat:@"  public static let batchPath = \"%@\";\n", batchPath];
+      [initMethod appendFormat:@"    public static let batchPath = \"%@\";\n", batchPath];
     }
   }
   NSArray *prettyPrintParams = [self apiPrettyPrintQueryParamNames];
   if (prettyPrintParams.count > 0) {
-    [initMethod appendFormat:@"  public static let prettyPrintQueryParameterNames = @[ \"%@\" ];\n",
+    [initMethod appendFormat:@"    public static let prettyPrintQueryParameterNames = @[ \"%@\" ];\n",
      [prettyPrintParams componentsJoinedByString:@"\", \""]];
   }
   if ([self.api.features containsObject:@"dataWrapper"]) {
     [initMethod appendString:@"\n"];
-    [initMethod appendString:@"  // This service uses the 'data' wrapper on results.\n"];
-    [initMethod appendString:@"  public static let dataWrapperRequired = YES;\n"];
+    [initMethod appendString:@"    // This service uses the 'data' wrapper on results.\n"];
+    [initMethod appendString:@"    public static let dataWrapperRequired = YES;\n"];
   }
 
 
@@ -967,13 +967,13 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
       }
     } else {
       [kindMappingsMethod appendString:@"+ (NSDictionary<NSString *, Class> *)kindStringToClassMap {\n"];
-      [kindMappingsMethod appendString:@"  return @{\n"];
+      [kindMappingsMethod appendString:@"    return @{\n"];
       NSArray *schemaSortedByKind = DictionaryObjectsSortedByKeys(kindMap);
       for (GTLRDiscovery_JsonSchema *schema in schemaSortedByKind) {
         NSString *kind = schema.sg_kindToRegister;
         if ([overloadedKindMap objectForKey:kind] == nil) {
-            [serviceEnum appendFormat:@"    enum %@ { // %@\n", schema.sg_objcClassName, kind];
-          [serviceEnum appendFormat:@"    } // %@ %@\n", schema.sg_objcClassName, kind];          
+            [serviceEnum appendFormat:@"    public enum %@ { // %@\n", schema.sg_objcClassName, kind];
+          [serviceEnum appendFormat:@"    } // %@ %@\n", schema.sg_objcClassName, kind];
         } else {
           NSArray *overloadedSchema = [overloadedKindMap objectForKey:kind];
           NSArray *classNames = [overloadedSchema valueForKey:@"sg_objcClassName"];
@@ -991,7 +991,7 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
           [self addWarning:warning];
         }
       }
-      [kindMappingsMethod appendString:@"  };\n"];
+      [kindMappingsMethod appendString:@"    };\n"];
       [kindMappingsMethod appendString:@"}\n"];
 
     }
@@ -1001,8 +1001,8 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
   }
 
   [parts addObject:@"@end\n"];
-  [serviceEnum appendFormat:@"} /* enum %@ */\n", self.serviceEnumName];  
-  [parts addObject:serviceEnum];  
+  [serviceEnum appendFormat:@"} /* enum %@ */\n", self.serviceEnumName];
+  [parts addObject:serviceEnum];
   return [parts componentsJoinedByString:@"\n"];
 }
 
@@ -1017,7 +1017,7 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
   [serviceEnum appendString:@"// ------------------------------------------------------------------ serviceEnum\n"];
   //[serviceEnum appendFormat:@"extension %@ { /* Moya extension to serviceEnum */ \n", self.serviceEnumName];
 
-  
+
   // Build up the kind mappings.
   NSMutableDictionary *kindMap = [NSMutableDictionary dictionary];
   NSMutableDictionary *overloadedKindMap = [NSMutableDictionary dictionary];
@@ -1062,7 +1062,7 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
       }
     } else {
         //[kindMappingsMethod appendString:@"+ (NSDictionary<`NSString *, Class> *)kindStringToClassMap {\n"];
-        //[kindMappingsMethod appendString:@"  return @{\n"];
+        //[kindMappingsMethod appendString:@"    return @{\n"];
         NSArray *schemaSortedByKind = DictionaryObjectsSortedByKeys(kindMap);
       for (GTLRDiscovery_JsonSchema *schema in schemaSortedByKind) {
         NSString *kind = schema.sg_kindToRegister;
@@ -1070,8 +1070,8 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
             [serviceEnum appendFormat:@"extension %@.%@: TargetType { // %@\n", self.serviceEnumName, schema.sg_objcClassName, kind];
           [serviceEnum appendFormat:@"    public var baseURL: NSURL { \n"];
           [serviceEnum appendFormat:@"        return NSURL(string: %@.rootURLString)\n", self.serviceEnumName];
-          [serviceEnum appendFormat:@"    } \n"];          
-          [serviceEnum appendFormat:@"} // %@ %@\n", schema.sg_objcClassName, kind];          
+          [serviceEnum appendFormat:@"    } \n"];
+          [serviceEnum appendFormat:@"} // %@ %@\n", schema.sg_objcClassName, kind];
         } else {
           NSArray *overloadedSchema = [overloadedKindMap objectForKey:kind];
           NSArray *classNames = [overloadedSchema valueForKey:@"sg_objcClassName"];
@@ -1092,8 +1092,8 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
     }
   }
 
-  [serviceEnum appendFormat:@"} /* enum %@ */\n", self.serviceEnumName];  
-  [parts addObject:serviceEnum];    
+  [serviceEnum appendFormat:@"} /* enum %@ */\n", self.serviceEnumName];
+  [parts addObject:serviceEnum];
 
   return [parts componentsJoinedByString:@"\n"];
 }
@@ -1808,7 +1808,7 @@ static NSString *MappedParamName(NSString *name) {
         NSArray *sortedConstants =
           [scopeConstants sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
         for (NSString *scopeConstant in sortedConstants) {
-          [classHDoc appendUnwrappedFormat:@"  %@ %@", classHDoc.atC, scopeConstant];
+          [classHDoc appendUnwrappedFormat:@"    %@ %@", classHDoc.atC, scopeConstant];
         }
       }
 
@@ -2128,7 +2128,7 @@ static NSString *MappedParamName(NSString *name) {
         if (paramChecks.count > 0) {
           // Now build the multiline "if (..) {"
           NSString *paramCheckStr = [SGUtils stringOfLinesFromStrings:paramChecks
-                                                      firstLinePrefix:@"  if ("
+                                                      firstLinePrefix:@"    if ("
                                                      extraLinesPrefix:@"      "
                                                           linesSuffix:@" ||"
                                                        lastLineSuffix:@") {"
@@ -2138,7 +2138,7 @@ static NSString *MappedParamName(NSString *name) {
           [methodStr appendString:[assertLines componentsJoinedByString:@""]];
 
           [methodStr appendString:@"    return nil;\n"];
-          [methodStr appendString:@"  }\n"];
+          [methodStr appendString:@"    }\n"];
         }
       }
 
@@ -2162,10 +2162,10 @@ static NSString *MappedParamName(NSString *name) {
       NSString *pathParamsValue;
       if (pathParamNames.count != 0) {
         if (pathParamNames.count == 1) {
-          [methodStr appendFormat:@"  NSArray *pathParams = @[ @\"%@\" ];\n",
+          [methodStr appendFormat:@"    NSArray *pathParams = @[ @\"%@\" ];\n",
            pathParamNames[0]];
         } else {
-          [methodStr appendString:@"  NSArray *pathParams = @[\n"];
+          [methodStr appendString:@"    NSArray *pathParams = @[\n"];
           NSString *pathParamsNamesAsLines = [SGUtils stringOfLinesFromStrings:pathParamNames
                                                                firstLinePrefix:@"    @\""
                                                               extraLinesPrefix:@"    @\""
@@ -2173,7 +2173,7 @@ static NSString *MappedParamName(NSString *name) {
                                                                 lastLineSuffix:@"\""
                                                                  elementJoiner:@"\", @\""];
           [methodStr appendString:pathParamsNamesAsLines];
-          [methodStr appendString:@"  ];\n"];
+          [methodStr appendString:@"    ];\n"];
         }
         pathParamsValue = @"pathParams";
       } else {
@@ -2192,14 +2192,14 @@ static NSString *MappedParamName(NSString *name) {
         [self addWarning:msg];
       }
 
-      [methodStr appendFormat:@"  let pathURITemplate: String = @\"%@\";\n", methodPath];
-      [methodStr appendFormat:@"  let query = %@(\n", [self objcQueryClassName:method]];
+      [methodStr appendFormat:@"    let pathURITemplate: String = @\"%@\";\n", methodPath];
+      [methodStr appendFormat:@"    let query = %@(\n", [self objcQueryClassName:method]];
       [methodStr appendString:@"    initWithPathURITemplate:pathURITemplate\n"];
       [methodStr appendFormat:@"                               HTTPMethod:%@\n", httpMethod];
       [methodStr appendFormat:@"                       pathParameterNames:%@)\n", pathParamsValue];
 
       if (doesQueryTakeObject) {
-        [methodStr appendString:@"  query.bodyObject = object;\n"];
+        [methodStr appendString:@"    query.bodyObject = object;\n"];
       }
 
       // Handle required params.
@@ -2208,32 +2208,32 @@ static NSString *MappedParamName(NSString *name) {
           if (param.required.boolValue) {
             NSString *name = param.sg_objcName;
             NSString *nameAsValue = MappedParamName(name);
-            [methodStr appendFormat:@"  query.%@ = %@\n", name, nameAsValue];
+            [methodStr appendFormat:@"    query.%@ = %@\n", name, nameAsValue];
           }
         }
       }
 
       if (supportsMediaUpload) {
-        [methodStr appendString:@"  query.uploadParameters = uploadParameters;\n"];
+        [methodStr appendString:@"    query.uploadParameters = uploadParameters;\n"];
         NSString *resumableUploadPathOverride = method.sg_resumableUploadPathOverride;
         if (resumableUploadPathOverride.length > 0) {
-          [methodStr appendFormat:@"  query.resumableUploadPathURITemplateOverride = \"%@\";\n",
+          [methodStr appendFormat:@"    query.resumableUploadPathURITemplateOverride = \"%@\";\n",
            resumableUploadPathOverride];
         }
         NSString *simpleUploadPathOverride = method.sg_simpleUploadPathOverride;
         if (simpleUploadPathOverride.length > 0) {
-          [methodStr appendFormat:@"  query.simpleUploadPathURITemplateOverride = \"%@\";\n",
+          [methodStr appendFormat:@"    query.simpleUploadPathURITemplateOverride = \"%@\";\n",
            simpleUploadPathOverride];
         }
       }
 
       if (returnsSchema) {
-        [methodStr appendFormat:@"  query.expectedObjectClass = [%@ class];\n",
+        [methodStr appendFormat:@"    query.expectedObjectClass = [%@ class];\n",
          returnsSchema.sg_objcClassName];
       }
 
-      [methodStr appendFormat:@"  query.loggingName = \"%@\";\n", method.identifier];
-      [methodStr appendString:@"  return query;\n}\n"];
+      [methodStr appendFormat:@"    query.loggingName = \"%@\";\n", method.identifier];
+      [methodStr appendString:@"    return query;\n}\n"];
     }
 
     if (methodStr) {
@@ -2242,7 +2242,7 @@ static NSString *MappedParamName(NSString *name) {
 
     if ((mode == kGenerateImplementation) && (downloadMethodStr.length > 0)) {
       [downloadMethodStr appendString:@" {\n"];
-      [downloadMethodStr appendFormat:@"  %@ *query =\n", [self objcQueryClassName:method]];
+      [downloadMethodStr appendFormat:@"    %@ *query =\n", [self objcQueryClassName:method]];
 
       NSString *firstLine = @"    [self query";
       [downloadMethodStr appendString:firstLine];
@@ -2283,12 +2283,12 @@ static NSString *MappedParamName(NSString *name) {
       }
       [downloadMethodStr appendString:@"];\n"];
 
-      [downloadMethodStr appendString:@"  query.downloadAsDataObjectType = @\"media\";\n"];
+      [downloadMethodStr appendString:@"    query.downloadAsDataObjectType = @\"media\";\n"];
       if (method.useMediaDownloadService.boolValue) {
-        [downloadMethodStr appendString:@"  query.useMediaDownloadService = YES;\n"];
+        [downloadMethodStr appendString:@"    query.useMediaDownloadService = YES;\n"];
       }
-      [downloadMethodStr appendFormat:@"  query.loggingName = \"Download %@\";\n", method.identifier];
-      [downloadMethodStr appendString:@"  return query;\n}\n"];
+      [downloadMethodStr appendFormat:@"    query.loggingName = \"Download %@\";\n", method.identifier];
+      [downloadMethodStr appendString:@"    return query;\n}\n"];
     }
 
     if (downloadMethodStr.length > 0) {
@@ -2459,7 +2459,7 @@ static NSString *MappedParamName(NSString *name) {
       if (comment == nil) {
         comment = @"";
       } else {
-        comment = [@"  // " stringByAppendingString:comment];
+        comment = [@"    // " stringByAppendingString:comment];
       }
       NSString *propertyLine = [NSString stringWithFormat:@"@property(%@, readonly) %@%@%@;%@\n",
                                 objcPropertySemantics, objcType,
@@ -2483,7 +2483,7 @@ static NSString *MappedParamName(NSString *name) {
       }
       NSMutableString *itemsMethod = [NSMutableString string];
       [itemsMethod appendString:@"- (NSArray *)items {\n"];
-      [itemsMethod appendFormat:@"  return [self itemsWithItemClass:[%@ class]];\n",
+      [itemsMethod appendFormat:@"    return [self itemsWithItemClass:[%@ class]];\n",
                                 objcType];
       [itemsMethod appendString:@"}\n"];
       [methodParts addObject:itemsMethod];
@@ -2660,9 +2660,9 @@ static NSString *MappedParamName(NSString *name) {
     if (schema.sg_isLikelyInvalidUseOfKind) {
       NSString *blockKindMethod =
           @"+ (BOOL)isKindValidForClassRegistry {\n"
-          @"  // This class has a \"kind\" property that doesn't appear to be usable to\n"
-          @"  // determine what type of object was encoded in the JSON.\n"
-          @"  return NO;\n"
+          @"    // This class has a \"kind\" property that doesn't appear to be usable to\n"
+          @"    // determine what type of object was encoded in the JSON.\n"
+          @"    return NO;\n"
           @"}\n";
       [methodParts addObject:blockKindMethod];
     }
@@ -2673,7 +2673,7 @@ static NSString *MappedParamName(NSString *name) {
     if (![collectionItemsKey isEqual:defaultCollectionItemsKey]) {
       NSMutableString *collectionItemsKeyMethod = [NSMutableString string];
       [collectionItemsKeyMethod appendString:@"+ (NSString *)collectionItemsKey {\n"];
-      [collectionItemsKeyMethod appendFormat:@"  return @\"%@\";\n", collectionItemsKey];
+      [collectionItemsKeyMethod appendFormat:@"    return @\"%@\";\n", collectionItemsKey];
       [collectionItemsKeyMethod appendString:@"}\n"];
 
       [methodParts addObject:collectionItemsKeyMethod];
@@ -2694,7 +2694,7 @@ static NSString *MappedParamName(NSString *name) {
 
     NSMutableString *method = [NSMutableString string];
     [method appendString:@"+ (Class)classForAdditionalProperties {\n"];
-    [method appendFormat:@"  return [%@ class];\n", objcType];
+    [method appendFormat:@"    return [%@ class];\n", objcType];
     [method appendString:@"}\n"];
     [methodParts addObject:method];
   }
@@ -2784,7 +2784,7 @@ static NSString *MappedParamName(NSString *name) {
   NSMutableString *header = [NSMutableString string];
   [header appendString:@"// ----------------------------------------------------------------------------\n"];
   if (commentExtra.length > 0) {
-    [header appendFormat:@"// Constants - %@\n", commentExtra];
+    [header appendFormat:@"// Constants - %@ @%@\n", commentExtra, NSS];
   } else {
     [header appendString:@"// Constants\n"];
   }
@@ -2798,7 +2798,7 @@ static NSString *MappedParamName(NSString *name) {
     NSDictionary *enumGroup = [enumsMap objectForKey:constantsGroup];
 
     NSString *enumName = [SGUtils objcName:constantsGroup shouldCapitalize:YES];
-    NSString *enumLine = [NSString stringWithFormat:@"enum %@ {\n", enumName];
+    NSString *enumLine = [NSString stringWithFormat:@"public enum %@ {\n", enumName];
 
     [subParts addObject:enumLine];
 
@@ -2833,7 +2833,7 @@ static NSString *MappedParamName(NSString *name) {
       [subParts addObject:line];
     }
     NSString *enumEnd = [NSString stringWithFormat:@"} // enum %@\n", enumName];
-    [subParts addObject:enumEnd];    
+    [subParts addObject:enumEnd];
 
     [result addObject:[subParts componentsJoinedByString:@""]];
     [subParts removeAllObjects];
@@ -2892,9 +2892,9 @@ static NSString *MappedParamName(NSString *name) {
     [result appendFormat:@"#import <%@/%@.h>\n", self.frameworkName, headerName];
   } else {
     [result appendFormat:@"#if %@\n", kFrameworkIncludeGate];
-    [result appendFormat:@"  #import \"%@/%@.h\"\n", kProjectPrefix, headerName];
+    [result appendFormat:@"    #import \"%@/%@.h\"\n", kProjectPrefix, headerName];
     [result appendString:@"#else\n"];
-    [result appendFormat:@"  #import \"%@.h\"\n", headerName];
+    [result appendFormat:@"    #import \"%@.h\"\n", headerName];
     [result appendString:@"#endif\n"];
   }
 
@@ -4589,3 +4589,7 @@ static SGTypeInfo *LookupTypeInfo(NSString *typeString,
 }
 
 @end
+// Local Variables:
+// tab-width: 2
+// c-basic-offset: 2
+// End:
