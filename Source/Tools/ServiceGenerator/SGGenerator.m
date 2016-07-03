@@ -2455,10 +2455,13 @@ static NSString *MappedParamName(NSString *name) {
     atBlock = [NSString stringWithFormat:@"@interface %@ : %@\n",
                schemaClassName, baseClass];
   } else {
-    atBlock = [NSString stringWithFormat:@"@implementation %@\n",
+    atBlock = [NSString stringWithFormat:@"public struct %@ {\n",
                schemaClassName];
   }
+  NSString *locator = [NSString stringWithFormat:@"// fn %@ %s:%i \n", NSStringFromSelector(_cmd), __FILE__, __LINE__];
   [parts addObject:atBlock];
+  [parts addObject:locator];
+  
 
   // For the rare cases where a method returns an array directly, generate a
   // special result object that just has -items to get the contents of the
@@ -2723,7 +2726,9 @@ static NSString *MappedParamName(NSString *name) {
   }
 
   // Close it up.
-  [parts addObject:@"@end\n"];
+  NSString *closeBlock = [NSString stringWithFormat:@"} // struct %@ \n",
+               schemaClassName];
+  [parts addObject:closeBlock];
 
   return [parts componentsJoinedByString:@""];
 }
