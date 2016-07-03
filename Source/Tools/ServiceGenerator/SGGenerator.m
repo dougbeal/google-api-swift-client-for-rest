@@ -181,7 +181,7 @@ static NSString *ConstantName(NSString *grouping, NSString *name) {
 
   NSString *formattedName = [SGUtils objcName:name shouldCapitalize:YES];
   NSString *result =
-    [NSString stringWithFormat:@"k%@%@", grouping, formattedName];
+    [NSString stringWithFormat:@"%@%@", grouping, formattedName];
   return result;
 }
 
@@ -708,7 +708,7 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
 }
 
 - (NSString *)objcServiceClassName {
-  NSString *result = [NSString stringWithFormat:@"%@%@Service",
+  NSString *result = [NSString stringWithFormat:@"%@%@",
                       kProjectPrefix, self.formattedAPIName];
   return result;
 }
@@ -3047,15 +3047,15 @@ static NSString *MappedParamName(NSString *name) {
                   format:@"Collecting enum values, %@ needed group name '%@', but it is already in use.",
        schema.sg_fullSchemaName, groupName];
     }
-    NSString *groupPrefix =
-      [NSString stringWithFormat:@"%@_%@_", groupBase, groupLeafCap];
+    //NSString *groupPrefix =
+    //  [NSString stringWithFormat:@"%@_%@_", groupBase, groupLeafCap];
     NSMutableDictionary *groupMap = [NSMutableDictionary dictionary];
     [worker setObject:groupMap forKey:groupName];
     NSArray *enumDescriptions = schema.enumDescriptions;
     for (NSUInteger i = 0; i < enumProperty.count; ++i) {
       NSString *enumValue = enumProperty[i];
       NSString *enumDescription = (i < enumDescriptions.count ? enumDescriptions[i] : @"");
-      NSString *constName = ConstantName(groupPrefix, enumValue);
+      NSString *constName = ConstantName(@""/*groupPrefix*/, enumValue);
       [groupMap setObject:@[ enumValue, enumDescription ]
                    forKey:constName];
     }
@@ -3849,8 +3849,8 @@ static NSString *OverrideName(NSString *name, EQueryOrObject queryOrObject,
     NSArray *parts = [resolvedSchema sg_fullSchemaPath:YES foldArrayItems:YES];
     NSString *fullName = [parts componentsJoinedByString:@""];
 
-    result = [NSString stringWithFormat:@"%@%@_%@",
-              kProjectPrefix, self.sg_generator.formattedAPIName, fullName];
+    result = [NSString stringWithFormat:@"%@",
+                       /*kProjectPrefix, self.sg_generator.formattedAPIName,*/ fullName];
 
     [resolvedSchema sg_setProperty:result forKey:kSchemaObjCClassNameKey];
   }
@@ -4090,11 +4090,11 @@ static NSString *OverrideName(NSString *name, EQueryOrObject queryOrObject,
 }
 
 - (NSString *)sg_constantNamed:(NSString *)name {
-  NSString *group = [NSString stringWithFormat:@"%@%@%@",
-                     kProjectPrefix,
-                     self.sg_generator.formattedAPIName,
-                     self.sg_capObjCName];
-  NSString *result = ConstantName(group, name);
+  // NSString *group = [NSString stringWithFormat:@"%@%@%@",
+  //                    kProjectPrefix,
+  //                    self.sg_generator.formattedAPIName,
+  //                    self.sg_capObjCName];
+  NSString *result = ConstantName(@""/*group*/, name);
   return result;
 }
 
@@ -4120,40 +4120,40 @@ typedef struct {
 
 static SGTypeFormatMapping kObjectParameterMappings[] = {
   // http://code.google.com/apis/discovery/v1/reference.html#type-and-format-summary
-  { @"any", nil,             { @"id", NO, @"strong", @"Can be any valid JSON type." },
-                             { @"id", NO, @"strong", @"Can be any valid JSON type." } },
+  { @"any", nil,             { @"Any", NO, @"strong", @"Can be any valid JSON type." },
+                             { @"Any", NO, @"strong", @"Can be any valid JSON type." } },
 
-  { @"array", nil,           { @"NSArray", YES, @"strong", nil },
-                             { @"NSArray", YES, @"strong", nil } },
+  { @"array", nil,           { @"Array", YES, @"strong", nil },
+                             { @"Array", YES, @"strong", nil } },
 
-  { @"boolean", nil,         { @"NSNumber", YES, @"strong", @"Uses NSNumber of boolValue." },
-                             { @"BOOL", NO, @"assign", nil } },
+  { @"boolean", nil,         { @"Bool", YES, @"strong", @"Uses NSNumber of boolValue." },
+                             { @"Bool", NO, @"assign", nil } },
 
-  { @"integer", @"int32",    { @"NSNumber", YES, @"strong", @"Uses NSNumber of intValue." },
-                             { @"NSInteger", NO, @"assign", nil } },
-  { @"integer", @"uint32",   { @"NSNumber", YES, @"strong", @"Uses NSNumber of unsignedIntValue." },
-                             { @"NSUInteger", NO, @"assign", nil } },
+  { @"integer", @"int32",    { @"Int32", YES, @"strong", @"Uses NSNumber of intValue." },
+                             { @"Int32", NO, @"assign", nil } },
+  { @"integer", @"uint32",   { @"UInt32", YES, @"strong", @"Uses NSNumber of unsignedIntValue." },
+                             { @"UInt32", NO, @"assign", nil } },
 
-  { @"number", @"double",    { @"NSNumber", YES, @"strong", @"Uses NSNumber of doubleValue." },
-                             { @"double", NO, @"assign", nil } },
-  { @"number", @"float",     { @"NSNumber", YES, @"strong", @"Uses NSNumber of floatValue." },
-                             { @"float", NO, @"assign", nil } },
+  { @"number", @"double",    { @"Double", YES, @"strong", @"Uses NSNumber of doubleValue." },
+                             { @"Double", NO, @"assign", nil } },
+  { @"number", @"float",     { @"Float", YES, @"strong", @"Uses NSNumber of floatValue." },
+                             { @"Flaot", NO, @"assign", nil } },
 
   { @"object", nil,          { kUseItemsClass, YES, @"strong", nil },
                              { kUseItemsClass, YES, @"strong", nil } },
 
-  { @"string", @"byte",      { @"NSString", YES, @"copy", @"Contains encoded binary data; GTLRBase64 can encode/decode (probably web-safe format)." },
-                             { @"NSString", YES, @"copy", @"Contains encoded binary data; GTLRBase64 can encode/decode (probably web-safe format)." } },
+  { @"string", @"byte",      { @"String", YES, @"copy", @"Contains encoded binary data; GTLRBase64 can encode/decode (probably web-safe format)." },
+                             { @"String", YES, @"copy", @"Contains encoded binary data; GTLRBase64 can encode/decode (probably web-safe format)." } },
   { @"string", @"date",      { @"GTLRDateTime", YES, @"strong", @"Date only (yyyy-mm-dd)."},
                              { @"GTLRDateTime", YES, @"strong", @"Date only (yyyy-mm-dd)."} },
   { @"string", @"date-time", { @"GTLRDateTime", YES, @"strong", nil },
                              { @"GTLRDateTime", YES, @"strong", nil }},
-  { @"string", @"int64",     { @"NSNumber", YES, @"strong", @"Uses NSNumber of longLongValue." },
-                             { @"long long", NO, @"assign", nil } },
-  { @"string", @"uint64",    { @"NSNumber", YES, @"strong", @"Uses NSNumber of unsignedLongLongValue." },
-                             { @"unsigned long long", NO, @"assign", nil } },
-  { @"string", nil,          { @"NSString", YES, @"copy", nil },
-                             { @"NSString", YES, @"copy", nil } },
+  { @"string", @"int64",     { @"Int64", YES, @"strong", @"Uses NSNumber of longLongValue." },
+                             { @"Int64", NO, @"assign", nil } },
+  { @"string", @"uint64",    { @"UInt64", YES, @"strong", @"Uses NSNumber of unsignedLongLongValue." },
+                             { @"UInt64", NO, @"assign", nil } },
+  { @"string", nil,          { @"String", YES, @"copy", nil },
+                             { @"String", YES, @"copy", nil } },
   // This should be the same as "date-time".
   { @"string", @"google-datetime", { @"GTLRDateTime", YES, @"strong", nil },
                                    { @"GTLRDateTime", YES, @"strong", nil }},
@@ -4245,13 +4245,13 @@ static SGTypeInfo *LookupTypeInfo(NSString *typeString,
       // objcType is already "NSArray", and there's no need for a generic
       // since it can hold anything.
     } else {
-      *objcType = [NSString stringWithFormat:@"NSArray<%@ *>", itemsObjCType];
+      *objcType = [NSString stringWithFormat:@"Array<%@>", itemsObjCType];
       if ((itemsComment.length > 0) && comment) {
         *comment = itemsComment;
       }
     }
     while (--depth > 0) {
-      *objcType = [NSString stringWithFormat:@"NSArray<%@ *>", *objcType];
+      *objcType = [NSString stringWithFormat:@"Array<%@>", *objcType];
     }
   }
 }
@@ -4326,12 +4326,12 @@ static SGTypeInfo *LookupTypeInfo(NSString *typeString,
 
     if ([localItemsClassName isEqual:@"id"]) {
       // Accepts anything, no need for generics.
-      *objcType = @"NSArray";
-    } else {
-      *objcType = [NSString stringWithFormat:@"NSArray<%@ *>", localItemsClassName];
+      *objcType = @"Array";
+  } else {
+      *objcType = [NSString stringWithFormat:@"Array<%@>", localItemsClassName];
     }
     while (--depth > 0) {
-      *objcType = [NSString stringWithFormat:@"NSArray<%@ *>", *objcType];
+      *objcType = [NSString stringWithFormat:@"Array<%@>", *objcType];
     }
 
   } else {
