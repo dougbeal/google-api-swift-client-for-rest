@@ -772,7 +772,7 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
     [parts addObjectsFromArray:scopesConstants];
 
     NSMutableString *classHeader = [NSMutableString string];
-    [classHeader appendString:@"// ---------------------------------------------------------------------------- serviceHeader \n"];
+    [classHeader appendString:@"// ----------------------------------------------------------------------- serviceHeader \n"];
     [classHeader appendFormat:@"//   %@\n", self.objcServiceClassName];
     [classHeader appendString:@"//\n"];
     [parts addObject:classHeader];
@@ -840,8 +840,9 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
 
   NSMutableString *serviceEnum = [NSMutableString string];
 
-  [serviceEnum appendString:@"// ------------------------------------------------------------------ serviceEnum\n"];
-  [serviceEnum appendFormat:@"public enum %@ { /* serviceEnum */ \n", self.serviceEnumName];
+  [serviceEnum appendFormat:@"// ------------------------------------------------------------------ \n"];
+  [serviceEnum appendFormat:@"// fn %@ %s:%i \n", NSStringFromSelector(_cmd), __FILE__, __LINE__];
+  [serviceEnum appendFormat:@"public enum %@ { /* %@ */ \n", self.serviceEnumName, NSStringFromSelector(_cmd)];
 
 
   NSArray *scopesConstants =
@@ -851,7 +852,7 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
       [serviceEnum appendString: [scopesConstants componentsJoinedByString:@""]];
 
     // NSMutableString *classHeader = [NSMutableString string];
-    // [classHeader appendString:@"// ------------------------------------------------------------------ serviceSource\n"];
+    // [classHeader appendString:@"// ------------------------------------------------------------- serviceSource\n"];
     // [classHeader appendFormat:@"//   %@\n", self.objcServiceClassName];
     // [classHeader appendString:@"//\n"];
     [serviceEnum appendFormat:@"    } // Scope\n"];
@@ -894,6 +895,7 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
       (resumableUploadPath.length > 0) || (simpleUploadPath.length > 0) ||
       (batchPath.length > 0)) {
     [initMethod appendString:@"    // From discovery.\n"];
+    [initMethod appendFormat:@"    // fn %@ %s:%i \n", NSStringFromSelector(_cmd), __FILE__, __LINE__];
     if (rootURLString.length) {
       [initMethod appendFormat:@"    public static let rootURLString = \"%@\";\n", rootURLString];
     }
@@ -972,7 +974,9 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
       for (GTLRDiscovery_JsonSchema *schema in schemaSortedByKind) {
         NSString *kind = schema.sg_kindToRegister;
         if ([overloadedKindMap objectForKey:kind] == nil) {
-            [serviceEnum appendFormat:@"    public enum %@ { // %@\n", schema.sg_objcClassName, kind];
+          [serviceEnum appendFormat:@"    // fn %@ %s:%i \n", NSStringFromSelector(_cmd), __FILE__, __LINE__];
+          [serviceEnum appendFormat:@"    public enum %@ { // %@ %@\n", schema.sg_objcClassName, kind, NSStringFromSelector(_cmd)];
+
           [serviceEnum appendFormat:@"    } // %@ %@\n", schema.sg_objcClassName, kind];
         } else {
           NSArray *overloadedSchema = [overloadedKindMap objectForKey:kind];
@@ -1014,7 +1018,8 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
 
   NSMutableString *serviceEnum = [NSMutableString string];
 
-  [serviceEnum appendString:@"// ------------------------------------------------------------------ serviceEnum\n"];
+  [serviceEnum appendFormat:@"// ------------------------------------------------------------- %@\n", NSStringFromSelector(_cmd)];
+  [serviceEnum appendFormat:@"// fn %@ %s:%i \n", NSStringFromSelector(_cmd), __FILE__, __LINE__];
   //[serviceEnum appendFormat:@"extension %@ { /* Moya extension to serviceEnum */ \n", self.serviceEnumName];
 
 
@@ -1142,7 +1147,8 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
     [parts addObjectsFromArray:blocks];
 
     NSMutableString *header = [NSMutableString string];
-    [header appendString:@"// ----------------------------------------------------------------------------\n"];
+    [header appendFormat:@"// ----------------------------------------------------------------------- %@\n", NSStringFromSelector(_cmd)];
+    [header appendFormat:@"// fn %@ %s:%i \n", NSStringFromSelector(_cmd), __FILE__, __LINE__];
     [header appendString:@"// Query Classes\n"];
     [header appendString:@"//\n"];
     [parts addObject:header];
@@ -1208,7 +1214,8 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
     [parts addObjectsFromArray:blocks];
 
     NSMutableString *header = [NSMutableString string];
-    [header appendString:@"// ----------------------------------------------------------------------------\n"];
+    [header appendFormat:@"// ----------------------------------------------------------------------- %@\n", NSStringFromSelector(_cmd)];
+    [header appendFormat:@"// fn %@ %s:%i \n", NSStringFromSelector(_cmd), __FILE__, __LINE__];
     [header appendString:@"// Query Classes\n"];
     [header appendString:@"//\n"];
     [parts addObject:header];
@@ -1345,7 +1352,7 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
 
   [generatedInfo addObject:@"// NOTE: This file was generated by the ServiceGenerator.\n"];
   [generatedInfo addObject:@"\n"];
-  [generatedInfo addObject:@"// ----------------------------------------------------------------------------\n"];
+  [generatedInfo addObject:@"// ----------------------------------------------------------------------- \n"];
   [generatedInfo addObject:@"// API:\n"];
   NSString *serviceLine = nil;
   if (self.api.title.length > 0) {
@@ -2419,7 +2426,8 @@ static NSString *MappedParamName(NSString *name) {
     [parts addObject:hd.string];
   } else {
     NSMutableString *classHeader = [NSMutableString string];
-    [classHeader appendString:@"// ----------------------------------------------------------------------------\n"];
+    [classHeader appendFormat:@"// ----------------------------------------------------------------------- %@\n", NSStringFromSelector(_cmd)];
+    [classHeader appendFormat:@"// fn %@ %s:%i \n", NSStringFromSelector(_cmd), __FILE__, __LINE__];
     [classHeader appendString:@"//\n"];
     [classHeader appendFormat:@"//   %@\n", schemaClassName];
     [classHeader appendString:@"//\n"];
@@ -2672,7 +2680,7 @@ static NSString *MappedParamName(NSString *name) {
     NSString *defaultCollectionItemsKey = [GTLRCollectionObject collectionItemsKey];
     if (![collectionItemsKey isEqual:defaultCollectionItemsKey]) {
       NSMutableString *collectionItemsKeyMethod = [NSMutableString string];
-      [collectionItemsKeyMethod appendString:@"+ (NSString *)collectionItemsKey {\n"];
+      [collectionItemsKeyMethod appendFormat:@"+ (NSString *)collectionItemsKey {\n"];
       [collectionItemsKeyMethod appendFormat:@"    return @\"%@\";\n", collectionItemsKey];
       [collectionItemsKeyMethod appendString:@"}\n"];
 
@@ -2731,7 +2739,7 @@ static NSString *MappedParamName(NSString *name) {
   } else {
     [header appendString:@"    // Authorization scope\n"];
   }
-
+  [header appendFormat:@"// fn %@ %s:%i \n", NSStringFromSelector(_cmd), __FILE__, __LINE__];
   NSMutableArray *subParts = [NSMutableArray array];
 
   NSArray *sortedNames =
@@ -2782,12 +2790,13 @@ static NSString *MappedParamName(NSString *name) {
   NSMutableArray *result = [NSMutableArray array];
 
   NSMutableString *header = [NSMutableString string];
-  [header appendString:@"// ----------------------------------------------------------------------------\n"];
+  [header appendString:@"// -----------------------------------------------------------------------\n"];
   if (commentExtra.length > 0) {
-    [header appendFormat:@"// Constants - %@ @%@\n", commentExtra, NSS];
+    [header appendFormat:@"// Constants - %@ @%@\n", commentExtra, NSStringFromSelector(_cmd)];
   } else {
-    [header appendString:@"// Constants\n"];
+    [header appendFormat:@"// Constants - %@\n", NSStringFromSelector(_cmd)];
   }
+  [header appendFormat:@"// fn %@ %s:%i \n", NSStringFromSelector(_cmd), __FILE__, __LINE__];
   [result addObject:header];
 
   NSArray *constantsGroups =
@@ -2798,7 +2807,8 @@ static NSString *MappedParamName(NSString *name) {
     NSDictionary *enumGroup = [enumsMap objectForKey:constantsGroup];
 
     NSString *enumName = [SGUtils objcName:constantsGroup shouldCapitalize:YES];
-    NSString *enumLine = [NSString stringWithFormat:@"public enum %@ {\n", enumName];
+
+    NSString *enumLine = [NSString stringWithFormat:@"public enum %@ { /* %@ */\n", enumName, NSStringFromSelector(_cmd)];
 
     [subParts addObject:enumLine];
 
