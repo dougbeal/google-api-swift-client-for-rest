@@ -2468,9 +2468,7 @@ static NSString *MappedParamName(NSString *name) {
   // array.  The rest of the logic after this block is basically a no-op as
   // there are no properties on this schema.
   if (isTopLevelArrayResult) {
-    if (mode == kGenerateInterface) {
 
-    } else {
       NSString *objcType = nil, *objcPropertySemantics = nil, *comment = nil;
       BOOL asPtr = NO;
       [schema sg_getObjectParamObjCType:&objcType
@@ -2510,15 +2508,13 @@ static NSString *MappedParamName(NSString *name) {
                                 objcType];
       [itemsMethod appendString:@"}\n"];
       [methodParts addObject:itemsMethod];
-    }
   }
 
   NSArray *properties = DictionaryObjectsSortedByKeys(schema.properties.additionalProperties);
   if (properties.count) {
-    // Write out the property support (GTLRObject will fill them in at runtime).
-    if (mode == kGenerateInterface) {
+      NSMutableString *enumBody = [NSMutableString string];  
+      // Write out the property support (GTLRObject will fill them in at runtime).
 
-    } else {
       // Put a blank line around any property that gets comments to make them
       // a little more readable.
       NSMutableArray *subParts = [NSMutableArray array];
@@ -2538,26 +2534,33 @@ static NSString *MappedParamName(NSString *name) {
           [hd queueAppend:propertyObjCName];
         }
 
-        NSDictionary *enumMap = [property sg_propertyForKey:kEnumMapKey];
-        if (enumMap) {
-          [hd appendBlankLine];
-          [hd append:@"Likely values:"];
-          NSArray *constantsNames =
-            [enumMap.allKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-          for (NSString *name in constantsNames) {
-            NSArray *pair = [enumMap objectForKey:name];
-            NSString *value = [pair objectAtIndex:0];
-            NSString *desc = [pair objectAtIndex:1];
-            if (desc.length > 0) {
-              [hd appendArg:name
-                     format:@"%@ (Value: \"%@\")", desc, value];
-            } else {
-              [hd appendArg:name
-                     format:@"Value \"%@\"", value];
+        NSDictionary *typeMap = [property sg_propertyForKey:kEnumMapKey];
+        if (typeMap) {
+            NSArray *allTypes = [typeMap.allKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+            for (NSString* type in allTypes) {
+                NSDictionary *enumMap = [typeMap objectForKey:type];
+                if (enumMap) {
+                    [hd appendBlankLine];
+                    [hd append:@"Likely values:"];
+                    [enumBody stringByAppendingFormat:@"    public enum %@ {\n", type];
+                    NSArray *constantsNames =
+                        [enumMap.allKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+                    for (NSString *name in constantsNames) {
+                        NSArray *pair = [enumMap objectForKey:name];
+                        NSString *value = [pair objectAtIndex:0];
+                        NSString *desc = [pair objectAtIndex:1];
+                        if (desc.length > 0) {
+                            [hd appendArg:name
+                                   format:@"%@ (Value: \"%@\")", desc, value];
+                        } else {
+                            [hd appendArg:name
+                                   format:@"Value \"%@\"", value];
+                        }
+                    }
+                }
             }
-          }
         }
-
+        [parts addObject:enumBody];
         if (isCollectionClass && [collectionItemsKey isEqual:propertyObjCName]) {
           [hd appendBlankLine];
           [hd appendNote:
@@ -2619,15 +2622,6 @@ static NSString *MappedParamName(NSString *name) {
         [subParts addObject:@"\n"];
       }
       [parts addObject:[subParts componentsJoinedByString:@""]];        
-      // NSArray *propertiesObjCNames = [properties valueForKey:@"sg_objcName"];
-      // NSString *asLines = [SGUtils stringOfLinesFromStrings:propertiesObjCNames
-      //                                       firstLinePrefix:@"@dynamic "
-      //                                      extraLinesPrefix:@"         "
-      //                                           linesSuffix:@","
-      //                                        lastLineSuffix:@";"
-      //                                         elementJoiner:@", "];
-      // [parts addObject:asLines];
-    }
   }  // if (properties.count)
 
   if (properties.count && (mode == kGenerateImplementation)) {
@@ -2796,6 +2790,54 @@ static NSString *MappedParamName(NSString *name) {
   }
   NSString *body = [subParts componentsJoinedByString:@""];
   return @[ header, body ];
+}
+
+- (NSArray *)constantsGroup:(NSString *)constantsGroup
+                   enumsMap:(NSDictionary *)enumsMap
+                       commentExtra:(NSString *)commentExtra {
+    if (enumsMap.count == 0) {
+    return nil;
+  }
+
+  NSMutableArray *result = [NSMutableArray array];
+
+  NSMutableString *header = [NSMutableString string];
+  [header appendFormat:@"    // fn %@ %s:%i \n", NSStringFromSelector(_cmd), __FILE__, __LINE__];
+  [result addObject:header];
+
+  NSMutableArray *subParts = [NSMutableArray array];
+
+  NSDictionary *enumGroup = [enumsMap objectForKey:constantsGroup];
+  
+  NSString *enumName = [SGUtils objcName:constantsGroup shouldCapitalize:YES];
+
+  NSString *enumLine = [NSString stringWithFormat:@"public enum %@ { /* %@ */\n", enumName, NSStringFromSelector(_cmd)];
+
+  [subParts addObject:enumLine];
+
+
+  NSArray *names =
+      [enumGroup.allKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
+  NSNumber *maxLenNum = [names valueForKeyPath:@"@max.length"];
+  NSUInteger maxLen = maxLenNum.unsignedIntegerValue;
+  if (maxLen > 45) maxLen = 45;
+
+  for (__strong NSString *name in names) {
+      NSArray *pair = [enumGroup objectForKey:name];
+      NSString *value = [pair objectAtIndex:0];
+      NSString *desc = [pair objectAtIndex:1];
+      NSString *line;
+      line = [NSString stringWithFormat:@"        case %*s: = \"%@\"/* %@ */\n",
+                       (int)maxLen, name.UTF8String, value, desc];
+      [subParts addObject:line];
+  }
+  NSString *enumEnd = [NSString stringWithFormat:@"    } // enum %@\n", enumName];
+  [subParts addObject:enumEnd];
+  
+  [result addObject:[subParts componentsJoinedByString:@""]];
+  [subParts removeAllObjects];
+
+  return result;
 }
 
 - (NSArray *)constantsBlocksForMode:(GeneratorMode)mode
@@ -3172,13 +3214,15 @@ static NSString *MappedParamName(NSString *name) {
     //NSString *groupPrefix =
     //  [NSString stringWithFormat:@"%@_%@_", groupBase, groupLeafCap];
     NSMutableDictionary *groupMap = [NSMutableDictionary dictionary];
-    [worker setObject:groupMap forKey:groupName];
+    NSMutableDictionary *typeMap = [NSMutableDictionary dictionary];
+    [worker setObject:groupMap forKey:groupBase];
+    [groupMap setObject:typeMap forKey:groupLeaf];
     NSArray *enumDescriptions = schema.enumDescriptions;
     for (NSUInteger i = 0; i < enumProperty.count; ++i) {
       NSString *enumValue = enumProperty[i];
       NSString *enumDescription = (i < enumDescriptions.count ? enumDescriptions[i] : @"");
       NSString *constName = ConstantName(@""/*groupPrefix*/, enumValue);
-      [groupMap setObject:@[ enumValue, enumDescription ]
+      [typeMap setObject:@[ enumValue, enumDescription ]
                    forKey:constName];
     }
     [schema sg_setProperty:groupMap forKey:kEnumMapKey];
@@ -3688,7 +3732,8 @@ static NSDictionary *OverrideMap(EQueryOrObject queryOrObject,
         }
     }
     // Map etag to be nicer, but it doesn't need any reason in the comments.
-    [builderMappings setObject:@"ETag" forKey:@"etag"];
+    //[builderMappings setObject:@"ETag" forKey:@"etag"];
+    
     // uncessary in swift
     // We remap "id" to identifier, so we also have to remap "identifier".
     // [builderMappings setObject:@"identifier" forKey:@"id"];
