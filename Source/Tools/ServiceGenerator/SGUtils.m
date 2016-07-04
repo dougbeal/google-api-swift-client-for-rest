@@ -449,34 +449,33 @@ static const NSUInteger kMaxWidth = 80;
   NSString *valueBefore = @"";
   NSString *valueAfter = @"";
   if (quoteValues) {
-    valueBefore = @"@\"";
+    valueBefore = @"\"";
     valueAfter = @"\"";
   }
 
   NSString *genericsInfo;
   if (valueTypeStr.length > 0) {
-    genericsInfo = [NSString stringWithFormat:@"<NSString *, %@>", valueTypeStr];
+    genericsInfo = [NSString stringWithFormat:@"<String, %@>", valueTypeStr];
   } else {
     genericsInfo = @"";
   }
 
   NSMutableString *result = [NSMutableString string];
-  [result appendFormat:@"+ (NSDictionary%@ *)%@ {\n", genericsInfo, methodName];
+  [result appendFormat:@"// fn %@ %s:%i \n", NSStringFromSelector(_cmd), __FILE__, __LINE__];  
+  [result appendFormat:@"    public static let _%@ = [\n", methodName];
   if (quoteValues && (sortedKeys.count == 1)) {
     NSString *key = sortedKeys[0];
     NSString *value = [pairs objectForKey:key];
-    [result appendFormat:@"  return @{ @\"%@\" : %@%@%@ };\n",
+    [result appendFormat:@"        \"%@\" : %@%@%@ ]\n",
      key, valueBefore, value, valueAfter];
   } else {
-    [result appendFormat:@"  NSDictionary%@ *map = @{\n", genericsInfo];
     NSString *lastKey = sortedKeys.lastObject;
     for (NSString *key in sortedKeys) {
       NSString *value = [pairs objectForKey:key];
-      [result appendFormat:@"    @\"%@\" : %@%@%@%@\n",
+      [result appendFormat:@"        \"%@\" : %@%@%@%@\n",
        key, valueBefore, value, valueAfter, (key == lastKey ? @"" : @",")];
     }
-    [result appendString:@"  };\n"];
-    [result appendString:@"  return map;\n"];
+    [result appendString:@"    ]\n"];
   }
   [result appendString:@"}\n"];
   return result;
