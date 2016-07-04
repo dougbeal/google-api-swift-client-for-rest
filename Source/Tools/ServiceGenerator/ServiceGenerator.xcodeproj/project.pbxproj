@@ -94,7 +94,7 @@
 		F483B88B13A7ACEB001F030B /* GTLRDiscovery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLRDiscovery.h; sourceTree = "<group>"; };
 		F4BB4A7F12B7BF4F008B2FB4 /* GTLRDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTLRDefines.h; path = ../../GTLRDefines.h; sourceTree = SOURCE_ROOT; };
 		F4CC66DD1237D33800522D45 /* SGGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGGenerator.h; sourceTree = "<group>"; };
-		F4CC66DE1237D33800522D45 /* SGGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGGenerator.m; sourceTree = "<group>"; };
+		F4CC66DE1237D33800522D45 /* SGGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = SGGenerator.m; sourceTree = "<group>"; tabWidth = 2; };
 		F4F407631C21B3B9001B1A59 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F4F9D45D1313E9C0002E77E6 /* SGUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGUtils.h; sourceTree = "<group>"; };
 		F4F9D45E1313E9C0002E77E6 /* SGUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGUtils.m; sourceTree = "<group>"; };
