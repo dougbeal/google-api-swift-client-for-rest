@@ -352,7 +352,7 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
   NSString *querySource = self.querySource;
   NSString *queryFileNameBase = self.objcQueryBaseClassName;
 
-  NSString *objectsHeader = self.objectsHeader;
+  //NSString *objectsHeader = self.objectsHeader;
   NSString *objectsSource = self.objectsSource;
   NSString *objectsFileNameBase = self.objcObjectsBaseFileName;
 
@@ -365,7 +365,7 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
     [queryFileNameBase stringByAppendingPathExtension:@"h"] : queryHeader,    
     [queryFileNameBase stringByAppendingPathExtension:@"swift"] : querySource,
 
-    [objectsFileNameBase stringByAppendingPathExtension:@"h"] : objectsHeader,    
+    //[objectsFileNameBase stringByAppendingPathExtension:@"h"] : objectsHeader,
     [objectsFileNameBase stringByAppendingPathExtension:@"swift"] : objectsSource,
   };
 
@@ -2518,6 +2518,8 @@ static NSString *MappedParamName(NSString *name) {
       // Put a blank line around any property that gets comments to make them
       // a little more readable.
       NSMutableArray *subParts = [NSMutableArray array];
+      NSMutableString *enumBody = nil;
+      NSString* enumType = nil;
       [subParts addObject:@"\n"];
       BOOL lastLineWasBlank = YES;
       for (GTLRDiscovery_JsonSchema *property in properties) {
@@ -2536,12 +2538,14 @@ static NSString *MappedParamName(NSString *name) {
         // schemaClassName
         NSDictionary *constantMap = [self.api.sg_objectEnumsMap objectForKey:schemaClassName];
         if (constantMap) {
-          NSMutableString *enumBody = [NSMutableString string];
+          enumBody = [NSMutableString string];
+          enumType = [SGUtils objcName:propertyObjCName shouldCapitalize:YES];
           NSDictionary *enumMap = [constantMap objectForKey:propertyObjCName];
           if (enumMap) {
             [hd appendBlankLine];
             [hd append:@"Likely values:"];
-            [enumBody appendFormat:@"    public enum %@: String {\n", propertyObjCName];
+            [enumBody appendFormat:@"// fn %@ %s:%i \n", NSStringFromSelector(_cmd), __FILE__, __LINE__];
+            [enumBody appendFormat:@"    public enum %@: String {\n", enumType];
             NSArray *constantsNames = enumMap.allKeys;  // todo: sort
             //[enumMap.allKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare)];
             for (NSString *name in constantsNames) {
@@ -2557,9 +2561,8 @@ static NSString *MappedParamName(NSString *name) {
                        format:@"Value \"%@\"", value];
               }
             }
-            [enumBody appendFormat:@"    } // enum %@\n", propertyObjCName];
+            [enumBody appendFormat:@"    } // enum %@\n", enumType];
           }
-          [parts addObject:enumBody];
         }
         if (isCollectionClass && [collectionItemsKey isEqual:propertyObjCName]) {
           [hd appendBlankLine];
@@ -2578,6 +2581,7 @@ static NSString *MappedParamName(NSString *name) {
 
         NSString *objcType = nil, *objcPropertySemantics = nil, *comment = nil;
         BOOL asPtr = NO;
+        // TODO: this should be setting the enum type, how to do this?
         [property sg_getObjectParamObjCType:&objcType
                                   asPointer:&asPtr
                       objcPropertySemantics:&objcPropertySemantics
@@ -2588,7 +2592,11 @@ static NSString *MappedParamName(NSString *name) {
         }
         NSString *extraAttributes = @"";
         if (asPtr || [objcType isEqual:@"id"]) {
-          objcType = [NSString stringWithFormat:@"%@?", objcType];
+            if(enumBody) {
+                objcType = [NSString stringWithFormat:@"%@?", enumType];
+            } else {
+                objcType = [NSString stringWithFormat:@"%@?", objcType];
+            }
             //extraAttributes =
             //[extraAttributes stringByAppendingFormat:@", nullable"];
         }
@@ -2600,9 +2608,7 @@ static NSString *MappedParamName(NSString *name) {
         // if ([_notRetainedPredicate evaluateWithObject:propertyObjCName]) {
         //   clangDirective = @" NS_RETURNS_NOT_RETAINED";
         // }
-        NSString *propertyLine = [NSString stringWithFormat:@"    public let %@: %@\n",
-                                           propertyObjCName, 
-                                           objcType];
+
 
         if (hd.hasText) {
           if (!lastLineWasBlank) {
@@ -2610,7 +2616,14 @@ static NSString *MappedParamName(NSString *name) {
           }
           [subParts addObject:hd.string];
         }
-        [subParts addObject:propertyLine];
+        NSString *propertyLine = [NSString stringWithFormat:@"    public let %@: %@\n",
+                                           propertyObjCName, 
+                                           objcType];
+        if (enumBody) {
+            [subParts addObject:enumBody];
+        }
+        [subParts addObject:propertyLine];        
+
         if (hd.hasText) {
           [subParts addObject:@"\n"];
           lastLineWasBlank = YES;
