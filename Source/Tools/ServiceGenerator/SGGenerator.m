@@ -1314,12 +1314,12 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
   [parts addObject:[self generatedInfo]];
 
 
-  NSArray *blocks = [self constantsBlocksForMode:kGenerateImplementation
-                                        enumsMap:self.api.sg_objectEnumsMap
-                                    commentExtra:nil];
-  if (blocks) {
-    [parts addObjectsFromArray:blocks];
-  }
+//  NSArray *blocks = [self constantsBlocksForMode:kGenerateImplementation
+//                                        enumsMap:self.api.sg_objectEnumsMap
+//                                    commentExtra:nil];
+//  if (blocks) {
+//    [parts addObjectsFromArray:blocks];
+//  }
 
   NSMutableArray *classParts = [NSMutableArray array];
   for (GTLRDiscovery_JsonSchema *schema in self.api.sg_topLevelObjectSchemas) {
@@ -2512,7 +2512,7 @@ static NSString *MappedParamName(NSString *name) {
 
   NSArray *properties = DictionaryObjectsSortedByKeys(schema.properties.additionalProperties);
   if (properties.count) {
-      NSMutableString *enumBody = [NSMutableString string];  
+
       // Write out the property support (GTLRObject will fill them in at runtime).
 
       // Put a blank line around any property that gets comments to make them
@@ -2533,34 +2533,34 @@ static NSString *MappedParamName(NSString *name) {
           // any other information.
           [hd queueAppend:propertyObjCName];
         }
-
-        NSDictionary *typeMap = [property sg_propertyForKey:kEnumMapKey];
-        if (typeMap) {
-            NSArray *allTypes = [typeMap.allKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-            for (NSString* type in allTypes) {
-                NSDictionary *enumMap = [typeMap objectForKey:type];
-                if (enumMap) {
-                    [hd appendBlankLine];
-                    [hd append:@"Likely values:"];
-                    [enumBody stringByAppendingFormat:@"    public enum %@ {\n", type];
-                    NSArray *constantsNames =
-                        [enumMap.allKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
-                    for (NSString *name in constantsNames) {
-                        NSArray *pair = [enumMap objectForKey:name];
-                        NSString *value = [pair objectAtIndex:0];
-                        NSString *desc = [pair objectAtIndex:1];
-                        if (desc.length > 0) {
-                            [hd appendArg:name
-                                   format:@"%@ (Value: \"%@\")", desc, value];
-                        } else {
-                            [hd appendArg:name
-                                   format:@"Value \"%@\"", value];
-                        }
-                    }
-                }
+        // schemaClassName
+        NSDictionary *constantMap = [self.api.sg_objectEnumsMap objectForKey:schemaClassName];
+        if (constantMap) {
+          NSMutableString *enumBody = [NSMutableString string];
+          NSDictionary *enumMap = [constantMap objectForKey:propertyObjCName];
+          if (enumMap) {
+            [hd appendBlankLine];
+            [hd append:@"Likely values:"];
+            [enumBody appendFormat:@"    public enum %@: String {\n", propertyObjCName];
+            NSArray *constantsNames =
+            [enumMap.allKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare)];
+            for (NSString *name in constantsNames) {
+              NSArray *pair = [enumMap objectForKey:name];
+              NSString *value = [pair objectAtIndex:0];
+              NSString *desc = [pair objectAtIndex:1];
+              [enumBody appendFormat:@"        public case %@ = \"%@\" //%@\n", name, value, desc];
+              if (desc.length > 0) {
+                [hd appendArg:name
+                       format:@"%@ (Value: \"%@\")", desc, value];
+              } else {
+                [hd appendArg:name
+                       format:@"Value \"%@\"", value];
+              }
             }
+            [enumBody appendFormat:@"    } // enum %@\n", propertyObjCName];
+          }
+          [parts addObject:enumBody];
         }
-        [parts addObject:enumBody];
         if (isCollectionClass && [collectionItemsKey isEqual:propertyObjCName]) {
           [hd appendBlankLine];
           [hd appendNote:
