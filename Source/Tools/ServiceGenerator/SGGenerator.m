@@ -2542,8 +2542,8 @@ static NSString *MappedParamName(NSString *name) {
             [hd appendBlankLine];
             [hd append:@"Likely values:"];
             [enumBody appendFormat:@"    public enum %@: String {\n", propertyObjCName];
-            NSArray *constantsNames =
-            [enumMap.allKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare)];
+            NSArray *constantsNames = enumMap.allKeys;  // todo: sort
+            //[enumMap.allKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare)];
             for (NSString *name in constantsNames) {
               NSArray *pair = [enumMap objectForKey:name];
               NSString *value = [pair objectAtIndex:0];
