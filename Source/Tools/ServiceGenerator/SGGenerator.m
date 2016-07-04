@@ -3470,36 +3470,36 @@ static NSString *MappedParamName(NSString *name) {
 // taking no argument) against an expected list of reserved words. That way
 // the list can be trusted for checking for naming collisions when generating
 // classes based on the given class.
-static void CheckReservedList(Class aClass,
-                              NSArray *reservedList,
-                              BOOL ignoreNSObjectOverrides,
-                              NSArray *allowedExceptions) {
-  NSArray *nsobjectNames;
-  if (ignoreNSObjectOverrides) {
-    nsobjectNames = [SGUtils publicNoArgSelectorsForClass:[NSObject class]];
-  }
+// static void CheckReservedList(Class aClass,
+//                               NSArray *reservedList,
+//                               BOOL ignoreNSObjectOverrides,
+//                               NSArray *allowedExceptions) {
+//   NSArray *nsobjectNames;
+//   if (ignoreNSObjectOverrides) {
+//     nsobjectNames = [SGUtils publicNoArgSelectorsForClass:[NSObject class]];
+//   }
 
-  NSArray *namesFromRuntime = [SGUtils publicNoArgSelectorsForClass:aClass];
-  for (NSString *name in namesFromRuntime) {
-    if ([reservedList containsObject:name]) {
-      // Was listed!
-    } else if ([nsobjectNames containsObject:name]) {
-      // Was in the NSObject list, is ok!
-    } else if ([allowedExceptions containsObject:name]) {
-      // Was an allowed exception.
-    } else {
-      NSLog(@"WARNING: The reserved word list for %@ seems to be missing: %@",
-            aClass, name);
-    }
-  }
+//   NSArray *namesFromRuntime = [SGUtils publicNoArgSelectorsForClass:aClass];
+//   for (NSString *name in namesFromRuntime) {
+//     if ([reservedList containsObject:name]) {
+//       // Was listed!
+//     } else if ([nsobjectNames containsObject:name]) {
+//       // Was in the NSObject list, is ok!
+//     } else if ([allowedExceptions containsObject:name]) {
+//       // Was an allowed exception.
+//     } else {
+//       NSLog(@"WARNING: The reserved word list for %@ seems to be missing: %@",
+//             aClass, name);
+//     }
+//   }
 
-  for (NSString *name in reservedList) {
-    if (![namesFromRuntime containsObject:name]) {
-      NSLog(@"WARNING: The reserved word list for %@ has something not found in the runtime: %@",
-            aClass, name);
-    }
-  }
-}
+//   for (NSString *name in reservedList) {
+//     if (![namesFromRuntime containsObject:name]) {
+//       NSLog(@"WARNING: The reserved word list for %@ has something not found in the runtime: %@",
+//             aClass, name);
+//     }
+//   }
+// }
 
 typedef enum {
   kTypeQuery,
@@ -3513,150 +3513,107 @@ static NSDictionary *OverrideMap(EQueryOrObject queryOrObject,
   static NSDictionary *queryReserved = nil;
   static NSDictionary *queryReservedComments = nil;
   if (objectReserved == nil) {
-    NSArray *internalPrama
-    NSArray *langReserved = @[
+    
     // Objective C "keywords" that aren't in C/C++
     // From http://stackoverflow.com/questions/1873630/reserved-keywords-in-objective-c
-    // from https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/LexicalStructure.html                             
-                              
-                              //@"id",
-
-                              associatedtype, class, deinit, enum, extension, func, import, init, inout, internal, let, operator, private, protocol, public, static, struct, subscript, typealias, var.
-Keywords used in statements: break, case, continue, default, defer, do, else, fallthrough, for, guard, if, in, repeat, return, switch, where, and while.
-Keywords used in expressions and types: as, catch, dynamicType, false, is, nil, rethrows, super, self, Self, throw, throws, true, try, #column, #file, #function, and #line.
-Keywords used in patterns: _.
-Keywords that begin with a number sign (#):
-#available, #column, #else#elseif, #endif, #file, #function, #if, #line, and #selector.
-Keywords reserved in particular contexts: associativity, convenience, dynamic, didSet, final, get, infix, indirect, lazy, left, mutating, none, nonmutating, optional, override, postfix, precedence, prefix, Protocol, required, right, set, Type, unowned, weak, and willSet. Outside the context in which they appear in the grammar, they can be used as identifiers.
-                              
-      @"super",
-      @"in",
-      @"out",
+    // Swift reserved words
+    // from https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/LexicalStructure.html
+    NSArray *reserved = @[
       @"inout",
-      @"bycopy",
-      @"byref",
-      @"oneway",
-      @"self",
-      @"nil",
-      // C/C++ keywords (Incl C++ 0x11)
-      // From http://en.cppreference.com/w/cpp/keywords
-      @"and",
-      @"alignas",
-      @"alignof",
-      @"asm",
-      @"auto",
-      @"bitand",
-      @"bitor",
-      @"bool",
-      @"break",
-      @"case",
-      @"catch",
-      @"char",
-      @"compl",
-      @"const",
-      @"constexpr",
-      @"continue",
-      @"decltype",
-      @"default",
-      @"delete",
-      @"double",
-      @"else",
+      @"var",
+      @"let",
+      ];
+    
+    NSArray *internalPramameterReserved = @[
+      @"associatedtype",
+      @"class",
+      @"deinit",
       @"enum",
-      @"explicit",
-      @"export",
-      @"extern ",
-      @"false",
-      @"float",
-      @"for",
-      @"friend",
-      @"goto",
-      @"if",
-      @"inline",
-      @"int",
-      @"long",
-      @"mutable",
-      @"namespace",
-      @"new",
-      @"noexcept",
-      @"not",
-      @"nullptr",
+      @"extension",
+      @"func",
+      @"import",
+      @"init",
+      @"internal",
       @"operator",
-      @"or",
       @"private",
-      @"protected",
+      @"protocol",
       @"public",
-      @"register",
-      @"return",
-      @"short",
-      @"signed",
-      @"sizeof",
       @"static",
       @"struct",
+      @"subscript",
+      @"typealias",
+      @"break",
+      @"case",
+      @"continue",
+      @"default",
+      @"defer",
+      @"do",
+      @"else",
+      @"fallthrough",
+      @"for",
+      @"guard",
+      @"if",
+      @"in",
+      @"repeat",
+      @"return",
       @"switch",
-      @"template",
-      @"this",
+      @"where",
+      @"while",
+      @"as",
+      @"catch",
+      @"dynamicType",
+      @"false",
+      @"is",
+      @"nil",
+      @"rethrows",
+      @"super",
+      @"self",
+      @"Self",
       @"throw",
+      @"throws",
       @"true",
       @"try",
-      @"typedef",
-      @"typeid",
-      @"typename",
-      @"union",
-      @"unsigned",
-      @"using",
-      @"virtual",
-      @"void",
-      @"volatile",
-      @"while",
-      @"xor",
-      // C99 keywords
-      // From http://publib.boulder.ibm.com/infocenter/lnxpcomp/v8v101/index.jsp?topic=%2Fcom.ibm.xlcpp8l.doc%2Flanguage%2Fref%2Fkeyw.htm
-      @"restrict",
+      @"_",
+      @"#available",
+      @"#column",
+      @"#else",
+      @"#elseif",
+      @"#endif",
+      @"#file",
+      @"#function",
+      @"#if",
+      @"#line",
+      @"#selector",
     ];
-    // NSObject methods
-    NSArray *nsobjectReserved = @[
-      @"attributeKeys",
-      @"autoContentAccessingProxy",
-      @"autorelease",
-      @"class",
-      @"classCode",
-      @"classDescription",
-      @"classForArchiver",
-      @"classForCoder",
-      @"classForKeyedArchiver",
-      @"classForPortCoder",
-      @"className",
-      @"copy",
-      @"dealloc",
-      @"debugDescription",
-      @"description",
-      @"finalize",
-      @"hash",
-      @"init",
-      @"isProxy",
-      @"mutableCopy",
-      @"release",
-      @"retain",
-      @"retainCount",
-      @"self",
-      @"scriptingProperties",
-      @"superclass",
-      @"toManyRelationshipKeys",
-      @"toOneRelationshipKeys",
-      @"zone",
-      // These doesn't seem to be listed in Apple's docs, but are found in the
-      // OS X runtime, so play it safe and block them also.
-      @"allowsWeakReference",
-      @"allPropertyKeys",
-      @"clearProperties",
-      @"entityName",
-      @"finishObserving",
-      @"flushKeyBindings",
-      @"isFault",
-      @"objectSpecifier",
-      @"observationInfo",
-      @"retainWeakReference",
-    ];
+    NSArray *contextReserved = @[
+      @"associativity", // context reserved
+      @"convenience",
+      @"dynamic",
+      @"didSet",
+      @"final",
+      @"get",
+      @"infix",
+      @"indirect",
+      @"lazy",
+      @"left",
+      @"mutating",
+      @"none",
+      @"nonmutating",
+      @"optional",
+      @"override",
+      @"postfix",
+      @"precedence",
+      @"prefix",
+      @"Protocol",
+      @"required",
+      @"right",
+      @"set",
+      @"Type",
+      @"unowned",
+      @"weak",
+      @"willSet",
+      ];
+
     // GTLRObject methods
     NSArray *gtlrObjectReserved = @[
       @"additionalJSONKeys",
@@ -3697,12 +3654,13 @@ Keywords reserved in particular contexts: associativity, convenience, dynamic, d
 
     // ------------------------------------------------------------------------
     // Check our reserved word lists against the runtime.
-    CheckReservedList([NSObject class], nsobjectReserved, NO, nil);
-    CheckReservedList([GTLRQuery class], gtlrQueryReserved, YES, nil);
+    //CheckReservedList([NSObject class], nsobjectReserved, NO, nil);
+    //CheckReservedList([GTLRQuery class], gtlrQueryReserved, YES, nil);
+    
     // SGGenerator has a category on GTLRObject, so they aren't in the
     // reserved list and we don't want to report them.
-    NSArray *allowed = @[ @"sg_generator", @"sg_errorReportingName" ];
-    CheckReservedList([GTLRObject class], gtlrObjectReserved, YES, allowed);
+    //NSArray *allowed = @[ @"sg_generator", @"sg_errorReportingName" ];
+    //CheckReservedList([GTLRObject class], gtlrObjectReserved, YES, allowed);
     // ------------------------------------------------------------------------
 
     NSMutableDictionary *builderMappings = [NSMutableDictionary dictionary];
@@ -3710,21 +3668,24 @@ Keywords reserved in particular contexts: associativity, convenience, dynamic, d
 
     // Add in the common mappings first. Language gets added second so things
     // like 'self' use the message about the language vs. NSObject's method.
-    for (NSString *word in nsobjectReserved) {
-      NSString *reason =
-        [NSString stringWithFormat:@"Remapped to '%@Property' to avoid NSObject's '%@'.",
-         word, word];
-      [builderMappings setObject:[word stringByAppendingString:@"Property"]
-                          forKey:word];
-      [builderComments setObject:reason forKey:word];
-    }
-    for (NSString *word in langReserved) {
-      NSString *reason =
-      [NSString stringWithFormat:@"Remapped to '%@Property' to avoid language reserved word '%@'.",
-       word, word];
-      [builderMappings setObject:[word stringByAppendingString:@"Property"]
-                          forKey:word];
-      [builderComments setObject:reason forKey:word];
+    // for (NSString *word in nsobjectReserved) {
+    //   NSString *reason =
+    //     [NSString stringWithFormat:@"Remapped to '%@Property' to avoid NSObject's '%@'.",
+    //      word, word];
+    //   [builderMappings setObject:[word stringByAppendingString:@"Property"]
+    //                       forKey:word];
+    //   [builderComments setObject:reason forKey:word];
+    // }
+    NSArray *lang = @[reserved, internalPramameterReserved, contextReserved];
+    for (NSArray *langReserved in lang) {
+        for (NSString *word in langReserved) {
+            NSString *reason =
+                [NSString stringWithFormat:@"Remapped to `%@` to avoid language reserved word '%@'.",
+                          word, word];
+            [builderMappings setObject:[NSString stringWithFormat:@"`%@`", word]
+                                forKey:word];
+            [builderComments setObject:reason forKey:word];
+        }
     }
     // Map etag to be nicer, but it doesn't need any reason in the comments.
     [builderMappings setObject:@"ETag" forKey:@"etag"];
