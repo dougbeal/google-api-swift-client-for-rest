@@ -1276,13 +1276,13 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
 
   [parts addObject:@"NS_ASSUME_NONNULL_BEGIN\n"];
 
-  NSString *commentExtra = @"For some of the classes' properties below.";
-  NSArray *blocks = [self constantsBlocksForMode:kGenerateInterface
-                                        enumsMap:self.api.sg_objectEnumsMap
-                                    commentExtra:commentExtra];
-  if (blocks) {
-    [parts addObjectsFromArray:blocks];
-  }
+//  NSString *commentExtra = @"For some of the classes' properties below.";
+  // NSArray *blocks = [self constantsBlocksForMode:kGenerateInterface
+  //                                       enumsMap:self.api.sg_objectEnumsMap
+  //                                   commentExtra:commentExtra];
+  // if (blocks) {
+  //   [parts addObjectsFromArray:blocks];
+  // }
 
   NSMutableArray *classParts = [NSMutableArray array];
 
