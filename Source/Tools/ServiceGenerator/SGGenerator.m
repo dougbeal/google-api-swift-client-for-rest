@@ -1637,14 +1637,14 @@ static NSString *MappedParamName(NSString *name) {
         [pairs setObject:getClassStr forKey:param.sg_name];
       }
     }
-    if (pairs.count != 0) {
-      NSString *methodImpl = [SGUtils classMapForMethodNamed:@"arrayPropertyToClassMap"
-                                                       pairs:pairs
-                                                 quoteValues:NO
-                                                valueTypeStr:@"Class"];
-      [parts addObject:@"\n"];
-      [parts addObject:methodImpl];
-    }
+    // if (pairs.count != 0) {
+    //   NSString *methodImpl = [SGUtils classMapForMethodNamed:@"arrayPropertyToClassMap"
+    //                                                    pairs:pairs
+    //                                              quoteValues:NO
+    //                                             valueTypeStr:@"Class"];
+    //   [parts addObject:@"\n"];
+    //   [parts addObject:methodImpl];
+    // }
 
   }
 
@@ -2469,6 +2469,8 @@ static NSString *MappedParamName(NSString *name) {
   // there are no properties on this schema.
   if (isTopLevelArrayResult) {
     if (mode == kGenerateInterface) {
+
+    } else {
       NSString *objcType = nil, *objcPropertySemantics = nil, *comment = nil;
       BOOL asPtr = NO;
       [schema sg_getObjectParamObjCType:&objcType
@@ -2480,15 +2482,17 @@ static NSString *MappedParamName(NSString *name) {
       } else {
         comment = [@"    // " stringByAppendingString:comment];
       }
-      NSString *propertyLine = [NSString stringWithFormat:@"@property(%@, readonly) %@%@%@;%@\n",
-                                objcPropertySemantics, objcType,
-                                (asPtr ? @" *" : @" "),
-                                @"items", comment];
+
+      NSString *propertyLine = [NSString stringWithFormat:@"    public let %@:%@ %@\n",
+                                         @"items",
+                                         objcType,
+                                         comment];
       [parts addObject:propertyLine];
-    } else {
+
+      
       GTLRDiscovery_JsonSchema *itemProperty =
         [schema sg_itemsSchemaResolving:YES depth:NULL];
-      NSString *objcType = nil;
+
       if (itemProperty == nil) {
         objcType = @"id";
       } else {
@@ -2513,6 +2517,8 @@ static NSString *MappedParamName(NSString *name) {
   if (properties.count) {
     // Write out the property support (GTLRObject will fill them in at runtime).
     if (mode == kGenerateInterface) {
+
+    } else {
       // Put a blank line around any property that gets comments to make them
       // a little more readable.
       NSMutableArray *subParts = [NSMutableArray array];
@@ -2579,21 +2585,21 @@ static NSString *MappedParamName(NSString *name) {
         }
         NSString *extraAttributes = @"";
         if (asPtr || [objcType isEqual:@"id"]) {
-          extraAttributes =
-            [extraAttributes stringByAppendingFormat:@", nullable"];
+          objcType = [NSString stringWithFormat:@"%@?", objcType];
+            //extraAttributes =
+            //[extraAttributes stringByAppendingFormat:@", nullable"];
         }
         if ([_useCustomerGetterPredicate evaluateWithObject:propertyObjCName]) {
           extraAttributes =
             [extraAttributes stringByAppendingFormat:@", getter=valueOf_%@", propertyObjCName];
         }
-        NSString *clangDirective = @"";
-        if ([_notRetainedPredicate evaluateWithObject:propertyObjCName]) {
-          clangDirective = @" NS_RETURNS_NOT_RETAINED";
-        }
-        NSString *propertyLine = [NSString stringWithFormat:@"@property(%@%@) %@%@%@%@;\n",
-                                  objcPropertySemantics, extraAttributes, objcType,
-                                  (asPtr ? @" *" : @" "),
-                                  propertyObjCName, clangDirective];
+        // NSString *clangDirective = @"";
+        // if ([_notRetainedPredicate evaluateWithObject:propertyObjCName]) {
+        //   clangDirective = @" NS_RETURNS_NOT_RETAINED";
+        // }
+        NSString *propertyLine = [NSString stringWithFormat:@"    public let %@: %@\n",
+                                           propertyObjCName, 
+                                           objcType];
 
         if (hd.hasText) {
           if (!lastLineWasBlank) {
@@ -2612,16 +2618,15 @@ static NSString *MappedParamName(NSString *name) {
       if (!lastLineWasBlank) {
         [subParts addObject:@"\n"];
       }
-      [parts addObject:[subParts componentsJoinedByString:@""]];
-    } else {
-      NSArray *propertiesObjCNames = [properties valueForKey:@"sg_objcName"];
-      NSString *asLines = [SGUtils stringOfLinesFromStrings:propertiesObjCNames
-                                            firstLinePrefix:@"@dynamic "
-                                           extraLinesPrefix:@"         "
-                                                linesSuffix:@","
-                                             lastLineSuffix:@";"
-                                              elementJoiner:@", "];
-      [parts addObject:asLines];
+      [parts addObject:[subParts componentsJoinedByString:@""]];        
+      // NSArray *propertiesObjCNames = [properties valueForKey:@"sg_objcName"];
+      // NSString *asLines = [SGUtils stringOfLinesFromStrings:propertiesObjCNames
+      //                                       firstLinePrefix:@"@dynamic "
+      //                                      extraLinesPrefix:@"         "
+      //                                           linesSuffix:@","
+      //                                        lastLineSuffix:@";"
+      //                                         elementJoiner:@", "];
+      // [parts addObject:asLines];
     }
   }  // if (properties.count)
 
@@ -2668,13 +2673,13 @@ static NSString *MappedParamName(NSString *name) {
         [pairs setObject:getClassStr forKey:property.sg_name];
       }
     }
-    if (pairs.count != 0) {
-      NSString *methodImpl = [SGUtils classMapForMethodNamed:@"arrayPropertyToClassMap"
-                                                       pairs:pairs
-                                                 quoteValues:NO
-                                                valueTypeStr:@"Class"];
-      [methodParts addObject:methodImpl];
-    }
+    // if (pairs.count != 0) {
+    //   NSString *methodImpl = [SGUtils classMapForMethodNamed:@"arrayPropertyToClassMap"
+    //                                                    pairs:pairs
+    //                                              quoteValues:NO
+    //                                             valueTypeStr:@"Class"];
+    //   [methodParts addObject:methodImpl];
+    // }
 
     if (schema.sg_isLikelyInvalidUseOfKind) {
       NSString *blockKindMethod =
@@ -3508,10 +3513,22 @@ static NSDictionary *OverrideMap(EQueryOrObject queryOrObject,
   static NSDictionary *queryReserved = nil;
   static NSDictionary *queryReservedComments = nil;
   if (objectReserved == nil) {
+    NSArray *internalPrama
     NSArray *langReserved = @[
     // Objective C "keywords" that aren't in C/C++
     // From http://stackoverflow.com/questions/1873630/reserved-keywords-in-objective-c
-      @"id",
+    // from https://developer.apple.com/library/ios/documentation/Swift/Conceptual/Swift_Programming_Language/LexicalStructure.html                             
+                              
+                              //@"id",
+
+                              associatedtype, class, deinit, enum, extension, func, import, init, inout, internal, let, operator, private, protocol, public, static, struct, subscript, typealias, var.
+Keywords used in statements: break, case, continue, default, defer, do, else, fallthrough, for, guard, if, in, repeat, return, switch, where, and while.
+Keywords used in expressions and types: as, catch, dynamicType, false, is, nil, rethrows, super, self, Self, throw, throws, true, try, #column, #file, #function, and #line.
+Keywords used in patterns: _.
+Keywords that begin with a number sign (#):
+#available, #column, #else#elseif, #endif, #file, #function, #if, #line, and #selector.
+Keywords reserved in particular contexts: associativity, convenience, dynamic, didSet, final, get, infix, indirect, lazy, left, mutating, none, nonmutating, optional, override, postfix, precedence, prefix, Protocol, required, right, set, Type, unowned, weak, and willSet. Outside the context in which they appear in the grammar, they can be used as identifiers.
+                              
       @"super",
       @"in",
       @"out",
@@ -3711,13 +3728,14 @@ static NSDictionary *OverrideMap(EQueryOrObject queryOrObject,
     }
     // Map etag to be nicer, but it doesn't need any reason in the comments.
     [builderMappings setObject:@"ETag" forKey:@"etag"];
+    // uncessary in swift
     // We remap "id" to identifier, so we also have to remap "identifier".
-    [builderMappings setObject:@"identifier" forKey:@"id"];
-    [builderMappings setObject:@"identifierProperty" forKey:@"identifier"];
-    [builderComments setObject:@"identifier property maps to 'id' in JSON (to avoid Objective C's 'id')."
-                        forKey:@"id"];
-    [builderComments setObject:@"identifierProperty property maps to 'identifier' in the JSON ('identifier' is reserved for remapping 'id')."
-                        forKey:@"identifier"];
+    // [builderMappings setObject:@"identifier" forKey:@"id"];
+    // [builderMappings setObject:@"identifierProperty" forKey:@"identifier"];
+    // [builderComments setObject:@"identifier property maps to 'id' in JSON (to avoid Objective C's 'id')."
+    //                     forKey:@"id"];
+    // [builderComments setObject:@"identifierProperty property maps to 'identifier' in the JSON ('identifier' is reserved for remapping 'id')."
+    //                     forKey:@"identifier"];
 
     // Now make a second set of builders for adding the things reserved on
     // Query vs. Object.
