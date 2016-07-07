@@ -37,6 +37,7 @@ static NSString *kWrappedSchemaKey                = @"wrappedSchema";
 static NSString *kWrappedResourceKey              = @"wrappedResource";
 static NSString *kNameKey                         = @"name";
 static NSString *kObjCNameKey                     = @"objcName";
+static NSString *kObjCNameTypeKey                 = @"objcNameType";
 static NSString *kForcedNameCommentKey            = @"forcedNameComment";
 static NSString *kCapObjCNameKey                  = @"capObjCName";
 static NSString *kAllResourcesKey                 = @"allResources";
@@ -96,6 +97,7 @@ typedef enum {
 @interface GTLRDiscovery_JsonSchema (SGGeneratorAdditions)
 @property(readonly) NSString *sg_name;
 @property(readonly) NSString *sg_objcName;
+@property(readonly) NSString *sg_objcNameType;
 @property(readonly) NSString *sg_capObjCName;
 @property(readonly) NSString *sg_forceNameComment;
 @property(readonly) GTLRDiscovery_RestMethod *sg_method;
@@ -352,7 +354,7 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
   NSString *querySource = self.querySource;
   NSString *queryFileNameBase = self.objcQueryBaseClassName;
 
-  //NSString *objectsHeader = self.objectsHeader;
+  NSString *objectsHeader = self.objectsHeader;
   NSString *objectsSource = self.objectsSource;
   NSString *objectsFileNameBase = self.objcObjectsBaseFileName;
 
@@ -365,7 +367,7 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
     [queryFileNameBase stringByAppendingPathExtension:@"h"] : queryHeader,    
     [queryFileNameBase stringByAppendingPathExtension:@"swift"] : querySource,
 
-    //[objectsFileNameBase stringByAppendingPathExtension:@"h"] : objectsHeader,
+    [objectsFileNameBase stringByAppendingPathExtension:@"h"] : objectsHeader,
     [objectsFileNameBase stringByAppendingPathExtension:@"swift"] : objectsSource,
   };
 
@@ -2461,6 +2463,9 @@ static NSString *MappedParamName(NSString *name) {
     [classHeader appendFormat:@"// fn %@ %s:%i \n", NSStringFromSelector(_cmd), __FILE__, __LINE__];
     [classHeader appendString:@"//\n"];
     [classHeader appendFormat:@"//   %@\n", schemaClassName];
+    if (schema.descriptionProperty) {
+        [classHeader appendFormat:@"// %@\n", schema.descriptionProperty];
+    }
     [classHeader appendString:@"//\n"];
     [classHeader appendString:@"\n"];
 
@@ -2468,19 +2473,15 @@ static NSString *MappedParamName(NSString *name) {
   }
 
   NSString *atBlock;
-  if (mode == kGenerateInterface) {
     NSString *baseClass = kBaseObjectClass;
     if (isCollectionClass) {
       baseClass = kCollectionObjectClass;
     } else if (isTopLevelArrayResult) {
       baseClass = kResultArrayClass;
     }
-    atBlock = [NSString stringWithFormat:@"@interface %@ : %@\n",
-               schemaClassName, baseClass];
-  } else {
-    atBlock = [NSString stringWithFormat:@"public struct %@ {\n",
-               schemaClassName];
-  }
+    atBlock = [NSString stringWithFormat:@"public struct %@ { // base %@\n",
+                        schemaClassName, baseClass];
+
   NSString *locator = [NSString stringWithFormat:@"// fn %@ %s:%i \n", NSStringFromSelector(_cmd), __FILE__, __LINE__];
   [parts addObject:atBlock];
   [parts addObject:locator];
@@ -2550,6 +2551,7 @@ static NSString *MappedParamName(NSString *name) {
 
         NSString *propertyObjCName = property.sg_objcName;
 
+
         NSString *propertyDescription = property.descriptionProperty;
         if (propertyDescription.length > 0) {
           [hd append:propertyDescription];
@@ -2562,7 +2564,8 @@ static NSString *MappedParamName(NSString *name) {
         NSDictionary *constantMap = [self.api.sg_objectEnumsMap objectForKey:schemaClassName];
         if (constantMap) {
           enumBody = [NSMutableString string];
-          enumType = [SGUtils objcName:propertyObjCName shouldCapitalize:YES];
+          enumType = property.sg_objcNameType;
+          //enumType = [SGUtils objcName:propertyObjCName shouldCapitalize:YES];
           NSDictionary *enumMap = [constantMap objectForKey:propertyObjCName];
           if (enumMap) {
             [hd appendBlankLine];
@@ -3851,6 +3854,22 @@ static NSString *OverrideName(NSString *name, EQueryOrObject queryOrObject,
                           ( self.sg_parameter ? kTypeQuery : kTypeObject ),
                           &comment);
     [self sg_setProperty:result forKey:kObjCNameKey];
+    if (comment) {
+      [self sg_setProperty:comment forKey:kForcedNameCommentKey];
+    }
+  }
+  return result;
+}
+
+- (NSString *)sg_objcNameType {
+  NSString *result = [self sg_propertyForKey:kObjCNameTypeKey];
+  if (result == nil) {
+    result = [SGUtils objcName:self.sg_name shouldCapitalize:YES];
+    NSString *comment = nil;
+    result = OverrideName(result,
+                          ( self.sg_parameter ? kTypeQuery : kTypeObject ),
+                          &comment);
+    [self sg_setProperty:result forKey:kObjCNameTypeKey];
     if (comment) {
       [self sg_setProperty:comment forKey:kForcedNameCommentKey];
     }
