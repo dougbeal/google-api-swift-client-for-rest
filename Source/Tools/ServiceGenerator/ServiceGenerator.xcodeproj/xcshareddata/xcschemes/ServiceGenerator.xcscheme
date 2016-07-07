@@ -61,6 +61,12 @@
             ReferencedContainer = "container:ServiceGenerator.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+         <CommandLineArgument
+            argument = "--outputDir Output --apiLogDir Logs --httpLogDir Logs --verbose --verbose Logs/youtube_v3.json "
+            isEnabled = "YES">
+         </CommandLineArgument>
+      </CommandLineArguments>
       <AdditionalOptions>
       </AdditionalOptions>
    </LaunchAction>
