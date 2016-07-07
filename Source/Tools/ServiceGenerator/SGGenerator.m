@@ -1483,7 +1483,7 @@ static NSString *MappedParamName(NSString *name) {
                                     mode:(GeneratorMode)mode {
   NSMutableArray *parts = [NSMutableArray array];
 
-  if (mode == kGenerateInterface) {
+  
     for (GTLRDiscovery_JsonSchema *param in paramSchema) {
       // Blank line between properties.
       if (parts.count > 0) {
@@ -1583,9 +1583,30 @@ static NSString *MappedParamName(NSString *name) {
       [parts addObject:propertyLine];
     }  // for (param in paramSchema)
 
-  } else {
+  
+    
     if (paramSchema.count > 0) {
+      NSMutableString *properities = [NSMutableString string];      
+      for (GTLRDiscovery_JsonSchema *param in paramSchema) {
+        NSString *objcType = nil;
+        NSString *itemsClassName = [param valueForKey:@"sg_objcName"];
+        [param sg_getQueryParamObjCType:&objcType
+                              asPointer:NULL
+                  objcPropertySemantics:NULL
+                                comment:NULL
+                         itemsClassName:NULL];
+        if ([itemsClassName isEqual:@"id"]) {
+          itemsClassName = @"NSObject";
+        }
+        [properities appendFormat:@"    public let %@: %@\n", itemsClassName, objcType];
+        //  [pairs setObject:getClassStr forKey:param.sg_name];
+      }
+      [parts addObject:properities];
+
+
+  
       NSArray *paramsObjCNames = [paramSchema valueForKey:@"sg_objcName"];
+      //NSArray *paramsType = [paramSchema valueForKey:@"type"];
       NSString *asLines = [SGUtils stringOfLinesFromStrings:paramsObjCNames
                                             firstLinePrefix:@"@dynamic "
                                            extraLinesPrefix:@"         "
@@ -1594,7 +1615,7 @@ static NSString *MappedParamName(NSString *name) {
                                               elementJoiner:@", "];
       [parts addObject:asLines];
     }
-  }
+
 
   if (mode == kGenerateImplementation) {
 
@@ -1862,7 +1883,9 @@ static NSString *MappedParamName(NSString *name) {
 
       atBlock = builder;
     } else {
-      atBlock = [NSString stringWithFormat:@"@implementation %@\n", queryClassName];
+      atBlock = [NSString stringWithFormat:@"@implementation %@ //fn %@ %s:%i \n",
+                          queryClassName, NSStringFromSelector(_cmd),
+                          __FILE__, __LINE__];
     }
     [parts addObject:atBlock];
 
