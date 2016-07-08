@@ -1694,6 +1694,27 @@ static NSString *MappedParamName(NSString *name) {
   return result;
 }
 
+- (NSString *)swiftQueryEnumName:(GTLRDiscovery_RestMethod *)method {
+  NSMutableArray *segments = [NSMutableArray array];
+  // Add the resources infront of the name.
+  NSString *formatted =
+      [SGUtils objcName:method.sg_name shouldCapitalize:YES];
+  [segments addObject:formatted];
+  GTLRDiscovery_RestResource *resource =
+      [[method sg_propertyForKey:kWrappedResourceKey] nonretainedObjectValue];
+  formatted = [SGUtils objcName:resource.sg_name shouldCapitalize:YES];
+  NSString *result = [NSString stringWithFormat:@"%@", formatted];
+  return result;
+}
+
+- (NSString *)swiftQueryEnumCase:(GTLRDiscovery_RestMethod *)method {
+  // Add the resources infront of the name.
+  NSString *formatted =
+      [SGUtils objcName:method.sg_name shouldCapitalize:NO];
+  NSString *result = [NSString stringWithFormat:@"%@", formatted];
+  return result;
+}
+
 - (NSArray *)queryCommonParams {
   NSArray *result = [self.api sg_propertyForKey:kCommonQueryParamsKey];
   if (result) {
@@ -1784,22 +1805,20 @@ static NSString *MappedParamName(NSString *name) {
   NSMutableArray *parts = [NSMutableArray array];
 
   NSString *atBlock;
-  if (mode == kGenerateInterface) {
+  NSString *baseEnumeName = self.api.canonicalName;  
+  {
     SGHeaderDoc *hd = [[SGHeaderDoc alloc] init];
     // api.title tends to look a little odd here because it includes "API" a
     // lot of the time.
-    NSString *apiName = self.api.canonicalName;
-    if (apiName.length == 0) {
-      apiName = self.formattedAPIName;
+
+    if (baseEnumeName.length == 0) {
+      baseEnumeName = self.formattedAPIName;
     }
-    [hd appendFormat:@"Parent class for other %@ query classes.", apiName];
+    [hd appendFormat:@"Parent class for other %@ query classes.", baseEnumeName];
     NSMutableString *builder = [NSMutableString string];
     [builder appendString:hd.string];
-    [builder appendFormat:@"@interface %@ : %@\n", self.objcQueryBaseClassName, kQueryBaseClass];
+    [builder appendFormat:@"public enum %@ { // fn %@ %s:%i \n\n", baseEnumeName, NSStringFromSelector(_cmd), __FILE__, __LINE__];
     atBlock = builder;
-  } else {
-    atBlock = [NSString stringWithFormat:@"public class %@ {\n",
-               self.objcQueryBaseClassName];
   }
   [parts addObject:atBlock];
 
@@ -1810,9 +1829,7 @@ static NSString *MappedParamName(NSString *name) {
     [parts addObject:paramsBlock];
   }
 
-  // Close the base query.
-  [parts addObject:[NSString stringWithFormat:@"} // %@\n",
-                             self.objcQueryBaseClassName]];
+
 
   // Loop over all the query methods.
   for (GTLRDiscovery_RestMethod *method in self.api.sg_allMethods) {
@@ -1821,8 +1838,9 @@ static NSString *MappedParamName(NSString *name) {
     GTLRDiscovery_JsonSchema *returnsSchema = method.response.sg_resolvedSchema;
 
     NSString *queryClassName = [self objcQueryClassName:method];
+    NSString *queryEnumName = [self swiftQueryEnumName:method];
+    NSString *queryEnumCase = [self swiftQueryEnumCase:method];
 
-    if (mode == kGenerateInterface) {
       SGHeaderDoc *classHDoc = [[SGHeaderDoc alloc] init];
       [classHDoc append:method.descriptionProperty];
       if (classHDoc.isEmpty) {
@@ -1851,9 +1869,16 @@ static NSString *MappedParamName(NSString *name) {
       }
 
       NSMutableString *builder = [NSMutableString string];
-      [builder appendString:classHDoc.string];
-      [builder appendFormat:@"@interface %@ : %@\n", queryClassName, self.objcQueryBaseClassName];
-
+    [builder appendString:[SGUtils stringOfLinesFromString:classHDoc.string
+                                           firstLinePrefix:@"    "
+                                          extraLinesPrefix:@"    "
+                                               linesSuffix:@""
+                                            lastLineSuffix:@""
+                                             elementJoiner:@" " ]];
+      [builder appendFormat:@"    //@interface %@ : %@\n", queryClassName, self.objcQueryBaseClassName];
+      [builder appendFormat:@"    public enum %@ { //fn %@ %s:%i %@ \n",
+                          queryEnumName, NSStringFromSelector(_cmd),
+                          __FILE__, __LINE__, queryEnumCase];
       // Stick a comment in the header to reference the old name to make it a
       // little easer to find/match up when updating to use the new library.
       NSArray *segments = [method.identifier componentsSeparatedByString:@"."];
@@ -1879,16 +1904,14 @@ static NSString *MappedParamName(NSString *name) {
             }
           }
         }
-        [builder appendString:@"// Previous library name was\n"];
-        [builder appendFormat:@"//   +[GTLQuery%@ %@]\n", self.formattedAPIName, oldName];
+        [builder appendString:@"    // Previous library name was\n"];
+        [builder appendFormat:@"    //   +[GTLQuery%@ %@]\n", self.formattedAPIName, oldName];
       }
 
       atBlock = builder;
-    } else {
-      atBlock = [NSString stringWithFormat:@"@implementation %@ //fn %@ %s:%i \n",
-                          queryClassName, NSStringFromSelector(_cmd),
-                          __FILE__, __LINE__];
-    }
+
+
+
     [parts addObject:atBlock];
 
     NSArray *methodParameters = DictionaryObjectsSortedByKeys(method.parameters.additionalProperties);
@@ -1900,7 +1923,7 @@ static NSString *MappedParamName(NSString *name) {
 
     SGHeaderDoc *methodHDoc = nil;
     SGHeaderDoc *downloadMethodHDoc = nil;
-    if (mode == kGenerateInterface) {
+    {
       methodHDoc = [[SGHeaderDoc alloc] init];
 
       if (returnsSchema) {
@@ -1945,7 +1968,7 @@ static NSString *MappedParamName(NSString *name) {
       }
     }
 
-    NSString *initialLine = @"+ (instancetype)query";
+    NSString *initialLine = [NSString stringWithFormat:@"        case %@(", queryEnumCase];
     [methodStr appendString:initialLine];
     NSUInteger nameWidth = initialLine.length;
     NSString *downloadInitialLine = @"+ (instancetype)queryForMedia";
@@ -1956,10 +1979,11 @@ static NSString *MappedParamName(NSString *name) {
     BOOL doesQueryTakeObject = (method.request != nil);
     if (doesQueryTakeObject) {
       GTLRDiscovery_JsonSchema *requestSchema = method.request.sg_resolvedSchema;
-      [methodStr appendFormat:@"WithObject:(%@ *)object",
+      [methodStr appendFormat:@"let object:%@",
                               requestSchema.sg_objcClassName];
-      [downloadMethodStr appendFormat:@"WithObject:(%@ *)object",
+      [downloadMethodStr appendFormat:@"let object:%@",
                                       requestSchema.sg_objcClassName];
+
       nameWidth += 10; // 'WithObject'
       downloadNameWidth += 10;
       needsWith = NO;
@@ -1993,10 +2017,10 @@ static NSString *MappedParamName(NSString *name) {
         [methodHDoc appendBlankLine];
         NSString *capitalizeObjCName = param.sg_capObjCName;
         [methodStr appendFormat:@"With%@:(%@%@)%@",
-         capitalizeObjCName, objcType, (asPtr ? @" *" : @""),
+         capitalizeObjCName, objcType, (asPtr ? @"" : @""),
          (mode == kGenerateInterface ? name : MappedParamName(name))];
         [downloadMethodStr appendFormat:@"With%@:(%@%@)%@",
-         capitalizeObjCName, objcType, (asPtr ? @" *" : @""),
+         capitalizeObjCName, objcType, (asPtr ? @"" : @""),
          (mode == kGenerateInterface ? name : MappedParamName(name))];
         nameWidth += 4 + capitalizeObjCName.length; // 'With%@'
         downloadNameWidth += 4 + capitalizeObjCName.length;
@@ -2005,14 +2029,10 @@ static NSString *MappedParamName(NSString *name) {
         // nameWidth is how much space should be used for the name to align
         // the colons.  If this parameter name is longer than that, it
         // doesn't get aligned.
-        [methodStr appendFormat:@"\n%*s:(%@%@)%@",
-         (int)nameWidth, name.UTF8String, objcType,
-         (asPtr ? @" *" : @""),
-         (mode == kGenerateInterface ? name : MappedParamName(name))];
-        [downloadMethodStr appendFormat:@"\n%*s:(%@%@)%@",
-         (int)downloadNameWidth, name.UTF8String, objcType,
-         (asPtr ? @" *" : @""),
-         (mode == kGenerateInterface ? name : MappedParamName(name))];
+        [methodStr appendFormat:@"\n%@: %@",
+         MappedParamName(name), objcType];
+        [downloadMethodStr appendFormat:@"\n%@: %@",
+         MappedParamName(name), objcType];
       }
 
       NSString *paramDesc = param.descriptionProperty;
@@ -2120,19 +2140,29 @@ static NSString *MappedParamName(NSString *name) {
       }
     }
 
-    if (mode == kGenerateInterface) {
+    {
       // End the line.
       [methodStr appendString:@";\n"];
       [downloadMethodStr appendString:@";\n"];
 
       if (methodHDoc.hasText) {
-        [methodStr insertString:methodHDoc.string atIndex:0];
+        [methodStr insertString:[SGUtils stringOfLinesFromString:methodHDoc.string
+                                                 firstLinePrefix:@"    "
+                                                extraLinesPrefix:@"    "
+                                                     linesSuffix:@""
+                                                  lastLineSuffix:@""
+                                                   elementJoiner:@" " ] atIndex:0];
       }
 
       if (downloadMethodHDoc.hasText) {
-        [downloadMethodStr insertString:downloadMethodHDoc.string atIndex:0];
+          [downloadMethodStr insertString:[SGUtils stringOfLinesFromString:downloadMethodHDoc.string
+                                                           firstLinePrefix:@"    "
+                                                          extraLinesPrefix:@"    "
+                                                               linesSuffix:@""
+                                                            lastLineSuffix:@""
+                                                             elementJoiner:@" " ]
+                                  atIndex:0];
       }
-    } else {
       NSAssert(methodStr,
                @"implementation generation shouldn't swap out methodStr");
 
@@ -2337,7 +2367,9 @@ static NSString *MappedParamName(NSString *name) {
 
     [parts addObject:@"@end\n"];
   }
-
+  // Close the base query.
+  [parts addObject:[NSString stringWithFormat:@"} // enum %@\n",
+                             baseEnumeName]];
   return [parts componentsJoinedByString:@"\n"];
 }
 
