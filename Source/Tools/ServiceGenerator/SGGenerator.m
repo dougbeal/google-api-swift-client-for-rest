@@ -20,6 +20,7 @@
 #import "SGGenerator.h"
 #import "SGUtils.h"
 #import "GTLRUtilities.h"
+#import "ServiceGenerator-Swift.h"
 
 static NSString *kProjectPrefix         = @"";
 static NSString *kServiceBaseClass      = @"Service";
@@ -71,100 +72,14 @@ static NSString *kCommonQueryParamsKey            = @"commonQueryParam";
 static NSString *kCommonPrettyPrintQueryParamsKey = @"commonPrettyPrintQueryParams";
 static NSString *kEnumMapKey                      = @"enumMap";
 
-typedef enum {
-  kGenerateInterface = 1,
-  kGenerateImplementation
-} GeneratorMode;
 
-// This is added so it can be called on Methods, Parameters, and Schema.
-@interface GTLRObject (SGGeneratorAdditions)
-@property(readonly) NSString *sg_errorReportingName;
-@property(readonly) SGGenerator *sg_generator;
 
-- (void)sg_setProperty:(id)obj forKey:(NSString *)key;
-- (id)sg_propertyForKey:(NSString *)key;
-@end
 
-@interface GTLRDiscovery_RestDescription (SGGeneratorAdditions)
-@property(readonly) NSArray *sg_allMethods;
-@property(readonly) NSDictionary *sg_queryEnumsMap;
-@property(readonly) NSDictionary *sg_objectEnumsMap;
-@property(readonly) NSArray *sg_allSchemas;
-@property(readonly) NSArray *sg_topLevelObjectSchemas;
-@property(readonly) NSArray *sg_allMethodObjectParameters;
-@property(readonly) NSArray *sg_allMethodObjectParameterReferences;
-@property(readonly) NSString *sg_resumableUploadPath;
-@property(readonly) NSString *sg_simpleUploadPath;
 
-- (NSString *)sg_cleanedRootURLString;
-- (void)sg_calculateMediaPaths;
-@end
 
-@interface GTLRDiscovery_JsonSchema (SGGeneratorAdditions)
-@property(readonly) NSString *sg_name;
-@property(readonly) NSString *sg_objcName;
-@property(readonly) NSString *sg_objcNameType;
-@property(readonly) NSString *sg_capObjCName;
-@property(readonly) NSString *sg_forceNameComment;
-@property(readonly) GTLRDiscovery_RestMethod *sg_method;
-@property(readonly, getter=sg_isParameter) BOOL sg_parameter;
-@property(readonly) GTLRDiscovery_JsonSchema *sg_parentSchema;
-@property(readonly) NSString *sg_fullSchemaName;
-@property(readonly) NSString *sg_objcClassName;
-@property(readonly) NSArray *sg_childObjectSchemas;
-@property(readonly) GTLRDiscovery_JsonSchema *sg_resolvedSchema;
-@property(readonly) NSString *sg_kindToRegister;
-@property(readonly) BOOL sg_isLikelyInvalidUseOfKind;
-@property(readonly) NSString *sg_formattedRange;
-@property(readonly) NSString *sg_formattedDefault;
-@property(readonly) NSString *sg_rangeAndDefaultDescription;
-
-- (NSString *)sg_collectionItemsKey:(BOOL *)outSupportsPagination;
-
-- (GTLRDiscovery_JsonSchema *)sg_itemsSchemaResolving:(BOOL)resolving
-                                                depth:(NSInteger *)depth;
-
-- (NSString *)sg_constantNamed:(NSString *)name;
-
-- (void)sg_getObjectParamObjCType:(NSString **)objcType
-                        asPointer:(BOOL *)asPointer
-            objcPropertySemantics:(NSString **)objcPropertySemantics
-                          comment:(NSString **)comment;
-
-- (void)sg_getQueryParamObjCType:(NSString **)objcType
-                       asPointer:(BOOL *)asPointer
-           objcPropertySemantics:(NSString **)objcPropertySemantics
-                         comment:(NSString **)comment
-                  itemsClassName:(NSString **)itemsClassName;
-@end
-
-@interface GTLRDiscovery_RestResource (SGGeneratorAdditions)
-@property(readonly) NSString *sg_name;
-@end
-
-@interface GTLRDiscovery_RestMethod (SGGeneratorAdditions)
-@property(readonly) NSString *sg_name;
-@property(readonly) NSArray *sg_sortedParameters;
-@property(readonly) NSArray *sg_sortedParametersWithRequest;
-@property(readonly) NSString *sg_resumableUploadPathOverride;
-@property(readonly) NSString *sg_simpleUploadPathOverride;
-@end
-
-@interface GTLRDiscovery_RestMethodRequest (SGGeneratorAdditions)
-@property(readonly) GTLRDiscovery_JsonSchema *sg_resolvedSchema;
-@end
-
-@interface GTLRDiscovery_RestMethodResponse (SGGeneratorAdditions)
-@property(readonly) GTLRDiscovery_JsonSchema *sg_resolvedSchema;
-@end
-
-@interface SGGenerator ()
-@property(strong) NSMutableArray *warnings;
-@property(strong) NSMutableArray *infos;
-@end
 
 // Helper to get the objects of a dictionary out in a sorted order.
-static NSArray *DictionaryObjectsSortedByKeys(NSDictionary *dict) {
+  static NSArray *DictionaryObjectsSortedByKeys(NSDictionary *dict) {
   NSArray *allKeys = dict.allKeys;
   NSArray *sortedKeys =
     [allKeys sortedArrayUsingSelector:@selector(caseInsensitiveCompare:)];
@@ -1351,9 +1266,6 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
   return [parts componentsJoinedByString:@"\n"];
 }
 
-- (NSString *)objectsCodingArgoSource {
-    return @"not implemented";
-}
 - (NSString *)umbrellaHeader {
   NSMutableArray *parts = [NSMutableArray array];
 
@@ -1967,19 +1879,19 @@ static NSString *MappedParamName(NSString *name) {
 
     NSMutableString *methodStr = [NSMutableString string];
     NSMutableString *downloadMethodStr;
-    if (supportsMediaDownload) {
-      downloadMethodStr = [NSMutableString string];
-
-      // When generating the interface, if the method is marked as supporting
-      // media download, but there is no return schema; then it means that there
-      // is no "non media" version to just fetch metadata. So drop string used
-      // to build the method. The go through all the following code that would
-      // generate the interface. This hides the method from the public interface
-      // but still lets us generate the method so the ForMedia impl can call it.
-      if ((mode == kGenerateInterface) && !returnsSchema) {
-        methodStr = nil;
-      }
-    }
+//    if (supportsMediaDownload) {
+//      downloadMethodStr = [NSMutableString string];
+//
+//      // When generating the interface, if the method is marked as supporting
+//      // media download, but there is no return schema; then it means that there
+//      // is no "non media" version to just fetch metadata. So drop string used
+//      // to build the method. The go through all the following code that would
+//      // generate the interface. This hides the method from the public interface
+//      // but still lets us generate the method so the ForMedia impl can call it.
+//      if ((mode == kGenerateInterface) && !returnsSchema) {
+//        methodStr = nil;
+//      }
+//    }
 
     NSString *initialLine = [NSString stringWithFormat:@"        case %@(", queryEnumCase];
     [methodStr appendString:initialLine];

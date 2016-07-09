@@ -10,6 +10,7 @@
 		8DD76F9A0486AA7600D96B5E /* SGMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* SGMain.m */; settings = {ATTRIBUTES = (); }; };
 		8DD76F9C0486AA7600D96B5E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 08FB779EFE84155DC02AAC07 /* Foundation.framework */; };
 		D0F2815413D0BF6600B4F659 /* GTLRUploadParameters.m in Sources */ = {isa = PBXBuildFile; fileRef = D0F2815313D0BF6600B4F659 /* GTLRUploadParameters.m */; };
+		D166A9B71D316B2F0031789A /* SGGeneration+Argo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D166A9B61D316B2F0031789A /* SGGeneration+Argo.swift */; };
 		F40E71431384B41200EE3F02 /* GTLRObject.m in Sources */ = {isa = PBXBuildFile; fileRef = F40E712C1384B41200EE3F02 /* GTLRObject.m */; };
 		F40E71441384B41200EE3F02 /* GTLRQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = F40E712E1384B41200EE3F02 /* GTLRQuery.m */; };
 		F40E71451384B41200EE3F02 /* GTLRBatchQuery.m in Sources */ = {isa = PBXBuildFile; fileRef = F40E71301384B41200EE3F02 /* GTLRBatchQuery.m */; };
@@ -53,6 +54,8 @@
 		8DD76FA10486AA7600D96B5E /* ServiceGenerator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = ServiceGenerator; sourceTree = BUILT_PRODUCTS_DIR; };
 		D0F2815213D0BF6600B4F659 /* GTLRUploadParameters.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTLRUploadParameters.h; path = ../../Objects/GTLRUploadParameters.h; sourceTree = SOURCE_ROOT; };
 		D0F2815313D0BF6600B4F659 /* GTLRUploadParameters.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTLRUploadParameters.m; path = ../../Objects/GTLRUploadParameters.m; sourceTree = SOURCE_ROOT; };
+		D166A9B51D316B2F0031789A /* ServiceGenerator-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ServiceGenerator-Bridging-Header.h"; sourceTree = "<group>"; };
+		D166A9B61D316B2F0031789A /* SGGeneration+Argo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "SGGeneration+Argo.swift"; sourceTree = "<group>"; };
 		F40E712B1384B41200EE3F02 /* GTLRObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTLRObject.h; path = ../../Objects/GTLRObject.h; sourceTree = SOURCE_ROOT; };
 		F40E712C1384B41200EE3F02 /* GTLRObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTLRObject.m; path = ../../Objects/GTLRObject.m; sourceTree = SOURCE_ROOT; };
 		F40E712D1384B41200EE3F02 /* GTLRQuery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTLRQuery.h; path = ../../Objects/GTLRQuery.h; sourceTree = SOURCE_ROOT; };
@@ -129,12 +132,14 @@
 		08FB7795FE84155DC02AAC07 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				D166A9B61D316B2F0031789A /* SGGeneration+Argo.swift */,
 				08FB7796FE84155DC02AAC07 /* SGMain.m */,
 				F4CC66DD1237D33800522D45 /* SGGenerator.h */,
 				F4CC66DE1237D33800522D45 /* SGGenerator.m */,
 				F4F9D45D1313E9C0002E77E6 /* SGUtils.h */,
 				F4F9D45E1313E9C0002E77E6 /* SGUtils.m */,
 				F4BB4A4E12B7BEEB008B2FB4 /* GTLR Sources */,
+				D166A9B51D316B2F0031789A /* ServiceGenerator-Bridging-Header.h */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -283,6 +288,7 @@
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0720;
 			};
 			buildConfigurationList = 1DEB927808733DD40010E9CD /* Build configuration list for PBXProject "ServiceGenerator" */;
@@ -329,6 +335,7 @@
 				F40E714B1384B41200EE3F02 /* GTLRFramework.m in Sources */,
 				F40E714D1384B41200EE3F02 /* GTLRUtilities.m in Sources */,
 				F4469EB61C4E731700BCFAA1 /* GTMMIMEDocument.m in Sources */,
+				D166A9B71D316B2F0031789A /* SGGeneration+Argo.swift in Sources */,
 				F4469EC11C57ADC600BCFAA1 /* GTLRDiscoveryObjects.m in Sources */,
 				D0F2815413D0BF6600B4F659 /* GTLRUploadParameters.m in Sources */,
 				F4809571178A310E007D65F4 /* GTLRURITemplate.m in Sources */,
@@ -341,17 +348,24 @@
 		1DEB927508733DD40010E9CD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_NAME = ServiceGenerator;
+				SWIFT_OBJC_BRIDGING_HEADER = "ServiceGenerator-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		1DEB927608733DD40010E9CD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_NAME = ServiceGenerator;
+				SWIFT_OBJC_BRIDGING_HEADER = "ServiceGenerator-Bridging-Header.h";
 			};
 			name = Release;
 		};
