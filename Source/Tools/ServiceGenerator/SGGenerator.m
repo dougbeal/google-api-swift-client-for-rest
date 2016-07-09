@@ -25,10 +25,16 @@ static NSString *kProjectPrefix         = @"";
 static NSString *kServiceBaseClass      = @"Service";
 static NSString *kQueryBaseClass        = @"Query";
 static NSString *kBaseObjectClass       = @"Object";
+//static NSString *kBaseObjectClass       = @"Object+Argo";
 static NSString *kCollectionObjectClass = @"CollectionObject";
 static NSString *kResultArrayClass      = @"ResultArray";
 static NSString *kExternPrefix          = @"GTLR_EXTERN";
 static NSString *kFrameworkIncludeGate  = @"GTLR_BUILT_AS_FRAMEWORK";
+
+static NSString *kMoyaFile              = @"+Moya";
+static NSString *kSwishFile             = @"+Swish";
+static NSString *kArgoFile              = @"+Argo";
+static NSString *kCodeFileExtension     = @"swift";
 
 static NSString *kFatalGeneration = @"FatalGeneration";
 
@@ -347,8 +353,8 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
   NSString *serviceSource = self.serviceSource;
   NSString *serviceFileNameBase = self.objcServiceClassName;
 
-  NSString *serviceNetworkSource = self.serviceNetworkSource;
-  NSString *serviceNetworkFileNameBase = [self.objcServiceClassName stringByAppendingString:@"+Moya"];
+  NSString *serviceNetworkMoyaSource = self.serviceNetworkMoyaSource;
+  NSString *serviceNetworkMoyaFileNameBase = [serviceFileNameBase stringByAppendingString:kMoyaFile];
 
   NSString *queryHeader = self.queryHeader;
   NSString *querySource = self.querySource;
@@ -358,17 +364,21 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
   NSString *objectsSource = self.objectsSource;
   NSString *objectsFileNameBase = self.objcObjectsBaseFileName;
 
+  NSString *objectsCodingArgoSource = self.objectsCodingArgoSource;
+  NSString *objectsCodingArgoFileNameBase = [objectsFileNameBase stringByAppendingString:kArgoFile];  
+
 
   NSDictionary *result = @{
     [serviceFileNameBase stringByAppendingPathExtension:@"h"] : serviceHeader,
-    [serviceFileNameBase stringByAppendingPathExtension:@"swift"] : serviceSource,
-    [serviceNetworkFileNameBase stringByAppendingPathExtension:@"swift"] : serviceNetworkSource,
+    [serviceFileNameBase stringByAppendingPathExtension:kCodeFileExtension] : serviceSource,
+    [serviceNetworkMoyaFileNameBase stringByAppendingPathExtension:kCodeFileExtension] : serviceNetworkMoyaSource,
 
     [queryFileNameBase stringByAppendingPathExtension:@"h"] : queryHeader,    
-    [queryFileNameBase stringByAppendingPathExtension:@"swift"] : querySource,
+    [queryFileNameBase stringByAppendingPathExtension:kCodeFileExtension] : querySource,
 
     [objectsFileNameBase stringByAppendingPathExtension:@"h"] : objectsHeader,
-    [objectsFileNameBase stringByAppendingPathExtension:@"swift"] : objectsSource,
+    [objectsFileNameBase stringByAppendingPathExtension:kCodeFileExtension] : objectsSource,
+    [objectsCodingArgoFileNameBase stringByAppendingPathExtension:kCodeFileExtension] : objectsCodingArgoSource,
   };
 
   // Report any infos/warnings added during generation.
@@ -1021,7 +1031,7 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
 }
 
 // Generates the service networking body.
-- (NSString *)serviceNetworkSource {
+- (NSString *)serviceNetworkMoyaSource {
   NSMutableArray *parts = [NSMutableArray array];
 
   [parts addObject:[self generatedInfo]];
@@ -1341,6 +1351,9 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
   return [parts componentsJoinedByString:@"\n"];
 }
 
+- (NSString *)objectsCodingArgoSource {
+    return @"not implemented";
+}
 - (NSString *)umbrellaHeader {
   NSMutableArray *parts = [NSMutableArray array];
 
