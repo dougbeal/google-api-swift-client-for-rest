@@ -1219,11 +1219,18 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
                                                           forMode:kGenerateInterface];
     [classParts addObject:objectClassStr];
 
+    NSString *objectClassStrSw = [self generateSwiftObjectForSchema:schema
+                                                          forMode:kGenerateInterface];
+    [classParts addObject:objectClassStrSw];    
+
     // Child schema.
     for (GTLRDiscovery_JsonSchema *subSchema in schema.sg_childObjectSchemas) {
       NSString *subObjectClassStr = [self generateObjectClassForSchema:subSchema
                                                                forMode:kGenerateInterface];
       [classParts addObject:subObjectClassStr];
+      NSString *subObjectClassStrSw = [self generateSwiftObjectForSchema:subSchema
+                                                               forMode:kGenerateInterface];
+      [classParts addObject:subObjectClassStrSw];      
     }
   }
 
@@ -1253,10 +1260,16 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
     NSString *objectClassStr = [self generateObjectClassForSchema:schema
                                                           forMode:kGenerateImplementation];
     [classParts addObject:objectClassStr];
+    NSString *objectClassStrSw = [self generateSwiftObjectForSchema:schema
+                                                          forMode:kGenerateImplementation];
+    [classParts addObject:objectClassStrSw];    
     for (GTLRDiscovery_JsonSchema *subSchema in schema.sg_childObjectSchemas) {
       NSString *subObjectClassStr = [self generateObjectClassForSchema:subSchema
                                                                forMode:kGenerateImplementation];
       [classParts addObject:subObjectClassStr];
+      NSString *subObjectClassStrSw = [self generateSwiftObjectForSchema:subSchema
+                                                               forMode:kGenerateImplementation];
+      [classParts addObject:subObjectClassStrSw];      
     }
   }
 

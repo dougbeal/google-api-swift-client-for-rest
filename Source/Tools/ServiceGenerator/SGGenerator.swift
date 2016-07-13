@@ -25,10 +25,12 @@ struct SchemaSwiftWrapper: CustomStringConvertible {
     //     }
     //     return _type!
     // }
-    var type: String { return schema.type! }
-    
+    var type: String {
+        return schema.sg_getObjectParamSwiftType().type
+    }
+
     var className: String { return schema.sg_SwiftClassName() }
-    
+
     var description: String {
         return "type \(schema.type), format \(schema.format)"
     }
@@ -53,7 +55,6 @@ public enum JsonTypeMapping: String {
     case number = "number"
     case float = "float"
     case double = "double"
-    
     case int32 = "int32"
     case uint32 = "uint32"
     case int64 = "int64"
@@ -64,34 +65,63 @@ public enum JsonTypeMapping: String {
     case google_datetime = "google-datetime"
     case google_duration = "google-duration"
     case google_fieldmask = "google-fieldmask"
-    
-    
-    public func lookup(`type`:String, format:String?) -> String {
+    case use_item_class = "ITEMS_CLASS"
+
+                      
+
+
+}
+
+public func jsonTypeToSwift( `type`:String, format:String?) -> String {
         let jsonType = JsonTypeMapping(rawValue: `type`)!
-        let jsonFmt: JsonTypeMapping? = format != nil ? JsonTypeMapping(rawValue: format!): nil
-        switch (jsonType, jsonFmt) {
+        let jsonFormat: JsonTypeMapping? = format != nil ? JsonTypeMapping(rawValue: format!): nil
+        switch (jsonType, jsonFormat) {
         case (.any, .None):
             return "Any"
         case (.array, .None):
             return "Array"
+        case (.boolean, .None):
+            return "Bool"
+        case (.object, .None):
+            return JsonTypeMapping.use_item_class.rawValue
+        case (.string, .None):
+            return "String"
+        case (.integer, .Some(.int32)):
+            return "Int32"
+        case (.integer, .Some(.uint32)):
+            return "UInt32"
+        case (.string, .Some(.int64)):
+            return "Int64"
+        case (.string, .Some(.uint64)):
+            return "UInt64"
+        case (.number, .Some(.double)):
+            return "Double"
+        case (.number, .Some(.float)):
+            return "Float"
+        case (.string, .Some(.date_time)):
+            return "GTLRDateTime"
+        case (.string, .Some(.byte)):
+            return "GTLRBase64"                   
         default:
-            fatalError()
+            fatalError("not implemented/found '\(jsonType)' '\(jsonFormat)'")
         }
-    }
-    
-}
-
+    }                             
+                             
 public extension SGGenerator {
     public func generateSwiftObjectForSchema(schema: GTLRDiscovery_JsonSchema,
                                              forMode: GeneratorMode ) -> String {
         let schemaClassName = schema.sg_objcClassName
-        let locator = "\(#file):\(#function):\(#line):\(#column)"        
+        var collectionSupportsPagination: ObjCBool = ObjCBool(false)
+
+        let collectionsItemKey = schema.sg_collectionItemsKey(&collectionSupportsPagination)
+        let isCollectionClass: Bool = collectionsItemKey != ""
+        let locator = "\(#file):\(#function):\(#line):\(#column)"
         let decl = "public struct \(schemaClassName) { // \(locator)"
         let declOpen = indent(0) + decl
         let declClose = indent(0) + "} //" + decl
 
         var body = Array<String>()
-        
+
         let additionalProperties = schema
 
         body.append(declOpen)
@@ -100,14 +130,18 @@ public extension SGGenerator {
             for (name,schema) in properties.sort({ $0.0 < $1.0 }) {
                 guard let schema = schema as? GTLRDiscovery_JsonSchema else { fatalError() }
                 let property = SchemaSwiftWrapper(schema: schema.sg_resolvedSchema)
-                let propertyType = property.className
-                let isArray = property.type == "array"
-                body.append(indent(1) + "public let \(name):\(propertyType)")
+                let propertyType = property.type
+                let propertyClass = property.className
                 
+                let isClass = property.type == JsonTypeMapping.use_item_class.rawValue
+                let type = isClass ? propertyClass : propertyType
+
+                body.append(indent(1) + "public let \(name):\(type)?")
+
             }
         }
         body.append(declClose)
-        
+
         return body.joinWithSeparator("\n")
     }
 
@@ -134,7 +168,7 @@ public extension GTLRDiscovery_JsonSchema {
     public var resolvedSchema: GTLRDiscovery_JsonSchema {
         return self.sg_resolvedSchema
     }
-    
+
     public func sg_SwiftClassName() -> String {
         if let result = resolvedSchema.sg_propertyForKey(SwiftSchemaKeys.ClassName.rawValue) as? String {
             return result
@@ -154,21 +188,24 @@ public extension GTLRDiscovery_JsonSchema {
         -> (`type`:String, semantics: String, comment: String, itemsClassName: String)
     {
         var paramType = resolvedSchema.type!
-        var paramFormat = resolvedSchema.format!
-        
+        var paramFormat = resolvedSchema.format
+        var type = ""
+
         if resolvedSchema.repeated != nil || paramType == "array" {
             // find type of items
-            let depth = UnsafeMutablePointer<Int>(bitPattern: 1)
-            if let itemsSchema = resolvedSchema.sg_itemsSchemaResolving(true, depth: depth) {
+            var depth = Int(1)//UnsafeMutablePointer<Int>(bitPattern: 1)
+            let array = jsonTypeToSwift(paramType, format: paramFormat)
+            if let itemsSchema = resolvedSchema.sg_itemsSchemaResolving(true, depth: &depth) {
                 paramType = itemsSchema.type!
-                paramFormat = itemsSchema.format!
+                paramFormat = itemsSchema.format
+                type = array + "<" + jsonTypeToSwift(paramType, format: paramFormat) + ">"
             } else {
                 fatalError("array had no type") // maybe use Any?
             }
+        } else {
+            type = jsonTypeToSwift(paramType, format: paramFormat)
         }
-        //let typeInfo = LookupTypeInfo(paramType, paramFormat, true)
-        return (type: paramType, semantics:"", comment:"\(paramType) \(paramFormat)", itemsClassName: "")
+        return (type: type, semantics:"", comment:"\(paramType) \(paramFormat)", itemsClassName: "")
     }
 
 }
-
