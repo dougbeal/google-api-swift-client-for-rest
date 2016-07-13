@@ -114,6 +114,10 @@ typedef enum {
            objcPropertySemantics:(NSString **)objcPropertySemantics
                          comment:(NSString **)comment
                   itemsClassName:(NSString **)itemsClassName;
+
+- (NSArray *)sg_fullSchemaPath:(BOOL)formatted
+                foldArrayItems:(BOOL)foldArrayItems;
+
 @end
 
 @interface GTLRDiscovery_RestResource (SGGeneratorAdditions)
