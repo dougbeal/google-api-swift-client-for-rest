@@ -134,8 +134,20 @@ public extension SGGenerator {
                 let propertyClass = property.className
                 
                 let isClass = property.type == JsonTypeMapping.use_item_class.rawValue
-                let type = isClass ? propertyClass : propertyType
-
+                var type = isClass ? propertyClass : propertyType
+                if let enumProperty = schema.enumProperty,
+                    enumSchema = self.api.sg_objectEnumsMap[schemaClassName] as? NSDictionary,
+                    cases = enumSchema[name] as? NSDictionary
+                {
+                    type = name.capitalizedString
+                    body.append(indent(1) + "public enum \(type): String {")
+                    for (`case`, valueArray) in cases {
+                        let literal = valueArray[0]
+                        body.append(indent(2) + "case \(`case`) = \"\(literal)\"")
+                    }
+                    body.append(indent(1) + "}")
+                }
+                
                 body.append(indent(1) + "public let \(name):\(type)?")
 
             }
