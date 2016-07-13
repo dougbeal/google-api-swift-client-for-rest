@@ -4,3 +4,4 @@
 
 #import "SGGenerator.h"
 #import "SGUtils.h"
+#import "GTLRDiscoveryObjects.h"
