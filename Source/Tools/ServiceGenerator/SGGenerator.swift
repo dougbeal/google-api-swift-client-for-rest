@@ -44,42 +44,42 @@ public enum SwiftSchemaKeys: String {
 }
 
 public enum JsonTypeMapping: String {
-       case any = "any"
-       case array = "array"
-       case object = "object"
-       case string = "string"            
-       case boolean = "boolean"
-       case integer = "integer"
-       case number = "number"
-       case float = "float"                 
-       case double = "double"                 
-            
-       case int32 = "int32"
-       case uint32 = "uint32"
-       case int64 = "int64"
-       case uint64 = "uint64"            
-       case byte = "byte"
-       case date = "date"
-       case date_time = "date-time"
-       case google_datetime = "google-datetime"
-       case google_duration = "google-duration"
-       case google_fieldmask = "google-fieldmask"
-            
-
-            public func lookup(`type`:String, format:String?) -> String {
-                let jsonType = JsonTypeMapping(rawValue: `type`)!
-                let jsonFmt: JsonTypeMapping? = format != nil ? JsonTypeMapping(rawValue: format!): nil
-                switch (jsonType, jsonFmt) {
-                case (.any, .None):
-                    return "Any"
-                case (.array, .None):
-                    return "Array"                           
-                default:
-                    fatalError()
-                }
-       }
-
-       }
+    case any = "any"
+    case array = "array"
+    case object = "object"
+    case string = "string"
+    case boolean = "boolean"
+    case integer = "integer"
+    case number = "number"
+    case float = "float"
+    case double = "double"
+    
+    case int32 = "int32"
+    case uint32 = "uint32"
+    case int64 = "int64"
+    case uint64 = "uint64"
+    case byte = "byte"
+    case date = "date"
+    case date_time = "date-time"
+    case google_datetime = "google-datetime"
+    case google_duration = "google-duration"
+    case google_fieldmask = "google-fieldmask"
+    
+    
+    public func lookup(`type`:String, format:String?) -> String {
+        let jsonType = JsonTypeMapping(rawValue: `type`)!
+        let jsonFmt: JsonTypeMapping? = format != nil ? JsonTypeMapping(rawValue: format!): nil
+        switch (jsonType, jsonFmt) {
+        case (.any, .None):
+            return "Any"
+        case (.array, .None):
+            return "Array"
+        default:
+            fatalError()
+        }
+    }
+    
+}
 
 public extension SGGenerator {
     public func generateSwiftObjectForSchema(schema: GTLRDiscovery_JsonSchema,
