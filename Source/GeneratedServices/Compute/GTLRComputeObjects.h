@@ -37,6 +37,7 @@
 @class GTLRCompute_AutoscalingPolicyLoadBalancingUtilization;
 @class GTLRCompute_Backend;
 @class GTLRCompute_BackendService;
+@class GTLRCompute_ConnectionDraining;
 @class GTLRCompute_CustomerEncryptionKey;
 @class GTLRCompute_CustomerEncryptionKeyProtectedDisk;
 @class GTLRCompute_DeprecationStatus;
@@ -57,11 +58,15 @@
 @class GTLRCompute_ForwardingRulesScopedList;
 @class GTLRCompute_ForwardingRulesScopedListWarning;
 @class GTLRCompute_ForwardingRulesScopedListWarningDataItem;
+@class GTLRCompute_HealthCheck;
 @class GTLRCompute_HealthCheckReference;
 @class GTLRCompute_HealthStatus;
 @class GTLRCompute_HostRule;
+@class GTLRCompute_HTTP2HealthCheck;
+@class GTLRCompute_HTTPHealthCheck;
 @class GTLRCompute_HttpHealthCheck;
 @class GTLRCompute_HttpsHealthCheck;
+@class GTLRCompute_HTTPSHealthCheck;
 @class GTLRCompute_Image;
 @class GTLRCompute_ImageRawDisk;
 @class GTLRCompute_Instance;
@@ -129,6 +134,7 @@
 @class GTLRCompute_ServiceAccount;
 @class GTLRCompute_Snapshot;
 @class GTLRCompute_SslCertificate;
+@class GTLRCompute_SSLHealthCheck;
 @class GTLRCompute_Subnetwork;
 @class GTLRCompute_SubnetworkAggregatedListItems;
 @class GTLRCompute_SubnetworksScopedList;
@@ -147,11 +153,13 @@
 @class GTLRCompute_TargetPoolsScopedList;
 @class GTLRCompute_TargetPoolsScopedListWarning;
 @class GTLRCompute_TargetPoolsScopedListWarningDataItem;
+@class GTLRCompute_TargetSslProxy;
 @class GTLRCompute_TargetVpnGateway;
 @class GTLRCompute_TargetVpnGatewayAggregatedListItems;
 @class GTLRCompute_TargetVpnGatewaysScopedList;
 @class GTLRCompute_TargetVpnGatewaysScopedListWarning;
 @class GTLRCompute_TargetVpnGatewaysScopedListWarningDataItem;
+@class GTLRCompute_TCPHealthCheck;
 @class GTLRCompute_TestFailure;
 @class GTLRCompute_UrlMap;
 @class GTLRCompute_UrlMapTest;
@@ -192,6 +200,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_AddressesScopedListWarning_Code_Cleanu
 GTLR_EXTERN NSString * const kGTLRCompute_AddressesScopedListWarning_Code_DeprecatedResourceUsed;
 /** Value: "DISK_SIZE_LARGER_THAN_IMAGE_SIZE" */
 GTLR_EXTERN NSString * const kGTLRCompute_AddressesScopedListWarning_Code_DiskSizeLargerThanImageSize;
+/** Value: "FIELD_VALUE_OVERRIDEN" */
+GTLR_EXTERN NSString * const kGTLRCompute_AddressesScopedListWarning_Code_FieldValueOverriden;
 /** Value: "INJECTED_KERNELS_DEPRECATED" */
 GTLR_EXTERN NSString * const kGTLRCompute_AddressesScopedListWarning_Code_InjectedKernelsDeprecated;
 /** Value: "NEXT_HOP_ADDRESS_NOT_ASSIGNED" */
@@ -250,6 +260,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_AutoscalersScopedListWarning_Code_Clea
 GTLR_EXTERN NSString * const kGTLRCompute_AutoscalersScopedListWarning_Code_DeprecatedResourceUsed;
 /** Value: "DISK_SIZE_LARGER_THAN_IMAGE_SIZE" */
 GTLR_EXTERN NSString * const kGTLRCompute_AutoscalersScopedListWarning_Code_DiskSizeLargerThanImageSize;
+/** Value: "FIELD_VALUE_OVERRIDEN" */
+GTLR_EXTERN NSString * const kGTLRCompute_AutoscalersScopedListWarning_Code_FieldValueOverriden;
 /** Value: "INJECTED_KERNELS_DEPRECATED" */
 GTLR_EXTERN NSString * const kGTLRCompute_AutoscalersScopedListWarning_Code_InjectedKernelsDeprecated;
 /** Value: "NEXT_HOP_ADDRESS_NOT_ASSIGNED" */
@@ -288,6 +300,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_AutoscalingPolicyCustomMetricUtilizati
 // ----------------------------------------------------------------------------
 // GTLRCompute_Backend.balancingMode
 
+/** Value: "CONNECTION" */
+GTLR_EXTERN NSString * const kGTLRCompute_Backend_BalancingMode_Connection;
 /** Value: "RATE" */
 GTLR_EXTERN NSString * const kGTLRCompute_Backend_BalancingMode_Rate;
 /** Value: "UTILIZATION" */
@@ -300,6 +314,22 @@ GTLR_EXTERN NSString * const kGTLRCompute_Backend_BalancingMode_Utilization;
 GTLR_EXTERN NSString * const kGTLRCompute_BackendService_Protocol_Http;
 /** Value: "HTTPS" */
 GTLR_EXTERN NSString * const kGTLRCompute_BackendService_Protocol_Https;
+/** Value: "SSL" */
+GTLR_EXTERN NSString * const kGTLRCompute_BackendService_Protocol_Ssl;
+/** Value: "TCP" */
+GTLR_EXTERN NSString * const kGTLRCompute_BackendService_Protocol_Tcp;
+
+// ----------------------------------------------------------------------------
+// GTLRCompute_BackendService.sessionAffinity
+
+/** Value: "CLIENT_IP" */
+GTLR_EXTERN NSString * const kGTLRCompute_BackendService_SessionAffinity_ClientIp;
+/** Value: "CLIENT_IP_PROTO" */
+GTLR_EXTERN NSString * const kGTLRCompute_BackendService_SessionAffinity_ClientIpProto;
+/** Value: "GENERATED_COOKIE" */
+GTLR_EXTERN NSString * const kGTLRCompute_BackendService_SessionAffinity_GeneratedCookie;
+/** Value: "NONE" */
+GTLR_EXTERN NSString * const kGTLRCompute_BackendService_SessionAffinity_None;
 
 // ----------------------------------------------------------------------------
 // GTLRCompute_DeprecationStatus.state
@@ -332,6 +362,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_DisksScopedListWarning_Code_CleanupFai
 GTLR_EXTERN NSString * const kGTLRCompute_DisksScopedListWarning_Code_DeprecatedResourceUsed;
 /** Value: "DISK_SIZE_LARGER_THAN_IMAGE_SIZE" */
 GTLR_EXTERN NSString * const kGTLRCompute_DisksScopedListWarning_Code_DiskSizeLargerThanImageSize;
+/** Value: "FIELD_VALUE_OVERRIDEN" */
+GTLR_EXTERN NSString * const kGTLRCompute_DisksScopedListWarning_Code_FieldValueOverriden;
 /** Value: "INJECTED_KERNELS_DEPRECATED" */
 GTLR_EXTERN NSString * const kGTLRCompute_DisksScopedListWarning_Code_InjectedKernelsDeprecated;
 /** Value: "NEXT_HOP_ADDRESS_NOT_ASSIGNED" */
@@ -366,6 +398,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_DiskTypesScopedListWarning_Code_Cleanu
 GTLR_EXTERN NSString * const kGTLRCompute_DiskTypesScopedListWarning_Code_DeprecatedResourceUsed;
 /** Value: "DISK_SIZE_LARGER_THAN_IMAGE_SIZE" */
 GTLR_EXTERN NSString * const kGTLRCompute_DiskTypesScopedListWarning_Code_DiskSizeLargerThanImageSize;
+/** Value: "FIELD_VALUE_OVERRIDEN" */
+GTLR_EXTERN NSString * const kGTLRCompute_DiskTypesScopedListWarning_Code_FieldValueOverriden;
 /** Value: "INJECTED_KERNELS_DEPRECATED" */
 GTLR_EXTERN NSString * const kGTLRCompute_DiskTypesScopedListWarning_Code_InjectedKernelsDeprecated;
 /** Value: "NEXT_HOP_ADDRESS_NOT_ASSIGNED" */
@@ -414,6 +448,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_ForwardingRulesScopedListWarning_Code_
 GTLR_EXTERN NSString * const kGTLRCompute_ForwardingRulesScopedListWarning_Code_DeprecatedResourceUsed;
 /** Value: "DISK_SIZE_LARGER_THAN_IMAGE_SIZE" */
 GTLR_EXTERN NSString * const kGTLRCompute_ForwardingRulesScopedListWarning_Code_DiskSizeLargerThanImageSize;
+/** Value: "FIELD_VALUE_OVERRIDEN" */
+GTLR_EXTERN NSString * const kGTLRCompute_ForwardingRulesScopedListWarning_Code_FieldValueOverriden;
 /** Value: "INJECTED_KERNELS_DEPRECATED" */
 GTLR_EXTERN NSString * const kGTLRCompute_ForwardingRulesScopedListWarning_Code_InjectedKernelsDeprecated;
 /** Value: "NEXT_HOP_ADDRESS_NOT_ASSIGNED" */
@@ -440,12 +476,52 @@ GTLR_EXTERN NSString * const kGTLRCompute_ForwardingRulesScopedListWarning_Code_
 GTLR_EXTERN NSString * const kGTLRCompute_ForwardingRulesScopedListWarning_Code_Unreachable;
 
 // ----------------------------------------------------------------------------
+// GTLRCompute_HealthCheck.type
+
+/** Value: "HTTP" */
+GTLR_EXTERN NSString * const kGTLRCompute_HealthCheck_Type_Http;
+/** Value: "HTTP2" */
+GTLR_EXTERN NSString * const kGTLRCompute_HealthCheck_Type_Http2;
+/** Value: "HTTPS" */
+GTLR_EXTERN NSString * const kGTLRCompute_HealthCheck_Type_Https;
+/** Value: "INVALID" */
+GTLR_EXTERN NSString * const kGTLRCompute_HealthCheck_Type_Invalid;
+/** Value: "SSL" */
+GTLR_EXTERN NSString * const kGTLRCompute_HealthCheck_Type_Ssl;
+/** Value: "TCP" */
+GTLR_EXTERN NSString * const kGTLRCompute_HealthCheck_Type_Tcp;
+
+// ----------------------------------------------------------------------------
 // GTLRCompute_HealthStatus.healthState
 
 /** Value: "HEALTHY" */
 GTLR_EXTERN NSString * const kGTLRCompute_HealthStatus_HealthState_Healthy;
 /** Value: "UNHEALTHY" */
 GTLR_EXTERN NSString * const kGTLRCompute_HealthStatus_HealthState_Unhealthy;
+
+// ----------------------------------------------------------------------------
+// GTLRCompute_HTTP2HealthCheck.proxyHeader
+
+/** Value: "NONE" */
+GTLR_EXTERN NSString * const kGTLRCompute_HTTP2HealthCheck_ProxyHeader_None;
+/** Value: "PROXY_V1" */
+GTLR_EXTERN NSString * const kGTLRCompute_HTTP2HealthCheck_ProxyHeader_ProxyV1;
+
+// ----------------------------------------------------------------------------
+// GTLRCompute_HTTPHealthCheck.proxyHeader
+
+/** Value: "NONE" */
+GTLR_EXTERN NSString * const kGTLRCompute_HTTPHealthCheck_ProxyHeader_None;
+/** Value: "PROXY_V1" */
+GTLR_EXTERN NSString * const kGTLRCompute_HTTPHealthCheck_ProxyHeader_ProxyV1;
+
+// ----------------------------------------------------------------------------
+// GTLRCompute_HTTPSHealthCheck.proxyHeader
+
+/** Value: "NONE" */
+GTLR_EXTERN NSString * const kGTLRCompute_HTTPSHealthCheck_ProxyHeader_None;
+/** Value: "PROXY_V1" */
+GTLR_EXTERN NSString * const kGTLRCompute_HTTPSHealthCheck_ProxyHeader_ProxyV1;
 
 // ----------------------------------------------------------------------------
 // GTLRCompute_Image.sourceType
@@ -498,6 +574,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_InstanceGroupManagersScopedListWarning
 GTLR_EXTERN NSString * const kGTLRCompute_InstanceGroupManagersScopedListWarning_Code_DeprecatedResourceUsed;
 /** Value: "DISK_SIZE_LARGER_THAN_IMAGE_SIZE" */
 GTLR_EXTERN NSString * const kGTLRCompute_InstanceGroupManagersScopedListWarning_Code_DiskSizeLargerThanImageSize;
+/** Value: "FIELD_VALUE_OVERRIDEN" */
+GTLR_EXTERN NSString * const kGTLRCompute_InstanceGroupManagersScopedListWarning_Code_FieldValueOverriden;
 /** Value: "INJECTED_KERNELS_DEPRECATED" */
 GTLR_EXTERN NSString * const kGTLRCompute_InstanceGroupManagersScopedListWarning_Code_InjectedKernelsDeprecated;
 /** Value: "NEXT_HOP_ADDRESS_NOT_ASSIGNED" */
@@ -540,6 +618,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_InstanceGroupsScopedListWarning_Code_C
 GTLR_EXTERN NSString * const kGTLRCompute_InstanceGroupsScopedListWarning_Code_DeprecatedResourceUsed;
 /** Value: "DISK_SIZE_LARGER_THAN_IMAGE_SIZE" */
 GTLR_EXTERN NSString * const kGTLRCompute_InstanceGroupsScopedListWarning_Code_DiskSizeLargerThanImageSize;
+/** Value: "FIELD_VALUE_OVERRIDEN" */
+GTLR_EXTERN NSString * const kGTLRCompute_InstanceGroupsScopedListWarning_Code_FieldValueOverriden;
 /** Value: "INJECTED_KERNELS_DEPRECATED" */
 GTLR_EXTERN NSString * const kGTLRCompute_InstanceGroupsScopedListWarning_Code_InjectedKernelsDeprecated;
 /** Value: "NEXT_HOP_ADDRESS_NOT_ASSIGNED" */
@@ -574,6 +654,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_InstancesScopedListWarning_Code_Cleanu
 GTLR_EXTERN NSString * const kGTLRCompute_InstancesScopedListWarning_Code_DeprecatedResourceUsed;
 /** Value: "DISK_SIZE_LARGER_THAN_IMAGE_SIZE" */
 GTLR_EXTERN NSString * const kGTLRCompute_InstancesScopedListWarning_Code_DiskSizeLargerThanImageSize;
+/** Value: "FIELD_VALUE_OVERRIDEN" */
+GTLR_EXTERN NSString * const kGTLRCompute_InstancesScopedListWarning_Code_FieldValueOverriden;
 /** Value: "INJECTED_KERNELS_DEPRECATED" */
 GTLR_EXTERN NSString * const kGTLRCompute_InstancesScopedListWarning_Code_InjectedKernelsDeprecated;
 /** Value: "NEXT_HOP_ADDRESS_NOT_ASSIGNED" */
@@ -628,6 +710,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_MachineTypesScopedListWarning_Code_Cle
 GTLR_EXTERN NSString * const kGTLRCompute_MachineTypesScopedListWarning_Code_DeprecatedResourceUsed;
 /** Value: "DISK_SIZE_LARGER_THAN_IMAGE_SIZE" */
 GTLR_EXTERN NSString * const kGTLRCompute_MachineTypesScopedListWarning_Code_DiskSizeLargerThanImageSize;
+/** Value: "FIELD_VALUE_OVERRIDEN" */
+GTLR_EXTERN NSString * const kGTLRCompute_MachineTypesScopedListWarning_Code_FieldValueOverriden;
 /** Value: "INJECTED_KERNELS_DEPRECATED" */
 GTLR_EXTERN NSString * const kGTLRCompute_MachineTypesScopedListWarning_Code_InjectedKernelsDeprecated;
 /** Value: "NEXT_HOP_ADDRESS_NOT_ASSIGNED" */
@@ -660,6 +744,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_MachineTypesScopedListWarning_Code_Unr
 GTLR_EXTERN NSString * const kGTLRCompute_ManagedInstance_CurrentAction_Abandoning;
 /** Value: "CREATING" */
 GTLR_EXTERN NSString * const kGTLRCompute_ManagedInstance_CurrentAction_Creating;
+/** Value: "CREATING_WITHOUT_RETRIES" */
+GTLR_EXTERN NSString * const kGTLRCompute_ManagedInstance_CurrentAction_CreatingWithoutRetries;
 /** Value: "DELETING" */
 GTLR_EXTERN NSString * const kGTLRCompute_ManagedInstance_CurrentAction_Deleting;
 /** Value: "NONE" */
@@ -710,6 +796,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_OperationsScopedListWarning_Code_Clean
 GTLR_EXTERN NSString * const kGTLRCompute_OperationsScopedListWarning_Code_DeprecatedResourceUsed;
 /** Value: "DISK_SIZE_LARGER_THAN_IMAGE_SIZE" */
 GTLR_EXTERN NSString * const kGTLRCompute_OperationsScopedListWarning_Code_DiskSizeLargerThanImageSize;
+/** Value: "FIELD_VALUE_OVERRIDEN" */
+GTLR_EXTERN NSString * const kGTLRCompute_OperationsScopedListWarning_Code_FieldValueOverriden;
 /** Value: "INJECTED_KERNELS_DEPRECATED" */
 GTLR_EXTERN NSString * const kGTLRCompute_OperationsScopedListWarning_Code_InjectedKernelsDeprecated;
 /** Value: "NEXT_HOP_ADDRESS_NOT_ASSIGNED" */
@@ -744,6 +832,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_OperationWarningsItem_Code_CleanupFail
 GTLR_EXTERN NSString * const kGTLRCompute_OperationWarningsItem_Code_DeprecatedResourceUsed;
 /** Value: "DISK_SIZE_LARGER_THAN_IMAGE_SIZE" */
 GTLR_EXTERN NSString * const kGTLRCompute_OperationWarningsItem_Code_DiskSizeLargerThanImageSize;
+/** Value: "FIELD_VALUE_OVERRIDEN" */
+GTLR_EXTERN NSString * const kGTLRCompute_OperationWarningsItem_Code_FieldValueOverriden;
 /** Value: "INJECTED_KERNELS_DEPRECATED" */
 GTLR_EXTERN NSString * const kGTLRCompute_OperationWarningsItem_Code_InjectedKernelsDeprecated;
 /** Value: "NEXT_HOP_ADDRESS_NOT_ASSIGNED" */
@@ -802,6 +892,12 @@ GTLR_EXTERN NSString * const kGTLRCompute_Quota_Metric_InUseAddresses;
 GTLR_EXTERN NSString * const kGTLRCompute_Quota_Metric_LocalSsdTotalGb;
 /** Value: "NETWORKS" */
 GTLR_EXTERN NSString * const kGTLRCompute_Quota_Metric_Networks;
+/** Value: "PREEMPTIBLE_CPUS" */
+GTLR_EXTERN NSString * const kGTLRCompute_Quota_Metric_PreemptibleCpus;
+/** Value: "REGIONAL_AUTOSCALERS" */
+GTLR_EXTERN NSString * const kGTLRCompute_Quota_Metric_RegionalAutoscalers;
+/** Value: "REGIONAL_INSTANCE_GROUP_MANAGERS" */
+GTLR_EXTERN NSString * const kGTLRCompute_Quota_Metric_RegionalInstanceGroupManagers;
 /** Value: "ROUTERS" */
 GTLR_EXTERN NSString * const kGTLRCompute_Quota_Metric_Routers;
 /** Value: "ROUTES" */
@@ -824,6 +920,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Quota_Metric_TargetHttpsProxies;
 GTLR_EXTERN NSString * const kGTLRCompute_Quota_Metric_TargetInstances;
 /** Value: "TARGET_POOLS" */
 GTLR_EXTERN NSString * const kGTLRCompute_Quota_Metric_TargetPools;
+/** Value: "TARGET_SSL_PROXIES" */
+GTLR_EXTERN NSString * const kGTLRCompute_Quota_Metric_TargetSslProxies;
 /** Value: "TARGET_VPN_GATEWAYS" */
 GTLR_EXTERN NSString * const kGTLRCompute_Quota_Metric_TargetVpnGateways;
 /** Value: "URL_MAPS" */
@@ -848,6 +946,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_RoutersScopedListWarning_Code_CleanupF
 GTLR_EXTERN NSString * const kGTLRCompute_RoutersScopedListWarning_Code_DeprecatedResourceUsed;
 /** Value: "DISK_SIZE_LARGER_THAN_IMAGE_SIZE" */
 GTLR_EXTERN NSString * const kGTLRCompute_RoutersScopedListWarning_Code_DiskSizeLargerThanImageSize;
+/** Value: "FIELD_VALUE_OVERRIDEN" */
+GTLR_EXTERN NSString * const kGTLRCompute_RoutersScopedListWarning_Code_FieldValueOverriden;
 /** Value: "INJECTED_KERNELS_DEPRECATED" */
 GTLR_EXTERN NSString * const kGTLRCompute_RoutersScopedListWarning_Code_InjectedKernelsDeprecated;
 /** Value: "NEXT_HOP_ADDRESS_NOT_ASSIGNED" */
@@ -892,6 +992,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_RouteWarningsItem_Code_CleanupFailed;
 GTLR_EXTERN NSString * const kGTLRCompute_RouteWarningsItem_Code_DeprecatedResourceUsed;
 /** Value: "DISK_SIZE_LARGER_THAN_IMAGE_SIZE" */
 GTLR_EXTERN NSString * const kGTLRCompute_RouteWarningsItem_Code_DiskSizeLargerThanImageSize;
+/** Value: "FIELD_VALUE_OVERRIDEN" */
+GTLR_EXTERN NSString * const kGTLRCompute_RouteWarningsItem_Code_FieldValueOverriden;
 /** Value: "INJECTED_KERNELS_DEPRECATED" */
 GTLR_EXTERN NSString * const kGTLRCompute_RouteWarningsItem_Code_InjectedKernelsDeprecated;
 /** Value: "NEXT_HOP_ADDRESS_NOT_ASSIGNED" */
@@ -948,6 +1050,14 @@ GTLR_EXTERN NSString * const kGTLRCompute_Snapshot_StorageBytesStatus_Updating;
 GTLR_EXTERN NSString * const kGTLRCompute_Snapshot_StorageBytesStatus_UpToDate;
 
 // ----------------------------------------------------------------------------
+// GTLRCompute_SSLHealthCheck.proxyHeader
+
+/** Value: "NONE" */
+GTLR_EXTERN NSString * const kGTLRCompute_SSLHealthCheck_ProxyHeader_None;
+/** Value: "PROXY_V1" */
+GTLR_EXTERN NSString * const kGTLRCompute_SSLHealthCheck_ProxyHeader_ProxyV1;
+
+// ----------------------------------------------------------------------------
 // GTLRCompute_SubnetworksScopedListWarning.code
 
 /** Value: "CLEANUP_FAILED" */
@@ -956,6 +1066,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_SubnetworksScopedListWarning_Code_Clea
 GTLR_EXTERN NSString * const kGTLRCompute_SubnetworksScopedListWarning_Code_DeprecatedResourceUsed;
 /** Value: "DISK_SIZE_LARGER_THAN_IMAGE_SIZE" */
 GTLR_EXTERN NSString * const kGTLRCompute_SubnetworksScopedListWarning_Code_DiskSizeLargerThanImageSize;
+/** Value: "FIELD_VALUE_OVERRIDEN" */
+GTLR_EXTERN NSString * const kGTLRCompute_SubnetworksScopedListWarning_Code_FieldValueOverriden;
 /** Value: "INJECTED_KERNELS_DEPRECATED" */
 GTLR_EXTERN NSString * const kGTLRCompute_SubnetworksScopedListWarning_Code_InjectedKernelsDeprecated;
 /** Value: "NEXT_HOP_ADDRESS_NOT_ASSIGNED" */
@@ -996,6 +1108,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_TargetInstancesScopedListWarning_Code_
 GTLR_EXTERN NSString * const kGTLRCompute_TargetInstancesScopedListWarning_Code_DeprecatedResourceUsed;
 /** Value: "DISK_SIZE_LARGER_THAN_IMAGE_SIZE" */
 GTLR_EXTERN NSString * const kGTLRCompute_TargetInstancesScopedListWarning_Code_DiskSizeLargerThanImageSize;
+/** Value: "FIELD_VALUE_OVERRIDEN" */
+GTLR_EXTERN NSString * const kGTLRCompute_TargetInstancesScopedListWarning_Code_FieldValueOverriden;
 /** Value: "INJECTED_KERNELS_DEPRECATED" */
 GTLR_EXTERN NSString * const kGTLRCompute_TargetInstancesScopedListWarning_Code_InjectedKernelsDeprecated;
 /** Value: "NEXT_HOP_ADDRESS_NOT_ASSIGNED" */
@@ -1028,6 +1142,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_TargetInstancesScopedListWarning_Code_
 GTLR_EXTERN NSString * const kGTLRCompute_TargetPool_SessionAffinity_ClientIp;
 /** Value: "CLIENT_IP_PROTO" */
 GTLR_EXTERN NSString * const kGTLRCompute_TargetPool_SessionAffinity_ClientIpProto;
+/** Value: "GENERATED_COOKIE" */
+GTLR_EXTERN NSString * const kGTLRCompute_TargetPool_SessionAffinity_GeneratedCookie;
 /** Value: "NONE" */
 GTLR_EXTERN NSString * const kGTLRCompute_TargetPool_SessionAffinity_None;
 
@@ -1040,6 +1156,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_TargetPoolsScopedListWarning_Code_Clea
 GTLR_EXTERN NSString * const kGTLRCompute_TargetPoolsScopedListWarning_Code_DeprecatedResourceUsed;
 /** Value: "DISK_SIZE_LARGER_THAN_IMAGE_SIZE" */
 GTLR_EXTERN NSString * const kGTLRCompute_TargetPoolsScopedListWarning_Code_DiskSizeLargerThanImageSize;
+/** Value: "FIELD_VALUE_OVERRIDEN" */
+GTLR_EXTERN NSString * const kGTLRCompute_TargetPoolsScopedListWarning_Code_FieldValueOverriden;
 /** Value: "INJECTED_KERNELS_DEPRECATED" */
 GTLR_EXTERN NSString * const kGTLRCompute_TargetPoolsScopedListWarning_Code_InjectedKernelsDeprecated;
 /** Value: "NEXT_HOP_ADDRESS_NOT_ASSIGNED" */
@@ -1066,6 +1184,22 @@ GTLR_EXTERN NSString * const kGTLRCompute_TargetPoolsScopedListWarning_Code_Sing
 GTLR_EXTERN NSString * const kGTLRCompute_TargetPoolsScopedListWarning_Code_Unreachable;
 
 // ----------------------------------------------------------------------------
+// GTLRCompute_TargetSslProxiesSetProxyHeaderRequest.proxyHeader
+
+/** Value: "NONE" */
+GTLR_EXTERN NSString * const kGTLRCompute_TargetSslProxiesSetProxyHeaderRequest_ProxyHeader_None;
+/** Value: "PROXY_V1" */
+GTLR_EXTERN NSString * const kGTLRCompute_TargetSslProxiesSetProxyHeaderRequest_ProxyHeader_ProxyV1;
+
+// ----------------------------------------------------------------------------
+// GTLRCompute_TargetSslProxy.proxyHeader
+
+/** Value: "NONE" */
+GTLR_EXTERN NSString * const kGTLRCompute_TargetSslProxy_ProxyHeader_None;
+/** Value: "PROXY_V1" */
+GTLR_EXTERN NSString * const kGTLRCompute_TargetSslProxy_ProxyHeader_ProxyV1;
+
+// ----------------------------------------------------------------------------
 // GTLRCompute_TargetVpnGateway.status
 
 /** Value: "CREATING" */
@@ -1086,6 +1220,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_TargetVpnGatewaysScopedListWarning_Cod
 GTLR_EXTERN NSString * const kGTLRCompute_TargetVpnGatewaysScopedListWarning_Code_DeprecatedResourceUsed;
 /** Value: "DISK_SIZE_LARGER_THAN_IMAGE_SIZE" */
 GTLR_EXTERN NSString * const kGTLRCompute_TargetVpnGatewaysScopedListWarning_Code_DiskSizeLargerThanImageSize;
+/** Value: "FIELD_VALUE_OVERRIDEN" */
+GTLR_EXTERN NSString * const kGTLRCompute_TargetVpnGatewaysScopedListWarning_Code_FieldValueOverriden;
 /** Value: "INJECTED_KERNELS_DEPRECATED" */
 GTLR_EXTERN NSString * const kGTLRCompute_TargetVpnGatewaysScopedListWarning_Code_InjectedKernelsDeprecated;
 /** Value: "NEXT_HOP_ADDRESS_NOT_ASSIGNED" */
@@ -1110,6 +1246,14 @@ GTLR_EXTERN NSString * const kGTLRCompute_TargetVpnGatewaysScopedListWarning_Cod
 GTLR_EXTERN NSString * const kGTLRCompute_TargetVpnGatewaysScopedListWarning_Code_SingleInstancePropertyTemplate;
 /** Value: "UNREACHABLE" */
 GTLR_EXTERN NSString * const kGTLRCompute_TargetVpnGatewaysScopedListWarning_Code_Unreachable;
+
+// ----------------------------------------------------------------------------
+// GTLRCompute_TCPHealthCheck.proxyHeader
+
+/** Value: "NONE" */
+GTLR_EXTERN NSString * const kGTLRCompute_TCPHealthCheck_ProxyHeader_None;
+/** Value: "PROXY_V1" */
+GTLR_EXTERN NSString * const kGTLRCompute_TCPHealthCheck_ProxyHeader_ProxyV1;
 
 // ----------------------------------------------------------------------------
 // GTLRCompute_VpnTunnel.status
@@ -1148,6 +1292,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_VpnTunnelsScopedListWarning_Code_Clean
 GTLR_EXTERN NSString * const kGTLRCompute_VpnTunnelsScopedListWarning_Code_DeprecatedResourceUsed;
 /** Value: "DISK_SIZE_LARGER_THAN_IMAGE_SIZE" */
 GTLR_EXTERN NSString * const kGTLRCompute_VpnTunnelsScopedListWarning_Code_DiskSizeLargerThanImageSize;
+/** Value: "FIELD_VALUE_OVERRIDEN" */
+GTLR_EXTERN NSString * const kGTLRCompute_VpnTunnelsScopedListWarning_Code_FieldValueOverriden;
 /** Value: "INJECTED_KERNELS_DEPRECATED" */
 GTLR_EXTERN NSString * const kGTLRCompute_VpnTunnelsScopedListWarning_Code_InjectedKernelsDeprecated;
 /** Value: "NEXT_HOP_ADDRESS_NOT_ASSIGNED" */
@@ -1182,7 +1328,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Down;
 GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 
 /**
- *  An access configuration attached to an instance's network interface.
+ *  An access configuration attached to an instance's network interface. Only
+ *  one access config per instance is supported.
  */
 @interface GTLRCompute_AccessConfig : GTLRObject
 
@@ -1190,10 +1337,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  [Output Only] Type of the resource. Always compute#accessConfig for access
  *  configs.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /** Name of this access configuration. */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
  *  An external IP address associated with this instance. Specify an unused
@@ -1202,7 +1349,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  specify a static external IP address, it must live in the same region as the
  *  zone of the instance.
  */
-@property(copy, nullable) NSString *natIP;
+@property(nonatomic, copy, nullable) NSString *natIP;
 
 /**
  *  The type of configuration. The default and only option is ONE_TO_ONE_NAT.
@@ -1210,7 +1357,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  Likely values:
  *    @arg @c kGTLRCompute_AccessConfig_Type_OneToOneNat Value "ONE_TO_ONE_NAT"
  */
-@property(copy, nullable) NSString *type;
+@property(nonatomic, copy, nullable) NSString *type;
 
 @end
 
@@ -1221,10 +1368,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_Address : GTLRObject
 
 /** The static external IP address represented by this resource. */
-@property(copy, nullable) NSString *address;
+@property(nonatomic, copy, nullable) NSString *address;
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -1232,7 +1379,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -1242,12 +1389,12 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  [Output Only] Type of the resource. Always compute#address for addresses.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  Name of the resource. Provided by the client when the resource is created.
@@ -1258,16 +1405,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
  *  [Output Only] URL of the region where the regional address resides. This
  *  field is not applicable to global addresses.
  */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  [Output Only] The status of the address, which can be either IN_USE or
@@ -1279,10 +1426,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_Address_Status_InUse Value "IN_USE"
  *    @arg @c kGTLRCompute_Address_Status_Reserved Value "RESERVED"
  */
-@property(copy, nullable) NSString *status;
+@property(nonatomic, copy, nullable) NSString *status;
 
 /** [Output Only] The URLs of the resources that are using this address. */
-@property(strong, nullable) NSArray<NSString *> *users;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *users;
 
 @end
 
@@ -1297,16 +1444,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /** [Output Only] A map of scoped address lists. */
-@property(strong, nullable) GTLRCompute_AddressAggregatedListItems *items;
+@property(nonatomic, strong, nullable) GTLRCompute_AddressAggregatedListItems *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#addressAggregatedList for
  *  aggregated lists of addresses.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -1315,10 +1462,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -1341,13 +1488,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_AddressesScopedList : GTLRObject
 
 /** [Output Only] List of addresses contained in this scope. */
-@property(strong, nullable) NSArray<GTLRCompute_Address *> *addresses;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Address *> *addresses;
 
 /**
  *  [Output Only] Informational warning which replaces the list of addresses
  *  when the list is empty.
  */
-@property(strong, nullable) GTLRCompute_AddressesScopedListWarning *warning;
+@property(nonatomic, strong, nullable) GTLRCompute_AddressesScopedListWarning *warning;
 
 @end
 
@@ -1369,6 +1516,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        Value "DEPRECATED_RESOURCE_USED"
  *    @arg @c kGTLRCompute_AddressesScopedListWarning_Code_DiskSizeLargerThanImageSize
  *        Value "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+ *    @arg @c kGTLRCompute_AddressesScopedListWarning_Code_FieldValueOverriden
+ *        Value "FIELD_VALUE_OVERRIDEN"
  *    @arg @c kGTLRCompute_AddressesScopedListWarning_Code_InjectedKernelsDeprecated
  *        Value "INJECTED_KERNELS_DEPRECATED"
  *    @arg @c kGTLRCompute_AddressesScopedListWarning_Code_NextHopAddressNotAssigned
@@ -1394,16 +1543,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_AddressesScopedListWarning_Code_Unreachable Value
  *        "UNREACHABLE"
  */
-@property(copy, nullable) NSString *code;
+@property(nonatomic, copy, nullable) NSString *code;
 
 /**
  *  [Output Only] Metadata about this warning in key: value format. For example:
  *  "data": [ { "key": "scope", "value": "zones/us-east1-d" }
  */
-@property(strong, nullable) NSArray<GTLRCompute_AddressesScopedListWarningDataItem *> *data;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_AddressesScopedListWarningDataItem *> *data;
 
 /** [Output Only] A human-readable description of the warning code. */
-@property(copy, nullable) NSString *message;
+@property(nonatomic, copy, nullable) NSString *message;
 
 @end
 
@@ -1422,10 +1571,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  example, if an instance attempts to perform IP forwarding but is not enabled
  *  for IP forwarding).
  */
-@property(copy, nullable) NSString *key;
+@property(nonatomic, copy, nullable) NSString *key;
 
 /** [Output Only] A warning data value corresponding to the key. */
-@property(copy, nullable) NSString *value;
+@property(nonatomic, copy, nullable) NSString *value;
 
 @end
 
@@ -1446,7 +1595,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  [Output Only] A list of addresses.
@@ -1454,13 +1603,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_Address *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Address *> *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#addressList for lists of
  *  addresses.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -1469,10 +1618,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -1488,7 +1637,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *autoDelete;
+@property(nonatomic, strong, nullable) NSNumber *autoDelete;
 
 /**
  *  Indicates that this is a boot disk. The virtual machine will use the first
@@ -1496,7 +1645,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *boot;
+@property(nonatomic, strong, nullable) NSNumber *boot;
 
 /**
  *  Specifies a unique device name of your choice that is reflected into the
@@ -1507,7 +1656,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  disk, in the form persistent-disks-x, where x is a number assigned by Google
  *  Compute Engine. This field is only applicable for persistent disks.
  */
-@property(copy, nullable) NSString *deviceName;
+@property(nonatomic, copy, nullable) NSString *deviceName;
 
 /**
  *  Encrypts or decrypts a disk using a customer-supplied encryption key.
@@ -1525,7 +1674,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  Instance templates do not store customer-supplied encryption keys, so you
  *  cannot use your own keys to encrypt disks in a managed instance group.
  */
-@property(strong, nullable) GTLRCompute_CustomerEncryptionKey *diskEncryptionKey;
+@property(nonatomic, strong, nullable) GTLRCompute_CustomerEncryptionKey *diskEncryptionKey;
 
 /**
  *  Assigns a zero-based index to this disk, where 0 is reserved for the boot
@@ -1535,7 +1684,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *index;
+@property(nonatomic, strong, nullable) NSNumber *index;
 
 /**
  *  [Input Only] Specifies the parameters for a new disk that will be created
@@ -1544,7 +1693,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  This property is mutually exclusive with the source property; you can only
  *  define one or the other, but not both.
  */
-@property(strong, nullable) GTLRCompute_AttachedDiskInitializeParams *initializeParams;
+@property(nonatomic, strong, nullable) GTLRCompute_AttachedDiskInitializeParams *initializeParams;
 
 /**
  *  Specifies the disk interface to use for attaching this disk, which is either
@@ -1557,16 +1706,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_AttachedDisk_Interface_Nvme Value "NVME"
  *    @arg @c kGTLRCompute_AttachedDisk_Interface_Scsi Value "SCSI"
  */
-@property(copy, nullable) NSString *interface;
+@property(nonatomic, copy, nullable) NSString *interface;
 
 /**
  *  [Output Only] Type of the resource. Always compute#attachedDisk for attached
  *  disks.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /** [Output Only] Any valid publicly visible licenses. */
-@property(strong, nullable) NSArray<NSString *> *licenses;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *licenses;
 
 /**
  *  The mode in which to attach this disk, either READ_WRITE or READ_ONLY. If
@@ -1576,13 +1725,14 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_AttachedDisk_Mode_ReadOnly Value "READ_ONLY"
  *    @arg @c kGTLRCompute_AttachedDisk_Mode_ReadWrite Value "READ_WRITE"
  */
-@property(copy, nullable) NSString *mode;
+@property(nonatomic, copy, nullable) NSString *mode;
 
 /**
  *  Specifies a valid partial or full URL to an existing Persistent Disk
- *  resource. This field is only applicable for persistent disks.
+ *  resource. This field is only applicable for persistent disks. Note that for
+ *  InstanceTemplate, it is just disk name, not URL for the disk.
  */
-@property(copy, nullable) NSString *source;
+@property(nonatomic, copy, nullable) NSString *source;
 
 /**
  *  Specifies the type of the disk, either SCRATCH or PERSISTENT. If not
@@ -1592,7 +1742,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_AttachedDisk_Type_Persistent Value "PERSISTENT"
  *    @arg @c kGTLRCompute_AttachedDisk_Type_Scratch Value "SCRATCH"
  */
-@property(copy, nullable) NSString *type;
+@property(nonatomic, copy, nullable) NSString *type;
 
 @end
 
@@ -1610,14 +1760,14 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  Specifies the disk name. If not specified, the default is to use the name of
  *  the instance.
  */
-@property(copy, nullable) NSString *diskName;
+@property(nonatomic, copy, nullable) NSString *diskName;
 
 /**
  *  Specifies the size of the disk in base-2 GB.
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *diskSizeGb;
+@property(nonatomic, strong, nullable) NSNumber *diskSizeGb;
 
 /**
  *  Specifies the disk type to use to create the instance. If not specified, the
@@ -1629,9 +1779,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  -
  *  https://www.googleapis.com/compute/v1/projects/project/zones/zone/diskTypes/diskType
  *  - projects/project/zones/zone/diskTypes/diskType
- *  - zones/zone/diskTypes/diskType
+ *  - zones/zone/diskTypes/diskType Note that for InstanceTemplate, this is the
+ *  name of the disk type, not URL.
  */
-@property(copy, nullable) NSString *diskType;
+@property(nonatomic, copy, nullable) NSString *diskType;
 
 /**
  *  The source image used to create this disk. If the source image is deleted,
@@ -1650,7 +1801,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  family/family-name:
  *  global/images/family/my-private-family
  */
-@property(copy, nullable) NSString *sourceImage;
+@property(nonatomic, copy, nullable) NSString *sourceImage;
 
 /**
  *  The customer-supplied encryption key of the source image. Required if the
@@ -1659,7 +1810,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  cannot create disks for instances in a managed instance group if the source
  *  images are encrypted with your own keys.
  */
-@property(strong, nullable) GTLRCompute_CustomerEncryptionKey *sourceImageEncryptionKey;
+@property(nonatomic, strong, nullable) GTLRCompute_CustomerEncryptionKey *sourceImageEncryptionKey;
 
 @end
 
@@ -1677,12 +1828,12 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  one or more of the policies for an autoscaler: cpuUtilization,
  *  customMetricUtilizations, and loadBalancingUtilization.
  *  If none of these are specified, the default will be to autoscale based on
- *  cpuUtilization to 0.8 or 80%.
+ *  cpuUtilization to 0.6 or 60%.
  */
-@property(strong, nullable) GTLRCompute_AutoscalingPolicy *autoscalingPolicy;
+@property(nonatomic, strong, nullable) GTLRCompute_AutoscalingPolicy *autoscalingPolicy;
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -1690,7 +1841,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -1700,13 +1851,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  [Output Only] Type of the resource. Always compute#autoscaler for
  *  autoscalers.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  Name of the resource. Provided by the client when the resource is created.
@@ -1717,20 +1868,27 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
-
-/** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
-
-/** URL of the managed instance group that this autoscaler will scale. */
-@property(copy, nullable) NSString *target;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
- *  [Output Only] URL of the zone where the instance group resides.
+ *  [Output Only] URL of the region where the instance group resides (for
+ *  autoscalers living in regional scope).
+ */
+@property(nonatomic, copy, nullable) NSString *region;
+
+/** [Output Only] Server-defined URL for the resource. */
+@property(nonatomic, copy, nullable) NSString *selfLink;
+
+/** URL of the managed instance group that this autoscaler will scale. */
+@property(nonatomic, copy, nullable) NSString *target;
+
+/**
+ *  [Output Only] URL of the zone where the instance group resides (for
+ *  autoscalers living in zonal scope).
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 @end
 
@@ -1746,16 +1904,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /** A map of scoped autoscaler lists. */
-@property(strong, nullable) GTLRCompute_AutoscalerAggregatedListItems *items;
+@property(nonatomic, strong, nullable) GTLRCompute_AutoscalerAggregatedListItems *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#autoscalerAggregatedList for
  *  aggregated lists of autoscalers.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -1764,10 +1922,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -1800,7 +1958,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  A list of Autoscaler resources.
@@ -1808,13 +1966,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_Autoscaler *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Autoscaler *> *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#autoscalerList for lists of
  *  autoscalers.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -1823,10 +1981,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -1837,13 +1995,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_AutoscalersScopedList : GTLRObject
 
 /** [Output Only] List of autoscalers contained in this scope. */
-@property(strong, nullable) NSArray<GTLRCompute_Autoscaler *> *autoscalers;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Autoscaler *> *autoscalers;
 
 /**
  *  [Output Only] Informational warning which replaces the list of autoscalers
  *  when the list is empty.
  */
-@property(strong, nullable) GTLRCompute_AutoscalersScopedListWarning *warning;
+@property(nonatomic, strong, nullable) GTLRCompute_AutoscalersScopedListWarning *warning;
 
 @end
 
@@ -1865,6 +2023,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        Value "DEPRECATED_RESOURCE_USED"
  *    @arg @c kGTLRCompute_AutoscalersScopedListWarning_Code_DiskSizeLargerThanImageSize
  *        Value "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+ *    @arg @c kGTLRCompute_AutoscalersScopedListWarning_Code_FieldValueOverriden
+ *        Value "FIELD_VALUE_OVERRIDEN"
  *    @arg @c kGTLRCompute_AutoscalersScopedListWarning_Code_InjectedKernelsDeprecated
  *        Value "INJECTED_KERNELS_DEPRECATED"
  *    @arg @c kGTLRCompute_AutoscalersScopedListWarning_Code_NextHopAddressNotAssigned
@@ -1890,16 +2050,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_AutoscalersScopedListWarning_Code_Unreachable Value
  *        "UNREACHABLE"
  */
-@property(copy, nullable) NSString *code;
+@property(nonatomic, copy, nullable) NSString *code;
 
 /**
  *  [Output Only] Metadata about this warning in key: value format. For example:
  *  "data": [ { "key": "scope", "value": "zones/us-east1-d" }
  */
-@property(strong, nullable) NSArray<GTLRCompute_AutoscalersScopedListWarningDataItem *> *data;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_AutoscalersScopedListWarningDataItem *> *data;
 
 /** [Output Only] A human-readable description of the warning code. */
-@property(copy, nullable) NSString *message;
+@property(nonatomic, copy, nullable) NSString *message;
 
 @end
 
@@ -1918,10 +2078,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  example, if an instance attempts to perform IP forwarding but is not enabled
  *  for IP forwarding).
  */
-@property(copy, nullable) NSString *key;
+@property(nonatomic, copy, nullable) NSString *key;
 
 /** [Output Only] A warning data value corresponding to the key. */
-@property(copy, nullable) NSString *value;
+@property(nonatomic, copy, nullable) NSString *value;
 
 @end
 
@@ -1943,19 +2103,19 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *coolDownPeriodSec;
+@property(nonatomic, strong, nullable) NSNumber *coolDownPeriodSec;
 
 /**
  *  Defines the CPU utilization policy that allows the autoscaler to scale based
  *  on the average CPU utilization of a managed instance group.
  */
-@property(strong, nullable) GTLRCompute_AutoscalingPolicyCpuUtilization *cpuUtilization;
+@property(nonatomic, strong, nullable) GTLRCompute_AutoscalingPolicyCpuUtilization *cpuUtilization;
 
 /** Configuration parameters of autoscaling based on a custom metric. */
-@property(strong, nullable) NSArray<GTLRCompute_AutoscalingPolicyCustomMetricUtilization *> *customMetricUtilizations;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_AutoscalingPolicyCustomMetricUtilization *> *customMetricUtilizations;
 
 /** Configuration parameters of autoscaling based on load balancer. */
-@property(strong, nullable) GTLRCompute_AutoscalingPolicyLoadBalancingUtilization *loadBalancingUtilization;
+@property(nonatomic, strong, nullable) GTLRCompute_AutoscalingPolicyLoadBalancingUtilization *loadBalancingUtilization;
 
 /**
  *  The maximum number of instances that the autoscaler can scale up to. This is
@@ -1964,7 +2124,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *maxNumReplicas;
+@property(nonatomic, strong, nullable) NSNumber *maxNumReplicas;
 
 /**
  *  The minimum number of replicas that the autoscaler can scale down to. This
@@ -1973,7 +2133,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *minNumReplicas;
+@property(nonatomic, strong, nullable) NSNumber *minNumReplicas;
 
 @end
 
@@ -1985,7 +2145,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 
 /**
  *  The target CPU utilization that the autoscaler should maintain. Must be a
- *  float value in the range (0, 1]. If not specified, the default is 0.8.
+ *  float value in the range (0, 1]. If not specified, the default is 0.6.
  *  If the CPU level is below the target utilization, the autoscaler scales down
  *  the number of instances until it reaches the minimum number of instances you
  *  specified or until the average CPU of your instances reaches the target
@@ -1996,7 +2156,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of doubleValue.
  */
-@property(strong, nullable) NSNumber *utilizationTarget;
+@property(nonatomic, strong, nullable) NSNumber *utilizationTarget;
 
 @end
 
@@ -2007,7 +2167,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_AutoscalingPolicyCustomMetricUtilization : GTLRObject
 
 /**
- *  The identifier of the Cloud Monitoring metric. The metric cannot have
+ *  The identifier of the Stackdriver Monitoring metric. The metric cannot have
  *  negative values and should be a utilization metric, which means that the
  *  number of virtual machines handling requests should increase or decrease
  *  proportionally to the metric. The metric must also have a label of
@@ -2019,7 +2179,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  based on usage:
  *  compute.googleapis.com/instance/cpu/reserved_cores
  */
-@property(copy, nullable) NSString *metric;
+@property(nonatomic, copy, nullable) NSString *metric;
 
 /**
  *  Target value of the metric which autoscaler should maintain. Must be a
@@ -2027,12 +2187,12 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of doubleValue.
  */
-@property(strong, nullable) NSNumber *utilizationTarget;
+@property(nonatomic, strong, nullable) NSNumber *utilizationTarget;
 
 /**
- *  Defines how target utilization value is expressed for a Cloud Monitoring
- *  metric. Either GAUGE, DELTA_PER_SECOND, or DELTA_PER_MINUTE. If not
- *  specified, the default is GAUGE.
+ *  Defines how target utilization value is expressed for a Stackdriver
+ *  Monitoring metric. Either GAUGE, DELTA_PER_SECOND, or DELTA_PER_MINUTE. If
+ *  not specified, the default is GAUGE.
  *
  *  Likely values:
  *    @arg @c kGTLRCompute_AutoscalingPolicyCustomMetricUtilization_UtilizationTargetType_DeltaPerMinute
@@ -2042,7 +2202,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_AutoscalingPolicyCustomMetricUtilization_UtilizationTargetType_Gauge
  *        Value "GAUGE"
  */
-@property(copy, nullable) NSString *utilizationTargetType;
+@property(nonatomic, copy, nullable) NSString *utilizationTargetType;
 
 @end
 
@@ -2059,7 +2219,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of doubleValue.
  */
-@property(strong, nullable) NSNumber *utilizationTarget;
+@property(nonatomic, strong, nullable) NSNumber *utilizationTarget;
 
 @end
 
@@ -2070,26 +2230,29 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_Backend : GTLRObject
 
 /**
- *  Specifies the balancing mode for this backend. For global HTTP(S) load
- *  balancing, the default is UTILIZATION. Valid values are UTILIZATION and
- *  RATE.
+ *  Specifies the balancing mode for this backend. For global HTTP(S) or TCP/SSL
+ *  load balancing, the default is UTILIZATION. Valid values are UTILIZATION,
+ *  RATE (for HTTP(S)) and CONNECTION (for TCP/SSL).
+ *  This cannot be used for internal load balancing.
  *
  *  Likely values:
+ *    @arg @c kGTLRCompute_Backend_BalancingMode_Connection Value "CONNECTION"
  *    @arg @c kGTLRCompute_Backend_BalancingMode_Rate Value "RATE"
  *    @arg @c kGTLRCompute_Backend_BalancingMode_Utilization Value "UTILIZATION"
  */
-@property(copy, nullable) NSString *balancingMode;
+@property(nonatomic, copy, nullable) NSString *balancingMode;
 
 /**
- *  A multiplier applied to the group's maximum servicing capacity (either
- *  UTILIZATION or RATE). Default value is 1, which means the group will serve
- *  up to 100% of its configured CPU or RPS (depending on balancingMode). A
- *  setting of 0 means the group is completely drained, offering 0% of its
- *  available CPU or RPS. Valid range is [0.0,1.0].
+ *  A multiplier applied to the group's maximum servicing capacity (based on
+ *  UTILIZATION, RATE or CONNECTION). Default value is 1, which means the group
+ *  will serve up to 100% of its configured capacity (depending on
+ *  balancingMode). A setting of 0 means the group is completely drained,
+ *  offering 0% of its available Capacity. Valid range is [0.0,1.0].
+ *  This cannot be used for internal load balancing.
  *
  *  Uses NSNumber of floatValue.
  */
-@property(strong, nullable) NSNumber *capacityScaler;
+@property(nonatomic, strong, nullable) NSNumber *capacityScaler;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -2097,7 +2260,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  The fully-qualified URL of a zonal Instance Group resource. This instance
@@ -2107,36 +2270,62 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  use same Instance Group resource.
  *  Note that you must specify an Instance Group resource using the
  *  fully-qualified URL, rather than a partial URL.
+ *  When the BackendService has load balancing scheme INTERNAL, the instance
+ *  group must be in a zone within the same region as the BackendService.
  */
-@property(copy, nullable) NSString *group;
+@property(nonatomic, copy, nullable) NSString *group;
+
+/**
+ *  The max number of simultaneous connections for the group. Can be used with
+ *  either CONNECTION or UTILIZATION balancing modes. For CONNECTION mode,
+ *  either maxConnections or maxConnectionsPerInstance must be set.
+ *  This cannot be used for internal load balancing.
+ *
+ *  Uses NSNumber of intValue.
+ */
+@property(nonatomic, strong, nullable) NSNumber *maxConnections;
+
+/**
+ *  The max number of simultaneous connections that a single backend instance
+ *  can handle. This is used to calculate the capacity of the group. Can be used
+ *  in either CONNECTION or UTILIZATION balancing modes. For CONNECTION mode,
+ *  either maxConnections or maxConnectionsPerInstance must be set.
+ *  This cannot be used for internal load balancing.
+ *
+ *  Uses NSNumber of intValue.
+ */
+@property(nonatomic, strong, nullable) NSNumber *maxConnectionsPerInstance;
 
 /**
  *  The max requests per second (RPS) of the group. Can be used with either RATE
  *  or UTILIZATION balancing modes, but required if RATE mode. For RATE mode,
  *  either maxRate or maxRatePerInstance must be set.
+ *  This cannot be used for internal load balancing.
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *maxRate;
+@property(nonatomic, strong, nullable) NSNumber *maxRate;
 
 /**
  *  The max requests per second (RPS) that a single backend instance can
  *  handle.This is used to calculate the capacity of the group. Can be used in
  *  either balancing mode. For RATE mode, either maxRate or maxRatePerInstance
  *  must be set.
+ *  This cannot be used for internal load balancing.
  *
  *  Uses NSNumber of floatValue.
  */
-@property(strong, nullable) NSNumber *maxRatePerInstance;
+@property(nonatomic, strong, nullable) NSNumber *maxRatePerInstance;
 
 /**
  *  Used when balancingMode is UTILIZATION. This ratio defines the CPU
  *  utilization target for the group. The default is 0.8. Valid range is [0.0,
  *  1.0].
+ *  This cannot be used for internal load balancing.
  *
  *  Uses NSNumber of floatValue.
  */
-@property(strong, nullable) NSNumber *maxUtilization;
+@property(nonatomic, strong, nullable) NSNumber *maxUtilization;
 
 @end
 
@@ -2147,11 +2336,24 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  */
 @interface GTLRCompute_BackendService : GTLRObject
 
+/**
+ *  Lifetime of cookies in seconds if session_affinity is GENERATED_COOKIE. If
+ *  set to 0, the cookie is non-persistent and lasts only until the end of the
+ *  browser session (or equivalent). The maximum allowed value for TTL is one
+ *  day.
+ *  When the load balancing scheme is INTERNAL, this field is not used.
+ *
+ *  Uses NSNumber of intValue.
+ */
+@property(nonatomic, strong, nullable) NSNumber *affinityCookieTtlSec;
+
 /** The list of backends that serve this BackendService. */
-@property(strong, nullable) NSArray<GTLRCompute_Backend *> *backends;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Backend *> *backends;
+
+@property(nonatomic, strong, nullable) GTLRCompute_ConnectionDraining *connectionDraining;
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -2159,14 +2361,15 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  If true, enable Cloud CDN for this BackendService.
+ *  When the load balancing scheme is INTERNAL, this field is not used.
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *enableCDN;
+@property(nonatomic, strong, nullable) NSNumber *enableCDN;
 
 /**
  *  Fingerprint of this resource. A hash of the contents stored in this object.
@@ -2177,14 +2380,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  Contains encoded binary data; GTLRBase64 can encode/decode (probably
  *  web-safe format).
  */
-@property(copy, nullable) NSString *fingerprint;
+@property(nonatomic, copy, nullable) NSString *fingerprint;
 
 /**
  *  The list of URLs to the HttpHealthCheck or HttpsHealthCheck resource for
  *  health checking this BackendService. Currently at most one health check can
  *  be specified, and a health check is required.
+ *  For internal load balancing, a URL to a HealthCheck resource must be
+ *  specified instead.
  */
-@property(strong, nullable) NSArray<NSString *> *healthChecks;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *healthChecks;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -2194,13 +2399,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  [Output Only] Type of resource. Always compute#backendService for backend
  *  services.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  Name of the resource. Provided by the client when the resource is created.
@@ -2211,40 +2416,66 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
  *  Deprecated in favor of portName. The TCP port to connect on the backend. The
  *  default value is 80.
+ *  This cannot be used for internal load balancing.
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *port;
+@property(nonatomic, strong, nullable) NSNumber *port;
 
 /**
  *  Name of backend port. The same name should appear in the instance groups
- *  referenced by this service. Required.
+ *  referenced by this service. Required when the load balancing scheme is
+ *  EXTERNAL.
+ *  When the load balancing scheme is INTERNAL, this field is not used.
  */
-@property(copy, nullable) NSString *portName;
+@property(nonatomic, copy, nullable) NSString *portName;
 
 /**
  *  The protocol this BackendService uses to communicate with backends.
- *  Possible values are HTTP, HTTPS, HTTP2, TCP and SSL.
+ *  Possible values are HTTP, HTTPS, HTTP2, TCP and SSL. The default is HTTP.
+ *  For internal load balancing, the possible values are TCP and UDP, and the
+ *  default is TCP.
  *
  *  Likely values:
  *    @arg @c kGTLRCompute_BackendService_Protocol_Http Value "HTTP"
  *    @arg @c kGTLRCompute_BackendService_Protocol_Https Value "HTTPS"
+ *    @arg @c kGTLRCompute_BackendService_Protocol_Ssl Value "SSL"
+ *    @arg @c kGTLRCompute_BackendService_Protocol_Tcp Value "TCP"
  */
-@property(copy, nullable) NSString *protocol;
+@property(nonatomic, copy, nullable) NSString *protocol;
 
 /**
  *  [Output Only] URL of the region where the regional backend service resides.
  *  This field is not applicable to global backend services.
  */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
+
+/**
+ *  Type of session affinity to use. The default is NONE.
+ *  When the load balancing scheme is EXTERNAL, can be NONE, CLIENT_IP, or
+ *  GENERATED_COOKIE.
+ *  When the load balancing scheme is INTERNAL, can be NONE, CLIENT_IP,
+ *  CLIENT_IP_PROTO, or CLIENT_IP_PORT_PROTO.
+ *  When the protocol is UDP, this field is not used.
+ *
+ *  Likely values:
+ *    @arg @c kGTLRCompute_BackendService_SessionAffinity_ClientIp Value
+ *        "CLIENT_IP"
+ *    @arg @c kGTLRCompute_BackendService_SessionAffinity_ClientIpProto Value
+ *        "CLIENT_IP_PROTO"
+ *    @arg @c kGTLRCompute_BackendService_SessionAffinity_GeneratedCookie Value
+ *        "GENERATED_COOKIE"
+ *    @arg @c kGTLRCompute_BackendService_SessionAffinity_None Value "NONE"
+ */
+@property(nonatomic, copy, nullable) NSString *sessionAffinity;
 
 /**
  *  How many seconds to wait for the backend before considering it a failed
@@ -2252,7 +2483,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *timeoutSec;
+@property(nonatomic, strong, nullable) NSNumber *timeoutSec;
 
 @end
 
@@ -2262,13 +2493,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  */
 @interface GTLRCompute_BackendServiceGroupHealth : GTLRObject
 
-@property(strong, nullable) NSArray<GTLRCompute_HealthStatus *> *healthStatus;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_HealthStatus *> *healthStatus;
 
 /**
  *  [Output Only] Type of resource. Always compute#backendServiceGroupHealth for
  *  the health of backend services.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 @end
 
@@ -2288,7 +2519,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  A list of BackendService resources.
@@ -2296,19 +2527,19 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_BackendService *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_BackendService *> *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#backendServiceList for lists
  *  of backend services.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /** [Output Only] A token used to continue a truncated list request. */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -2318,7 +2549,23 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  */
 @interface GTLRCompute_CacheInvalidationRule : GTLRObject
 
-@property(copy, nullable) NSString *path;
+@property(nonatomic, copy, nullable) NSString *path;
+
+@end
+
+
+/**
+ *  Message containing connection draining configuration.
+ */
+@interface GTLRCompute_ConnectionDraining : GTLRObject
+
+/**
+ *  Time for which instance will be drained (not accept new connections, but
+ *  still work to finish started).
+ *
+ *  Uses NSNumber of intValue.
+ */
+@property(nonatomic, strong, nullable) NSNumber *drainingTimeoutSec;
 
 @end
 
@@ -2332,13 +2579,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  Specifies a 256-bit customer-supplied encryption key, encoded in RFC 4648
  *  base64 to either encrypt or decrypt this resource.
  */
-@property(copy, nullable) NSString *rawKey;
+@property(nonatomic, copy, nullable) NSString *rawKey;
 
 /**
  *  [Output only] The RFC 4648 base64 encoded SHA-256 hash of the
  *  customer-supplied encryption key that protects this resource.
  */
-@property(copy, nullable) NSString *sha256;
+@property(nonatomic, copy, nullable) NSString *sha256;
 
 @end
 
@@ -2352,13 +2599,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  Decrypts data associated with the disk with a customer-supplied encryption
  *  key.
  */
-@property(strong, nullable) GTLRCompute_CustomerEncryptionKey *diskEncryptionKey;
+@property(nonatomic, strong, nullable) GTLRCompute_CustomerEncryptionKey *diskEncryptionKey;
 
 /**
  *  Specifies a valid partial or full URL to an existing Persistent Disk
  *  resource. This field is only applicable for persistent disks.
  */
-@property(copy, nullable) NSString *source;
+@property(nonatomic, copy, nullable) NSString *source;
 
 @end
 
@@ -2372,26 +2619,26 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  An optional RFC3339 timestamp on or after which the deprecation state of
  *  this resource will be changed to DELETED.
  */
-@property(copy, nullable) NSString *deleted;
+@property(nonatomic, copy, nullable) NSString *deleted;
 
 /**
  *  An optional RFC3339 timestamp on or after which the deprecation state of
  *  this resource will be changed to DEPRECATED.
  */
-@property(copy, nullable) NSString *deprecated;
+@property(nonatomic, copy, nullable) NSString *deprecated;
 
 /**
  *  An optional RFC3339 timestamp on or after which the deprecation state of
  *  this resource will be changed to OBSOLETE.
  */
-@property(copy, nullable) NSString *obsolete;
+@property(nonatomic, copy, nullable) NSString *obsolete;
 
 /**
  *  The URL of the suggested replacement for a deprecated resource. The
  *  suggested replacement resource must be the same kind of resource as the
  *  deprecated resource.
  */
-@property(copy, nullable) NSString *replacement;
+@property(nonatomic, copy, nullable) NSString *replacement;
 
 /**
  *  The deprecation state of this resource. This can be DEPRECATED, OBSOLETE, or
@@ -2405,7 +2652,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_DeprecationStatus_State_Deprecated Value "DEPRECATED"
  *    @arg @c kGTLRCompute_DeprecationStatus_State_Obsolete Value "OBSOLETE"
  */
-@property(copy, nullable) NSString *state;
+@property(nonatomic, copy, nullable) NSString *state;
 
 @end
 
@@ -2416,7 +2663,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_Disk : GTLRObject
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -2424,7 +2671,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  Encrypts the disk using a customer-supplied encryption key.
@@ -2437,7 +2684,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  disk will be encrypted using an automatically generated key and you do not
  *  need to provide a key to use the disk later.
  */
-@property(strong, nullable) GTLRCompute_CustomerEncryptionKey *diskEncryptionKey;
+@property(nonatomic, strong, nullable) GTLRCompute_CustomerEncryptionKey *diskEncryptionKey;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -2447,19 +2694,19 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /** [Output Only] Type of the resource. Always compute#disk for disks. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /** [Output Only] Last attach timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *lastAttachTimestamp;
+@property(nonatomic, copy, nullable) NSString *lastAttachTimestamp;
 
 /** [Output Only] Last detach timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *lastDetachTimestamp;
+@property(nonatomic, copy, nullable) NSString *lastDetachTimestamp;
 
-/** [Output Only] Any applicable publicly visible licenses. */
-@property(strong, nullable) NSArray<NSString *> *licenses;
+/** Any applicable publicly visible licenses. */
+@property(nonatomic, strong, nullable) NSArray<NSString *> *licenses;
 
 /**
  *  Name of the resource. Provided by the client when the resource is created.
@@ -2470,13 +2717,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /** Internal use only. */
-@property(copy, nullable) NSString *options;
+@property(nonatomic, copy, nullable) NSString *options;
 
 /** [Output Only] Server-defined fully-qualified URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  Size of the persistent disk, specified in GB. You can specify this field
@@ -2488,7 +2735,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *sizeGb;
+@property(nonatomic, strong, nullable) NSNumber *sizeGb;
 
 /**
  *  The source image used to create this disk. If the source image is deleted,
@@ -2507,13 +2754,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  family/family-name:
  *  global/images/family/my-private-family
  */
-@property(copy, nullable) NSString *sourceImage;
+@property(nonatomic, copy, nullable) NSString *sourceImage;
 
 /**
  *  The customer-supplied encryption key of the source image. Required if the
  *  source image is protected by a customer-supplied encryption key.
  */
-@property(strong, nullable) GTLRCompute_CustomerEncryptionKey *sourceImageEncryptionKey;
+@property(nonatomic, strong, nullable) GTLRCompute_CustomerEncryptionKey *sourceImageEncryptionKey;
 
 /**
  *  [Output Only] The ID value of the image used to create this disk. This value
@@ -2522,7 +2769,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  deleted and recreated under the same name, the source image ID would
  *  identify the exact version of the image that was used.
  */
-@property(copy, nullable) NSString *sourceImageId;
+@property(nonatomic, copy, nullable) NSString *sourceImageId;
 
 /**
  *  The source snapshot used to create this disk. You can provide this as a
@@ -2533,13 +2780,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  - projects/project/global/snapshots/snapshot
  *  - global/snapshots/snapshot
  */
-@property(copy, nullable) NSString *sourceSnapshot;
+@property(nonatomic, copy, nullable) NSString *sourceSnapshot;
 
 /**
  *  The customer-supplied encryption key of the source snapshot. Required if the
  *  source snapshot is protected by a customer-supplied encryption key.
  */
-@property(strong, nullable) GTLRCompute_CustomerEncryptionKey *sourceSnapshotEncryptionKey;
+@property(nonatomic, strong, nullable) GTLRCompute_CustomerEncryptionKey *sourceSnapshotEncryptionKey;
 
 /**
  *  [Output Only] The unique ID of the snapshot used to create this disk. This
@@ -2548,11 +2795,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  was later deleted and recreated under the same name, the source snapshot ID
  *  would identify the exact version of the snapshot that was used.
  */
-@property(copy, nullable) NSString *sourceSnapshotId;
+@property(nonatomic, copy, nullable) NSString *sourceSnapshotId;
 
 /**
- *  [Output Only] The status of disk creation. Applicable statuses includes:
- *  CREATING, FAILED, READY, RESTORING.
+ *  [Output Only] The status of disk creation.
  *
  *  Likely values:
  *    @arg @c kGTLRCompute_Disk_Status_Creating Value "CREATING"
@@ -2560,26 +2806,26 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_Disk_Status_Ready Value "READY"
  *    @arg @c kGTLRCompute_Disk_Status_Restoring Value "RESTORING"
  */
-@property(copy, nullable) NSString *status;
+@property(nonatomic, copy, nullable) NSString *status;
 
 /**
  *  URL of the disk type resource describing which disk type to use to create
  *  the disk. Provide this when creating the disk.
  */
-@property(copy, nullable) NSString *type;
+@property(nonatomic, copy, nullable) NSString *type;
 
 /**
  *  [Output Only] Links to the users of the disk (attached instances) in form:
  *  project/zones/zone/instances/instance
  */
-@property(strong, nullable) NSArray<NSString *> *users;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *users;
 
 /**
  *  [Output Only] URL of the zone where the disk resides.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 @end
 
@@ -2595,16 +2841,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /** [Output Only] A map of scoped disk lists. */
-@property(strong, nullable) GTLRCompute_DiskAggregatedListItems *items;
+@property(nonatomic, strong, nullable) GTLRCompute_DiskAggregatedListItems *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#diskAggregatedList for
  *  aggregated lists of persistent disks.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -2613,10 +2859,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -2649,7 +2895,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  [Output Only] A list of persistent disks.
@@ -2657,12 +2903,12 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_Disk *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Disk *> *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#diskList for lists of disks.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -2671,10 +2917,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -2691,7 +2937,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  - projects/project/zones/zone
  *  - zones/zone
  */
-@property(copy, nullable) NSString *destinationZone;
+@property(nonatomic, copy, nullable) NSString *destinationZone;
 
 /**
  *  The URL of the target disk to move. This can be a full or partial URL. For
@@ -2701,7 +2947,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  - projects/project/zones/zone/disks/disk
  *  - zones/zone/disks/disk
  */
-@property(copy, nullable) NSString *targetDisk;
+@property(nonatomic, copy, nullable) NSString *targetDisk;
 
 @end
 
@@ -2716,7 +2962,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *sizeGb;
+@property(nonatomic, strong, nullable) NSNumber *sizeGb;
 
 @end
 
@@ -2727,13 +2973,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_DisksScopedList : GTLRObject
 
 /** [Output Only] List of disks contained in this scope. */
-@property(strong, nullable) NSArray<GTLRCompute_Disk *> *disks;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Disk *> *disks;
 
 /**
  *  [Output Only] Informational warning which replaces the list of disks when
  *  the list is empty.
  */
-@property(strong, nullable) GTLRCompute_DisksScopedListWarning *warning;
+@property(nonatomic, strong, nullable) GTLRCompute_DisksScopedListWarning *warning;
 
 @end
 
@@ -2755,6 +3001,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        Value "DEPRECATED_RESOURCE_USED"
  *    @arg @c kGTLRCompute_DisksScopedListWarning_Code_DiskSizeLargerThanImageSize
  *        Value "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+ *    @arg @c kGTLRCompute_DisksScopedListWarning_Code_FieldValueOverriden Value
+ *        "FIELD_VALUE_OVERRIDEN"
  *    @arg @c kGTLRCompute_DisksScopedListWarning_Code_InjectedKernelsDeprecated
  *        Value "INJECTED_KERNELS_DEPRECATED"
  *    @arg @c kGTLRCompute_DisksScopedListWarning_Code_NextHopAddressNotAssigned
@@ -2780,16 +3028,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_DisksScopedListWarning_Code_Unreachable Value
  *        "UNREACHABLE"
  */
-@property(copy, nullable) NSString *code;
+@property(nonatomic, copy, nullable) NSString *code;
 
 /**
  *  [Output Only] Metadata about this warning in key: value format. For example:
  *  "data": [ { "key": "scope", "value": "zones/us-east1-d" }
  */
-@property(strong, nullable) NSArray<GTLRCompute_DisksScopedListWarningDataItem *> *data;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_DisksScopedListWarningDataItem *> *data;
 
 /** [Output Only] A human-readable description of the warning code. */
-@property(copy, nullable) NSString *message;
+@property(nonatomic, copy, nullable) NSString *message;
 
 @end
 
@@ -2808,10 +3056,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  example, if an instance attempts to perform IP forwarding but is not enabled
  *  for IP forwarding).
  */
-@property(copy, nullable) NSString *key;
+@property(nonatomic, copy, nullable) NSString *key;
 
 /** [Output Only] A warning data value corresponding to the key. */
-@property(copy, nullable) NSString *value;
+@property(nonatomic, copy, nullable) NSString *value;
 
 @end
 
@@ -2822,24 +3070,24 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_DiskType : GTLRObject
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  [Output Only] Server-defined default disk size in GB.
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *defaultDiskSizeGb;
+@property(nonatomic, strong, nullable) NSNumber *defaultDiskSizeGb;
 
 /** [Output Only] The deprecation status associated with this disk type. */
-@property(strong, nullable) GTLRCompute_DeprecationStatus *deprecated;
+@property(nonatomic, strong, nullable) GTLRCompute_DeprecationStatus *deprecated;
 
 /**
  *  [Output Only] An optional description of this resource.
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -2849,31 +3097,31 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  [Output Only] Type of the resource. Always compute#diskType for disk types.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /** [Output Only] Name of the resource. */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  [Output Only] An optional textual description of the valid disk size, such
  *  as "10GB-10TB".
  */
-@property(copy, nullable) NSString *validDiskSize;
+@property(nonatomic, copy, nullable) NSString *validDiskSize;
 
 /**
  *  [Output Only] URL of the zone where the disk type resides.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 @end
 
@@ -2889,13 +3137,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /** [Output Only] A map of scoped disk type lists. */
-@property(strong, nullable) GTLRCompute_DiskTypeAggregatedListItems *items;
+@property(nonatomic, strong, nullable) GTLRCompute_DiskTypeAggregatedListItems *items;
 
 /** [Output Only] Type of resource. Always compute#diskTypeAggregatedList. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -2904,10 +3152,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -2940,7 +3188,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  [Output Only] A list of Disk Type resources.
@@ -2948,12 +3196,12 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_DiskType *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_DiskType *> *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#diskTypeList for disk types.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -2962,10 +3210,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -2976,13 +3224,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_DiskTypesScopedList : GTLRObject
 
 /** [Output Only] List of disk types contained in this scope. */
-@property(strong, nullable) NSArray<GTLRCompute_DiskType *> *diskTypes;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_DiskType *> *diskTypes;
 
 /**
  *  [Output Only] Informational warning which replaces the list of disk types
  *  when the list is empty.
  */
-@property(strong, nullable) GTLRCompute_DiskTypesScopedListWarning *warning;
+@property(nonatomic, strong, nullable) GTLRCompute_DiskTypesScopedListWarning *warning;
 
 @end
 
@@ -3004,6 +3252,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        Value "DEPRECATED_RESOURCE_USED"
  *    @arg @c kGTLRCompute_DiskTypesScopedListWarning_Code_DiskSizeLargerThanImageSize
  *        Value "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+ *    @arg @c kGTLRCompute_DiskTypesScopedListWarning_Code_FieldValueOverriden
+ *        Value "FIELD_VALUE_OVERRIDEN"
  *    @arg @c kGTLRCompute_DiskTypesScopedListWarning_Code_InjectedKernelsDeprecated
  *        Value "INJECTED_KERNELS_DEPRECATED"
  *    @arg @c kGTLRCompute_DiskTypesScopedListWarning_Code_NextHopAddressNotAssigned
@@ -3029,16 +3279,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_DiskTypesScopedListWarning_Code_Unreachable Value
  *        "UNREACHABLE"
  */
-@property(copy, nullable) NSString *code;
+@property(nonatomic, copy, nullable) NSString *code;
 
 /**
  *  [Output Only] Metadata about this warning in key: value format. For example:
  *  "data": [ { "key": "scope", "value": "zones/us-east1-d" }
  */
-@property(strong, nullable) NSArray<GTLRCompute_DiskTypesScopedListWarningDataItem *> *data;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_DiskTypesScopedListWarningDataItem *> *data;
 
 /** [Output Only] A human-readable description of the warning code. */
-@property(copy, nullable) NSString *message;
+@property(nonatomic, copy, nullable) NSString *message;
 
 @end
 
@@ -3057,10 +3307,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  example, if an instance attempts to perform IP forwarding but is not enabled
  *  for IP forwarding).
  */
-@property(copy, nullable) NSString *key;
+@property(nonatomic, copy, nullable) NSString *key;
 
 /** [Output Only] A warning data value corresponding to the key. */
-@property(copy, nullable) NSString *value;
+@property(nonatomic, copy, nullable) NSString *value;
 
 @end
 
@@ -3071,13 +3321,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_Firewall : GTLRObject
 
 /**
- *  The list of rules specified by this firewall. Each rule specifies a protocol
- *  and port-range tuple that describes a permitted connection.
+ *  The list of ALLOW rules specified by this firewall. Each rule specifies a
+ *  protocol and port-range tuple that describes a permitted connection.
  */
-@property(strong, nullable) NSArray<GTLRCompute_FirewallAllowedItem *> *allowed;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_FirewallAllowedItem *> *allowed;
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -3085,7 +3335,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -3095,13 +3345,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  [Output Ony] Type of the resource. Always compute#firewall for firewall
  *  rules.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  Name of the resource; provided by the client when the resource is created.
@@ -3112,7 +3362,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
  *  URL of the network resource for this firewall rule. If not specified when
@@ -3125,32 +3375,34 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  - projects/myproject/global/networks/my-network
  *  - global/networks/default
  */
-@property(copy, nullable) NSString *network;
+@property(nonatomic, copy, nullable) NSString *network;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
- *  The IP address blocks that this rule applies to, expressed in CIDR format.
- *  One or both of sourceRanges and sourceTags may be set.
- *  If both properties are set, an inbound connection is allowed if the range
- *  matches the sourceRanges OR the tag of the source matches the sourceTags
- *  property. The connection does not need to match both properties.
+ *  If source ranges are specified, the firewall will apply only to traffic that
+ *  has source IP address in these ranges. These ranges must be expressed in
+ *  CIDR format. One or both of sourceRanges and sourceTags may be set. If both
+ *  properties are set, the firewall will apply to traffic that has source IP
+ *  address within sourceRanges OR the source IP that belongs to a tag listed in
+ *  the sourceTags property. The connection does not need to match both
+ *  properties for the firewall to apply.
  */
-@property(strong, nullable) NSArray<NSString *> *sourceRanges;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *sourceRanges;
 
 /**
- *  A list of instance tags which this rule applies to. One or both of
- *  sourceRanges and sourceTags may be set.
- *  If both properties are set, an inbound connection is allowed if the range
- *  matches the sourceRanges OR the tag of the source matches the sourceTags
- *  property. The connection does not need to match both properties.
- *  Source tags cannot be used to allow access to an instance's external IP
- *  address. Because tags are associated with an instance, not an IP address,
- *  source tags can only be used to control traffic traveling from an instance
- *  inside the same network as the firewall.
+ *  If source tags are specified, the firewall will apply only to traffic with
+ *  source IP that belongs to a tag listed in source tags. Source tags cannot be
+ *  used to control traffic to an instance's external IP address. Because tags
+ *  are associated with an instance, not an IP address. One or both of
+ *  sourceRanges and sourceTags may be set. If both properties are set, the
+ *  firewall will apply to traffic that has source IP address within
+ *  sourceRanges OR the source IP that belongs to a tag listed in the sourceTags
+ *  property. The connection does not need to match both properties for the
+ *  firewall to apply.
  */
-@property(strong, nullable) NSArray<NSString *> *sourceTags;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *sourceTags;
 
 /**
  *  A list of instance tags indicating sets of instances located in the network
@@ -3158,7 +3410,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  targetTags are specified, the firewall rule applies to all instances on the
  *  specified network.
  */
-@property(strong, nullable) NSArray<NSString *> *targetTags;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *targetTags;
 
 @end
 
@@ -3169,20 +3421,21 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_FirewallAllowedItem : GTLRObject
 
 /**
- *  The IP protocol that is allowed for this rule. The protocol type is required
+ *  The IP protocol to which this rule applies. The protocol type is required
  *  when creating a firewall rule. This value can either be one of the following
  *  well known protocol strings (tcp, udp, icmp, esp, ah, sctp), or the IP
  *  protocol number.
  */
-@property(copy, nullable) NSString *IPProtocol;
+@property(nonatomic, copy, nullable) NSString *IPProtocol;
 
 /**
- *  An optional list of ports which are allowed. This field is only applicable
- *  for UDP or TCP protocol. Each entry must be either an integer or a range. If
- *  not specified, connections through any port are allowed
+ *  An optional list of ports to which this rule applies. This field is only
+ *  applicable for UDP or TCP protocol. Each entry must be either an integer or
+ *  a range. If not specified, this rule applies to connections through any
+ *  port.
  *  Example inputs include: ["22"], ["80","443"], and ["12345-12349"].
  */
-@property(strong, nullable) NSArray<NSString *> *ports;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *ports;
 
 @end
 
@@ -3203,7 +3456,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  [Output Only] A list of Firewall resources.
@@ -3211,13 +3464,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_Firewall *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Firewall *> *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#firewallList for lists of
  *  firewalls.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -3226,10 +3479,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -3242,7 +3495,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_ForwardingRule : GTLRObject
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -3250,7 +3503,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -3260,20 +3513,27 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
- *  Value of the reserved IP address that this forwarding rule is serving on
- *  behalf of. For global forwarding rules, the address must be a global IP; for
- *  regional forwarding rules, the address must live in the same region as the
- *  forwarding rule. If left empty (default value), an ephemeral IP from the
- *  same scope (global or regional) will be assigned.
+ *  The IP address that this forwarding rule is serving on behalf of.
+ *  For global forwarding rules, the address must be a global IP; for regional
+ *  forwarding rules, the address must live in the same region as the forwarding
+ *  rule. By default, this field is empty and an ephemeral IP from the same
+ *  scope (global or regional) will be assigned.
+ *  When the load balancing scheme is INTERNAL, this can only be an RFC 1918 IP
+ *  address belonging to the network/subnetwork configured for the forwarding
+ *  rule. A reserved address cannot be used. If the field is empty, the IP
+ *  address will be automatically allocated from the internal IP range of the
+ *  subnetwork or network configured for this forwarding rule.
  */
-@property(copy, nullable) NSString *IPAddress;
+@property(nonatomic, copy, nullable) NSString *IPAddress;
 
 /**
  *  The IP protocol to which this rule applies. Valid options are TCP, UDP, ESP,
  *  AH, SCTP or ICMP.
+ *  When the load balancing scheme is INTERNAL</code, only TCP and UDP are
+ *  valid.
  *
  *  Likely values:
  *    @arg @c kGTLRCompute_ForwardingRule_IPProtocol_Ah Value "AH"
@@ -3282,13 +3542,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_ForwardingRule_IPProtocol_Tcp Value "TCP"
  *    @arg @c kGTLRCompute_ForwardingRule_IPProtocol_Udp Value "UDP"
  */
-@property(copy, nullable) NSString *IPProtocol;
+@property(nonatomic, copy, nullable) NSString *IPProtocol;
 
 /**
  *  [Output Only] Type of the resource. Always compute#forwardingRule for
  *  Forwarding Rule resources.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  Name of the resource; provided by the client when the resource is created.
@@ -3299,24 +3559,25 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
  *  Applicable only when IPProtocol is TCP, UDP, or SCTP, only packets addressed
  *  to ports in the specified range will be forwarded to target. Forwarding
  *  rules with the same [IPAddress, IPProtocol] pair must have disjoint port
  *  ranges.
+ *  This field is not used for internal load balancing.
  */
-@property(copy, nullable) NSString *portRange;
+@property(nonatomic, copy, nullable) NSString *portRange;
 
 /**
  *  [Output Only] URL of the region where the regional forwarding rule resides.
  *  This field is not applicable to global forwarding rules.
  */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  The URL of the target resource to receive the matched traffic. For regional
@@ -3325,8 +3586,9 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  TargetHttpProxy or TargetHttpsProxy resource. The forwarded traffic must be
  *  of a type appropriate to the target object. For example, TargetHttpProxy
  *  requires HTTP traffic, and TargetHttpsProxy requires HTTPS traffic.
+ *  This field is not used for internal load balancing.
  */
-@property(copy, nullable) NSString *target;
+@property(nonatomic, copy, nullable) NSString *target;
 
 @end
 
@@ -3342,16 +3604,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /** A map of scoped forwarding rule lists. */
-@property(strong, nullable) GTLRCompute_ForwardingRuleAggregatedListItems *items;
+@property(nonatomic, strong, nullable) GTLRCompute_ForwardingRuleAggregatedListItems *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#forwardingRuleAggregatedList
  *  for lists of forwarding rules.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -3360,10 +3622,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -3395,7 +3657,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  A list of ForwardingRule resources.
@@ -3403,10 +3665,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_ForwardingRule *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_ForwardingRule *> *items;
 
 /** Type of resource. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -3415,10 +3677,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -3429,13 +3691,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_ForwardingRulesScopedList : GTLRObject
 
 /** List of forwarding rules contained in this scope. */
-@property(strong, nullable) NSArray<GTLRCompute_ForwardingRule *> *forwardingRules;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_ForwardingRule *> *forwardingRules;
 
 /**
  *  Informational warning which replaces the list of forwarding rules when the
  *  list is empty.
  */
-@property(strong, nullable) GTLRCompute_ForwardingRulesScopedListWarning *warning;
+@property(nonatomic, strong, nullable) GTLRCompute_ForwardingRulesScopedListWarning *warning;
 
 @end
 
@@ -3457,6 +3719,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        Value "DEPRECATED_RESOURCE_USED"
  *    @arg @c kGTLRCompute_ForwardingRulesScopedListWarning_Code_DiskSizeLargerThanImageSize
  *        Value "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+ *    @arg @c kGTLRCompute_ForwardingRulesScopedListWarning_Code_FieldValueOverriden
+ *        Value "FIELD_VALUE_OVERRIDEN"
  *    @arg @c kGTLRCompute_ForwardingRulesScopedListWarning_Code_InjectedKernelsDeprecated
  *        Value "INJECTED_KERNELS_DEPRECATED"
  *    @arg @c kGTLRCompute_ForwardingRulesScopedListWarning_Code_NextHopAddressNotAssigned
@@ -3482,16 +3746,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_ForwardingRulesScopedListWarning_Code_Unreachable
  *        Value "UNREACHABLE"
  */
-@property(copy, nullable) NSString *code;
+@property(nonatomic, copy, nullable) NSString *code;
 
 /**
  *  [Output Only] Metadata about this warning in key: value format. For example:
  *  "data": [ { "key": "scope", "value": "zones/us-east1-d" }
  */
-@property(strong, nullable) NSArray<GTLRCompute_ForwardingRulesScopedListWarningDataItem *> *data;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_ForwardingRulesScopedListWarningDataItem *> *data;
 
 /** [Output Only] A human-readable description of the warning code. */
-@property(copy, nullable) NSString *message;
+@property(nonatomic, copy, nullable) NSString *message;
 
 @end
 
@@ -3510,10 +3774,158 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  example, if an instance attempts to perform IP forwarding but is not enabled
  *  for IP forwarding).
  */
-@property(copy, nullable) NSString *key;
+@property(nonatomic, copy, nullable) NSString *key;
 
 /** [Output Only] A warning data value corresponding to the key. */
-@property(copy, nullable) NSString *value;
+@property(nonatomic, copy, nullable) NSString *value;
+
+@end
+
+
+/**
+ *  An HealthCheck resource. This resource defines a template for how individual
+ *  virtual machines should be checked for health, via one of the supported
+ *  protocols.
+ */
+@interface GTLRCompute_HealthCheck : GTLRObject
+
+/**
+ *  How often (in seconds) to send a health check. The default value is 5
+ *  seconds.
+ *
+ *  Uses NSNumber of intValue.
+ */
+@property(nonatomic, strong, nullable) NSNumber *checkIntervalSec;
+
+/** [Output Only] Creation timestamp in 3339 text format. */
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
+
+/**
+ *  An optional description of this resource. Provide this property when you
+ *  create the resource.
+ *
+ *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
+ */
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
+
+/**
+ *  A so-far unhealthy instance will be marked healthy after this many
+ *  consecutive successes. The default value is 2.
+ *
+ *  Uses NSNumber of intValue.
+ */
+@property(nonatomic, strong, nullable) NSNumber *healthyThreshold;
+
+@property(nonatomic, strong, nullable) GTLRCompute_HTTP2HealthCheck *http2HealthCheck;
+@property(nonatomic, strong, nullable) GTLRCompute_HTTPHealthCheck *httpHealthCheck;
+@property(nonatomic, strong, nullable) GTLRCompute_HTTPSHealthCheck *httpsHealthCheck;
+
+/**
+ *  [Output Only] The unique identifier for the resource. This identifier is
+ *  defined by the server.
+ *
+ *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
+ *
+ *  Uses NSNumber of unsignedLongLongValue.
+ */
+@property(nonatomic, strong, nullable) NSNumber *identifier;
+
+/** Type of the resource. */
+@property(nonatomic, copy, nullable) NSString *kind;
+
+/**
+ *  Name of the resource. Provided by the client when the resource is created.
+ *  The name must be 1-63 characters long, and comply with RFC1035.
+ *  Specifically, the name must be 1-63 characters long and match the regular
+ *  expression [a-z]([-a-z0-9]*[a-z0-9])? which means the first character must
+ *  be a lowercase letter, and all following characters must be a dash,
+ *  lowercase letter, or digit, except the last character, which cannot be a
+ *  dash.
+ */
+@property(nonatomic, copy, nullable) NSString *name;
+
+/** [Output Only] Server-defined URL for the resource. */
+@property(nonatomic, copy, nullable) NSString *selfLink;
+
+@property(nonatomic, strong, nullable) GTLRCompute_SSLHealthCheck *sslHealthCheck;
+@property(nonatomic, strong, nullable) GTLRCompute_TCPHealthCheck *tcpHealthCheck;
+
+/**
+ *  How long (in seconds) to wait before claiming failure. The default value is
+ *  5 seconds. It is invalid for timeoutSec to have greater value than
+ *  checkIntervalSec.
+ *
+ *  Uses NSNumber of intValue.
+ */
+@property(nonatomic, strong, nullable) NSNumber *timeoutSec;
+
+/**
+ *  Specifies the type of the healthCheck, either TCP, UDP, SSL, HTTP, HTTPS or
+ *  HTTP2. If not specified, the default is TCP. Exactly one of the
+ *  protocol-specific health check field must be specified, which must match
+ *  type field.
+ *
+ *  Likely values:
+ *    @arg @c kGTLRCompute_HealthCheck_Type_Http Value "HTTP"
+ *    @arg @c kGTLRCompute_HealthCheck_Type_Http2 Value "HTTP2"
+ *    @arg @c kGTLRCompute_HealthCheck_Type_Https Value "HTTPS"
+ *    @arg @c kGTLRCompute_HealthCheck_Type_Invalid Value "INVALID"
+ *    @arg @c kGTLRCompute_HealthCheck_Type_Ssl Value "SSL"
+ *    @arg @c kGTLRCompute_HealthCheck_Type_Tcp Value "TCP"
+ */
+@property(nonatomic, copy, nullable) NSString *type;
+
+/**
+ *  A so-far healthy instance will be marked unhealthy after this many
+ *  consecutive failures. The default value is 2.
+ *
+ *  Uses NSNumber of intValue.
+ */
+@property(nonatomic, strong, nullable) NSNumber *unhealthyThreshold;
+
+@end
+
+
+/**
+ *  Contains a list of HealthCheck resources.
+ *
+ *  @note This class supports NSFastEnumeration and indexed subscripting over
+ *        its "items" property. If returned as the result of a query, it should
+ *        support automatic pagination (when @c shouldFetchNextPages is
+ *        enabled).
+ */
+@interface GTLRCompute_HealthCheckList : GTLRCollectionObject
+
+/**
+ *  [Output Only] The unique identifier for the resource. This identifier is
+ *  defined by the server.
+ *
+ *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
+ */
+@property(nonatomic, copy, nullable) NSString *identifier;
+
+/**
+ *  A list of HealthCheck resources.
+ *
+ *  @note This property is used to support NSFastEnumeration and indexed
+ *        subscripting on this class.
+ */
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_HealthCheck *> *items;
+
+/** Type of resource. */
+@property(nonatomic, copy, nullable) NSString *kind;
+
+/**
+ *  [Output Only] This token allows you to get the next page of results for list
+ *  requests. If the number of results is larger than maxResults, use the
+ *  nextPageToken as a value for the query parameter pageToken in the next list
+ *  request. Subsequent list requests will have their own nextPageToken to
+ *  continue paging through the results.
+ */
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
+
+/** [Output Only] Server-defined URL for this resource. */
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -3528,7 +3940,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  */
 @interface GTLRCompute_HealthCheckReference : GTLRObject
 
-@property(copy, nullable) NSString *healthCheck;
+@property(nonatomic, copy, nullable) NSString *healthCheck;
 
 @end
 
@@ -3545,20 +3957,20 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_HealthStatus_HealthState_Healthy Value "HEALTHY"
  *    @arg @c kGTLRCompute_HealthStatus_HealthState_Unhealthy Value "UNHEALTHY"
  */
-@property(copy, nullable) NSString *healthState;
+@property(nonatomic, copy, nullable) NSString *healthState;
 
 /** URL of the instance resource. */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 /** The IP address represented by this resource. */
-@property(copy, nullable) NSString *ipAddress;
+@property(nonatomic, copy, nullable) NSString *ipAddress;
 
 /**
  *  The port on the instance.
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *port;
+@property(nonatomic, strong, nullable) NSNumber *port;
 
 @end
 
@@ -3575,20 +3987,106 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  The list of host patterns to match. They must be valid hostnames, except *
  *  will match any string of ([a-z0-9-.]*). In that case, * must be the first
  *  character and must be followed in the pattern by either - or ..
  */
-@property(strong, nullable) NSArray<NSString *> *hosts;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *hosts;
 
 /**
  *  The name of the PathMatcher to use to match the path portion of the URL if
  *  the hostRule matches the URL's host portion.
  */
-@property(copy, nullable) NSString *pathMatcher;
+@property(nonatomic, copy, nullable) NSString *pathMatcher;
+
+@end
+
+
+/**
+ *  GTLRCompute_HTTP2HealthCheck
+ */
+@interface GTLRCompute_HTTP2HealthCheck : GTLRObject
+
+/**
+ *  The value of the host header in the HTTP/2 health check request. If left
+ *  empty (default value), the IP on behalf of which this health check is
+ *  performed will be used.
+ */
+@property(nonatomic, copy, nullable) NSString *host;
+
+/**
+ *  The TCP port number for the health check request. The default value is 443.
+ *
+ *  Uses NSNumber of intValue.
+ */
+@property(nonatomic, strong, nullable) NSNumber *port;
+
+/**
+ *  Port name as defined in InstanceGroup#NamedPort#name. If both port and
+ *  port_name are defined, port takes precedence.
+ */
+@property(nonatomic, copy, nullable) NSString *portName;
+
+/**
+ *  Specifies the type of proxy header to append before sending data to the
+ *  backend, either NONE or PROXY_V1. The default is NONE.
+ *
+ *  Likely values:
+ *    @arg @c kGTLRCompute_HTTP2HealthCheck_ProxyHeader_None Value "NONE"
+ *    @arg @c kGTLRCompute_HTTP2HealthCheck_ProxyHeader_ProxyV1 Value "PROXY_V1"
+ */
+@property(nonatomic, copy, nullable) NSString *proxyHeader;
+
+/**
+ *  The request path of the HTTP/2 health check request. The default value is /.
+ */
+@property(nonatomic, copy, nullable) NSString *requestPath;
+
+@end
+
+
+/**
+ *  GTLRCompute_HTTPHealthCheck
+ */
+@interface GTLRCompute_HTTPHealthCheck : GTLRObject
+
+/**
+ *  The value of the host header in the HTTP health check request. If left empty
+ *  (default value), the IP on behalf of which this health check is performed
+ *  will be used.
+ */
+@property(nonatomic, copy, nullable) NSString *host;
+
+/**
+ *  The TCP port number for the health check request. The default value is 80.
+ *
+ *  Uses NSNumber of intValue.
+ */
+@property(nonatomic, strong, nullable) NSNumber *port;
+
+/**
+ *  Port name as defined in InstanceGroup#NamedPort#name. If both port and
+ *  port_name are defined, port takes precedence.
+ */
+@property(nonatomic, copy, nullable) NSString *portName;
+
+/**
+ *  Specifies the type of proxy header to append before sending data to the
+ *  backend, either NONE or PROXY_V1. The default is NONE.
+ *
+ *  Likely values:
+ *    @arg @c kGTLRCompute_HTTPHealthCheck_ProxyHeader_None Value "NONE"
+ *    @arg @c kGTLRCompute_HTTPHealthCheck_ProxyHeader_ProxyV1 Value "PROXY_V1"
+ */
+@property(nonatomic, copy, nullable) NSString *proxyHeader;
+
+/**
+ *  The request path of the HTTP health check request. The default value is /.
+ */
+@property(nonatomic, copy, nullable) NSString *requestPath;
 
 @end
 
@@ -3605,10 +4103,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *checkIntervalSec;
+@property(nonatomic, strong, nullable) NSNumber *checkIntervalSec;
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -3616,7 +4114,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  A so-far unhealthy instance will be marked healthy after this many
@@ -3624,14 +4122,14 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *healthyThreshold;
+@property(nonatomic, strong, nullable) NSNumber *healthyThreshold;
 
 /**
  *  The value of the host header in the HTTP health check request. If left empty
  *  (default value), the public IP on behalf of which this health check is
  *  performed will be used.
  */
-@property(copy, nullable) NSString *host;
+@property(nonatomic, copy, nullable) NSString *host;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -3641,13 +4139,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  [Output Only] Type of the resource. Always compute#httpHealthCheck for HTTP
  *  health checks.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  Name of the resource. Provided by the client when the resource is created.
@@ -3658,7 +4156,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
  *  The TCP port number for the HTTP health check request. The default value is
@@ -3666,15 +4164,15 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *port;
+@property(nonatomic, strong, nullable) NSNumber *port;
 
 /**
  *  The request path of the HTTP health check request. The default value is /.
  */
-@property(copy, nullable) NSString *requestPath;
+@property(nonatomic, copy, nullable) NSString *requestPath;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  How long (in seconds) to wait before claiming failure. The default value is
@@ -3683,7 +4181,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *timeoutSec;
+@property(nonatomic, strong, nullable) NSNumber *timeoutSec;
 
 /**
  *  A so-far healthy instance will be marked unhealthy after this many
@@ -3691,7 +4189,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *unhealthyThreshold;
+@property(nonatomic, strong, nullable) NSNumber *unhealthyThreshold;
 
 @end
 
@@ -3711,7 +4209,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  A list of HttpHealthCheck resources.
@@ -3719,10 +4217,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_HttpHealthCheck *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_HttpHealthCheck *> *items;
 
 /** Type of resource. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -3731,10 +4229,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -3751,10 +4249,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *checkIntervalSec;
+@property(nonatomic, strong, nullable) NSNumber *checkIntervalSec;
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -3762,7 +4260,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  A so-far unhealthy instance will be marked healthy after this many
@@ -3770,14 +4268,14 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *healthyThreshold;
+@property(nonatomic, strong, nullable) NSNumber *healthyThreshold;
 
 /**
  *  The value of the host header in the HTTPS health check request. If left
  *  empty (default value), the public IP on behalf of which this health check is
  *  performed will be used.
  */
-@property(copy, nullable) NSString *host;
+@property(nonatomic, copy, nullable) NSString *host;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -3787,10 +4285,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /** Type of the resource. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  Name of the resource. Provided by the client when the resource is created.
@@ -3801,7 +4299,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
  *  The TCP port number for the HTTPS health check request. The default value is
@@ -3809,16 +4307,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *port;
+@property(nonatomic, strong, nullable) NSNumber *port;
 
 /**
  *  The request path of the HTTPS health check request. The default value is
  *  "/".
  */
-@property(copy, nullable) NSString *requestPath;
+@property(nonatomic, copy, nullable) NSString *requestPath;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  How long (in seconds) to wait before claiming failure. The default value is
@@ -3827,7 +4325,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *timeoutSec;
+@property(nonatomic, strong, nullable) NSNumber *timeoutSec;
 
 /**
  *  A so-far healthy instance will be marked unhealthy after this many
@@ -3835,7 +4333,50 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *unhealthyThreshold;
+@property(nonatomic, strong, nullable) NSNumber *unhealthyThreshold;
+
+@end
+
+
+/**
+ *  GTLRCompute_HTTPSHealthCheck
+ */
+@interface GTLRCompute_HTTPSHealthCheck : GTLRObject
+
+/**
+ *  The value of the host header in the HTTPS health check request. If left
+ *  empty (default value), the IP on behalf of which this health check is
+ *  performed will be used.
+ */
+@property(nonatomic, copy, nullable) NSString *host;
+
+/**
+ *  The TCP port number for the health check request. The default value is 443.
+ *
+ *  Uses NSNumber of intValue.
+ */
+@property(nonatomic, strong, nullable) NSNumber *port;
+
+/**
+ *  Port name as defined in InstanceGroup#NamedPort#name. If both port and
+ *  port_name are defined, port takes precedence.
+ */
+@property(nonatomic, copy, nullable) NSString *portName;
+
+/**
+ *  Specifies the type of proxy header to append before sending data to the
+ *  backend, either NONE or PROXY_V1. The default is NONE.
+ *
+ *  Likely values:
+ *    @arg @c kGTLRCompute_HTTPSHealthCheck_ProxyHeader_None Value "NONE"
+ *    @arg @c kGTLRCompute_HTTPSHealthCheck_ProxyHeader_ProxyV1 Value "PROXY_V1"
+ */
+@property(nonatomic, copy, nullable) NSString *proxyHeader;
+
+/**
+ *  The request path of the HTTPS health check request. The default value is /.
+ */
+@property(nonatomic, copy, nullable) NSString *requestPath;
 
 @end
 
@@ -3855,7 +4396,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  A list of HttpsHealthCheck resources.
@@ -3863,10 +4404,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_HttpsHealthCheck *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_HttpsHealthCheck *> *items;
 
 /** Type of resource. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -3875,10 +4416,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -3893,13 +4434,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *archiveSizeBytes;
+@property(nonatomic, strong, nullable) NSNumber *archiveSizeBytes;
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /** The deprecation status associated with this image. */
-@property(strong, nullable) GTLRCompute_DeprecationStatus *deprecated;
+@property(nonatomic, strong, nullable) GTLRCompute_DeprecationStatus *deprecated;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -3907,21 +4448,22 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  Size of the image when restored onto a persistent disk (in GB).
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *diskSizeGb;
+@property(nonatomic, strong, nullable) NSNumber *diskSizeGb;
 
 /**
  *  The name of the image family to which this image belongs. You can create
  *  disks by specifying an image family instead of a specific image name. The
- *  image family always returns its latest image that is not deprecated.
+ *  image family always returns its latest image that is not deprecated. The
+ *  name of the image family must comply with RFC1035.
  */
-@property(copy, nullable) NSString *family;
+@property(nonatomic, copy, nullable) NSString *family;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -3931,7 +4473,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  Encrypts the image using a customer-supplied encryption key.
@@ -3944,13 +4486,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  disk will be encrypted using an automatically generated key and you do not
  *  need to provide a key to use the image later.
  */
-@property(strong, nullable) GTLRCompute_CustomerEncryptionKey *imageEncryptionKey;
+@property(nonatomic, strong, nullable) GTLRCompute_CustomerEncryptionKey *imageEncryptionKey;
 
 /** [Output Only] Type of the resource. Always compute#image for images. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /** Any applicable license URI. */
-@property(strong, nullable) NSArray<NSString *> *licenses;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *licenses;
 
 /**
  *  Name of the resource; provided by the client when the resource is created.
@@ -3961,13 +4503,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /** The parameters of the raw disk image. */
-@property(strong, nullable) GTLRCompute_ImageRawDisk *rawDisk;
+@property(nonatomic, strong, nullable) GTLRCompute_ImageRawDisk *rawDisk;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  URL of the The source disk used to create this image. This can be a full or
@@ -3975,24 +4517,24 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  rawDisk.source property but not both to create an image. For example, the
  *  following are valid values:
  *  -
- *  https://www.googleapis.com/compute/v1/projects/project/zones/zone/disk/disk
- *  - projects/project/zones/zone/disk/disk
+ *  https://www.googleapis.com/compute/v1/projects/project/zones/zone/disks/disk
+ *  - projects/project/zones/zone/disks/disk
  *  - zones/zone/disks/disk
  */
-@property(copy, nullable) NSString *sourceDisk;
+@property(nonatomic, copy, nullable) NSString *sourceDisk;
 
 /**
  *  The customer-supplied encryption key of the source disk. Required if the
  *  source disk is protected by a customer-supplied encryption key.
  */
-@property(strong, nullable) GTLRCompute_CustomerEncryptionKey *sourceDiskEncryptionKey;
+@property(nonatomic, strong, nullable) GTLRCompute_CustomerEncryptionKey *sourceDiskEncryptionKey;
 
 /**
  *  The ID value of the disk used to create this image. This value may be used
  *  to determine whether the image was taken from the current or a previous
  *  instance of a given disk name.
  */
-@property(copy, nullable) NSString *sourceDiskId;
+@property(nonatomic, copy, nullable) NSString *sourceDiskId;
 
 /**
  *  The type of the image used to create this disk. The default and only value
@@ -4001,7 +4543,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  Likely values:
  *    @arg @c kGTLRCompute_Image_SourceType_Raw Value "RAW"
  */
-@property(copy, nullable) NSString *sourceType;
+@property(nonatomic, copy, nullable) NSString *sourceType;
 
 /**
  *  [Output Only] The status of the image. An image can be used to create other
@@ -4014,7 +4556,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_Image_Status_Pending Value "PENDING"
  *    @arg @c kGTLRCompute_Image_Status_Ready Value "READY"
  */
-@property(copy, nullable) NSString *status;
+@property(nonatomic, copy, nullable) NSString *status;
 
 @end
 
@@ -4032,19 +4574,19 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  Likely values:
  *    @arg @c kGTLRCompute_ImageRawDisk_ContainerType_Tar Value "TAR"
  */
-@property(copy, nullable) NSString *containerType;
+@property(nonatomic, copy, nullable) NSString *containerType;
 
 /**
  *  An optional SHA1 checksum of the disk image before unpackaging; provided by
  *  the client when the disk image is created.
  */
-@property(copy, nullable) NSString *sha1Checksum;
+@property(nonatomic, copy, nullable) NSString *sha1Checksum;
 
 /**
  *  The full Google Cloud Storage URL where the disk image is stored. You must
  *  provide either this property or the sourceDisk property but not both.
  */
-@property(copy, nullable) NSString *source;
+@property(nonatomic, copy, nullable) NSString *source;
 
 @end
 
@@ -4065,7 +4607,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  [Output Only] A list of Image resources.
@@ -4073,10 +4615,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_Image *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Image *> *items;
 
 /** Type of resource. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -4085,10 +4627,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -4105,13 +4647,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *canIpForward;
+@property(nonatomic, strong, nullable) NSNumber *canIpForward;
 
 /** [Output Only] The CPU platform used by this instance. */
-@property(copy, nullable) NSString *cpuPlatform;
+@property(nonatomic, copy, nullable) NSString *cpuPlatform;
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -4119,13 +4661,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  Array of disks associated with this instance. Persistent disks must be
  *  created before you can assign them.
  */
-@property(strong, nullable) NSArray<GTLRCompute_AttachedDisk *> *disks;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_AttachedDisk *> *disks;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -4135,12 +4677,12 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  [Output Only] Type of the resource. Always compute#instance for instances.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  Full or partial URL of the machine type resource to use for this instance,
@@ -4158,13 +4700,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  For a full list of restrictions, read the Specifications for custom machine
  *  types.
  */
-@property(copy, nullable) NSString *machineType;
+@property(nonatomic, copy, nullable) NSString *machineType;
 
 /**
  *  The metadata key/value pairs assigned to this instance. This includes custom
  *  metadata and predefined keys.
  */
-@property(strong, nullable) GTLRCompute_Metadata *metadata;
+@property(nonatomic, strong, nullable) GTLRCompute_Metadata *metadata;
 
 /**
  *  The name of the resource, provided by the client when initially creating the
@@ -4175,20 +4717,20 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  dash, lowercase letter, or digit, except the last character, which cannot be
  *  a dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
  *  An array of configurations for this interface. This specifies how this
  *  interface is configured to interact with other network services, such as
- *  connecting to the internet.
+ *  connecting to the internet. Only one interface is supported per instance.
  */
-@property(strong, nullable) NSArray<GTLRCompute_NetworkInterface *> *networkInterfaces;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_NetworkInterface *> *networkInterfaces;
 
 /** Scheduling options for this instance. */
-@property(strong, nullable) GTLRCompute_Scheduling *scheduling;
+@property(nonatomic, strong, nullable) GTLRCompute_Scheduling *scheduling;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  A list of service accounts, with their specified scopes, authorized for this
@@ -4196,11 +4738,11 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  through the metadata server and used to authenticate applications on the
  *  instance. See Service Accounts for more information.
  */
-@property(strong, nullable) NSArray<GTLRCompute_ServiceAccount *> *serviceAccounts;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_ServiceAccount *> *serviceAccounts;
 
 /**
  *  [Output Only] The status of the instance. One of the following values:
- *  PROVISIONING, STAGING, RUNNING, STOPPING, SUSPENDED, SUSPENDING, and
+ *  PROVISIONING, STAGING, RUNNING, STOPPING, SUSPENDING, SUSPENDED, and
  *  TERMINATED.
  *
  *  Likely values:
@@ -4213,10 +4755,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_Instance_Status_Suspending Value "SUSPENDING"
  *    @arg @c kGTLRCompute_Instance_Status_Terminated Value "TERMINATED"
  */
-@property(copy, nullable) NSString *status;
+@property(nonatomic, copy, nullable) NSString *status;
 
 /** [Output Only] An optional, human-readable explanation of the status. */
-@property(copy, nullable) NSString *statusMessage;
+@property(nonatomic, copy, nullable) NSString *statusMessage;
 
 /**
  *  A list of tags to apply to this instance. Tags are used to identify valid
@@ -4224,14 +4766,14 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  during instance creation. The tags can be later modified by the setTags
  *  method. Each tag within the list must comply with RFC1035.
  */
-@property(strong, nullable) GTLRCompute_Tags *tags;
+@property(nonatomic, strong, nullable) GTLRCompute_Tags *tags;
 
 /**
  *  [Output Only] URL of the zone where the instance resides.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 @end
 
@@ -4247,16 +4789,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /** [Output Only] A map of scoped instance lists. */
-@property(strong, nullable) GTLRCompute_InstanceAggregatedListItems *items;
+@property(nonatomic, strong, nullable) GTLRCompute_InstanceAggregatedListItems *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#instanceAggregatedList for
  *  aggregated lists of Instance resources.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -4265,10 +4807,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -4294,7 +4836,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  [Output Only] The creation timestamp for this instance group in RFC3339 text
  *  format.
  */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -4302,7 +4844,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  [Output Only] The fingerprint of the named ports. The system uses this
@@ -4312,29 +4854,29 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  Contains encoded binary data; GTLRBase64 can encode/decode (probably
  *  web-safe format).
  */
-@property(copy, nullable) NSString *fingerprint;
+@property(nonatomic, copy, nullable) NSString *fingerprint;
 
 /**
- *  [Output Only] A unique identifier for this resource type. The server
- *  generates this identifier.
+ *  [Output Only] A unique identifier for this instance group, generated by the
+ *  server.
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  [Output Only] The resource type, which is always compute#instanceGroup for
  *  instance groups.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  The name of the instance group. The name must be 1-63 characters long, and
  *  comply with RFC1035.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
  *  Assigns a name to a port number. For example: {name: "http", port: 80}
@@ -4343,38 +4885,45 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  [{name: "http", port: 80},{name: "http", port: 8080}]
  *  Named ports apply to all instances in this instance group.
  */
-@property(strong, nullable) NSArray<GTLRCompute_NamedPort *> *namedPorts;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_NamedPort *> *namedPorts;
 
 /**
  *  The URL of the network to which all instances in the instance group belong.
  */
-@property(copy, nullable) NSString *network;
+@property(nonatomic, copy, nullable) NSString *network;
+
+/**
+ *  The URL of the region where the instance group is located (for regional
+ *  resources).
+ */
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  [Output Only] The URL for this instance group. The server generates this
  *  URL.
  */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  [Output Only] The total number of instances in the instance group.
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *size;
+@property(nonatomic, strong, nullable) NSNumber *size;
 
 /**
  *  The URL of the subnetwork to which all instances in the instance group
  *  belong.
  */
-@property(copy, nullable) NSString *subnetwork;
+@property(nonatomic, copy, nullable) NSString *subnetwork;
 
 /**
- *  [Output Only] The URL of the zone where the instance group is located.
+ *  [Output Only] The URL of the zone where the instance group is located (for
+ *  zonal resources).
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 @end
 
@@ -4390,16 +4939,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /** A map of scoped instance group lists. */
-@property(strong, nullable) GTLRCompute_InstanceGroupAggregatedListItems *items;
+@property(nonatomic, strong, nullable) GTLRCompute_InstanceGroupAggregatedListItems *items;
 
 /**
  *  [Output Only] The resource type, which is always
  *  compute#instanceGroupAggregatedList for aggregated lists of instance groups.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -4408,12 +4957,12 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /**
  *  [Output Only] The URL for this resource type. The server generates this URL.
  */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -4446,7 +4995,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  A list of instance groups.
@@ -4454,13 +5003,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_InstanceGroup *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_InstanceGroup *> *items;
 
 /**
  *  [Output Only] The resource type, which is always compute#instanceGroupList
  *  for instance group lists.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -4469,18 +5018,18 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /**
  *  [Output Only] The URL for this resource type. The server generates this URL.
  */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
 
 /**
- *  An Instance Template Manager resource.
+ *  An Instance Group Manager resource.
  */
 @interface GTLRCompute_InstanceGroupManager : GTLRObject
 
@@ -4490,19 +5039,19 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  four-character string to the base instance name. The base instance name must
  *  comply with RFC1035.
  */
-@property(copy, nullable) NSString *baseInstanceName;
+@property(nonatomic, copy, nullable) NSString *baseInstanceName;
 
 /**
  *  [Output Only] The creation timestamp for this managed instance group in
  *  RFC3339 text format.
  */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  [Output Only] The list of instance actions and the number of instances in
  *  this managed instance group that are scheduled for each of those actions.
  */
-@property(strong, nullable) GTLRCompute_InstanceGroupManagerActionsSummary *currentActions;
+@property(nonatomic, strong, nullable) GTLRCompute_InstanceGroupManagerActionsSummary *currentActions;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -4510,7 +5059,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  [Output Only] The fingerprint of the resource data. You can use this
@@ -4519,7 +5068,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  Contains encoded binary data; GTLRBase64 can encode/decode (probably
  *  web-safe format).
  */
-@property(copy, nullable) NSString *fingerprint;
+@property(nonatomic, copy, nullable) NSString *fingerprint;
 
 /**
  *  [Output Only] A unique identifier for this resource type. The server
@@ -4529,48 +5078,54 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /** [Output Only] The URL of the Instance Group resource. */
-@property(copy, nullable) NSString *instanceGroup;
+@property(nonatomic, copy, nullable) NSString *instanceGroup;
 
 /**
  *  The URL of the instance template that is specified for this managed instance
  *  group. The group uses this template to create all new instances in the
  *  managed instance group.
  */
-@property(copy, nullable) NSString *instanceTemplate;
+@property(nonatomic, copy, nullable) NSString *instanceTemplate;
 
 /**
  *  [Output Only] The resource type, which is always
  *  compute#instanceGroupManager for managed instance groups.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  The name of the managed instance group. The name must be 1-63 characters
  *  long, and comply with RFC1035.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
  *  Named ports configured for the Instance Groups complementary to this
  *  Instance Group Manager.
  */
-@property(strong, nullable) NSArray<GTLRCompute_NamedPort *> *namedPorts;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_NamedPort *> *namedPorts;
+
+/**
+ *  [Output Only] The URL of the region where the managed instance group resides
+ *  (for regional resources).
+ */
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  [Output Only] The URL for this managed instance group. The server defines
  *  this URL.
  */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  The URLs for all TargetPool resources to which instances in the
  *  instanceGroup field are added. The target pools automatically apply to all
  *  of the instances in the managed instance group.
  */
-@property(strong, nullable) NSArray<NSString *> *targetPools;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *targetPools;
 
 /**
  *  The target number of running instances for this managed instance group.
@@ -4579,14 +5134,15 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *targetSize;
+@property(nonatomic, strong, nullable) NSNumber *targetSize;
 
 /**
- *  The name of the zone where the managed instance group is located.
+ *  [Output Only] The URL of the zone where the managed instance group is
+ *  located (for zonal resources).
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 @end
 
@@ -4603,17 +5159,29 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *abandoning;
+@property(nonatomic, strong, nullable) NSNumber *abandoning;
 
 /**
  *  [Output Only] The number of instances in the managed instance group that are
  *  scheduled to be created or are currently being created. If the group fails
- *  to create one of these instances, it tries again until it creates the
+ *  to create any of these instances, it tries again until it creates the
  *  instance successfully.
+ *  If you have disabled creation retries, this field will not be populated;
+ *  instead, the creatingWithoutRetries field will be populated.
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *creating;
+@property(nonatomic, strong, nullable) NSNumber *creating;
+
+/**
+ *  [Output Only] The number of instances that the managed instance group will
+ *  attempt to create. The group attempts to create each instance only once. If
+ *  the group fails to create any of these instances, it decreases the group's
+ *  targetSize value accordingly.
+ *
+ *  Uses NSNumber of intValue.
+ */
+@property(nonatomic, strong, nullable) NSNumber *creatingWithoutRetries;
 
 /**
  *  [Output Only] The number of instances in the managed instance group that are
@@ -4621,7 +5189,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *deleting;
+@property(nonatomic, strong, nullable) NSNumber *deleting;
 
 /**
  *  [Output Only] The number of instances in the managed instance group that are
@@ -4629,7 +5197,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *none;
+@property(nonatomic, strong, nullable) NSNumber *none;
 
 /**
  *  [Output Only] The number of instances in the managed instance group that are
@@ -4639,7 +5207,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *recreating;
+@property(nonatomic, strong, nullable) NSNumber *recreating;
 
 /**
  *  [Output Only] The number of instances in the managed instance group that are
@@ -4649,7 +5217,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *refreshing;
+@property(nonatomic, strong, nullable) NSNumber *refreshing;
 
 /**
  *  [Output Only] The number of instances in the managed instance group that are
@@ -4657,7 +5225,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *restarting;
+@property(nonatomic, strong, nullable) NSNumber *restarting;
 
 @end
 
@@ -4673,17 +5241,17 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /** [Output Only] A map of filtered managed instance group lists. */
-@property(strong, nullable) GTLRCompute_InstanceGroupManagerAggregatedListItems *items;
+@property(nonatomic, strong, nullable) GTLRCompute_InstanceGroupManagerAggregatedListItems *items;
 
 /**
  *  [Output Only] The resource type, which is always
  *  compute#instanceGroupManagerAggregatedList for an aggregated list of managed
  *  instance groups.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -4692,12 +5260,12 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /**
  *  [Output Only] The URL for this resource type. The server generates this URL.
  */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -4731,7 +5299,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  [Output Only] A list of managed instance groups.
@@ -4739,13 +5307,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_InstanceGroupManager *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_InstanceGroupManager *> *items;
 
 /**
  *  [Output Only] The resource type, which is always
  *  compute#instanceGroupManagerList for a list of managed instance groups.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -4754,12 +5322,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
-/**
- *  [Output Only] The URL for this resource type. The server generates this URL.
- */
-@property(copy, nullable) NSString *selfLink;
+/** [Output Only] Server-defined URL for this resource. */
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -4773,7 +5339,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  The URL for one or more instances to abandon from the managed instance
  *  group.
  */
-@property(strong, nullable) NSArray<NSString *> *instances;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *instances;
 
 @end
 
@@ -4787,7 +5353,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  The list of instances to delete from this managed instance group. Specify
  *  one or more instance URLs.
  */
-@property(strong, nullable) NSArray<NSString *> *instances;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *instances;
 
 @end
 
@@ -4798,7 +5364,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_InstanceGroupManagersListManagedInstancesResponse : GTLRObject
 
 /** [Output Only] The list of instances in the managed instance group. */
-@property(strong, nullable) NSArray<GTLRCompute_ManagedInstance *> *managedInstances;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_ManagedInstance *> *managedInstances;
 
 @end
 
@@ -4809,7 +5375,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_InstanceGroupManagersRecreateInstancesRequest : GTLRObject
 
 /** The URL for one or more instances to recreate. */
-@property(strong, nullable) NSArray<NSString *> *instances;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *instances;
 
 @end
 
@@ -4823,13 +5389,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  [Output Only] The list of managed instance groups that are contained in the
  *  specified project and zone.
  */
-@property(strong, nullable) NSArray<GTLRCompute_InstanceGroupManager *> *instanceGroupManagers;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_InstanceGroupManager *> *instanceGroupManagers;
 
 /**
  *  [Output Only] The warning that replaces the list of managed instance groups
  *  when the list is empty.
  */
-@property(strong, nullable) GTLRCompute_InstanceGroupManagersScopedListWarning *warning;
+@property(nonatomic, strong, nullable) GTLRCompute_InstanceGroupManagersScopedListWarning *warning;
 
 @end
 
@@ -4851,6 +5417,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        Value "DEPRECATED_RESOURCE_USED"
  *    @arg @c kGTLRCompute_InstanceGroupManagersScopedListWarning_Code_DiskSizeLargerThanImageSize
  *        Value "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+ *    @arg @c kGTLRCompute_InstanceGroupManagersScopedListWarning_Code_FieldValueOverriden
+ *        Value "FIELD_VALUE_OVERRIDEN"
  *    @arg @c kGTLRCompute_InstanceGroupManagersScopedListWarning_Code_InjectedKernelsDeprecated
  *        Value "INJECTED_KERNELS_DEPRECATED"
  *    @arg @c kGTLRCompute_InstanceGroupManagersScopedListWarning_Code_NextHopAddressNotAssigned
@@ -4876,16 +5444,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_InstanceGroupManagersScopedListWarning_Code_Unreachable
  *        Value "UNREACHABLE"
  */
-@property(copy, nullable) NSString *code;
+@property(nonatomic, copy, nullable) NSString *code;
 
 /**
  *  [Output Only] Metadata about this warning in key: value format. For example:
  *  "data": [ { "key": "scope", "value": "zones/us-east1-d" }
  */
-@property(strong, nullable) NSArray<GTLRCompute_InstanceGroupManagersScopedListWarningDataItem *> *data;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_InstanceGroupManagersScopedListWarningDataItem *> *data;
 
 /** [Output Only] A human-readable description of the warning code. */
-@property(copy, nullable) NSString *message;
+@property(nonatomic, copy, nullable) NSString *message;
 
 @end
 
@@ -4904,10 +5472,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  example, if an instance attempts to perform IP forwarding but is not enabled
  *  for IP forwarding).
  */
-@property(copy, nullable) NSString *key;
+@property(nonatomic, copy, nullable) NSString *key;
 
 /** [Output Only] A warning data value corresponding to the key. */
-@property(copy, nullable) NSString *value;
+@property(nonatomic, copy, nullable) NSString *value;
 
 @end
 
@@ -4922,7 +5490,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  group. The group uses this template to create all new instances in the
  *  managed instance group.
  */
-@property(copy, nullable) NSString *instanceTemplate;
+@property(nonatomic, copy, nullable) NSString *instanceTemplate;
 
 @end
 
@@ -4942,7 +5510,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  Contains encoded binary data; GTLRBase64 can encode/decode (probably
  *  web-safe format).
  */
-@property(copy, nullable) NSString *fingerprint;
+@property(nonatomic, copy, nullable) NSString *fingerprint;
 
 /**
  *  The list of target pool URLs that instances in this managed instance group
@@ -4950,7 +5518,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  the instances in the group. Existing instances and new instances in the
  *  group all receive these target pool settings.
  */
-@property(strong, nullable) NSArray<NSString *> *targetPools;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *targetPools;
 
 @end
 
@@ -4961,7 +5529,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_InstanceGroupsAddInstancesRequest : GTLRObject
 
 /** The list of instances to add to the instance group. */
-@property(strong, nullable) NSArray<GTLRCompute_InstanceReference *> *instances;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_InstanceReference *> *instances;
 
 @end
 
@@ -4977,12 +5545,12 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_InstanceGroupsListInstances : GTLRCollectionObject
 
 /**
- *  [Output Only] A unique identifier for this list of instance groups. The
- *  server generates this identifier.
+ *  [Output Only] A unique identifier for this list of instances in the
+ *  specified instance group. The server generates this identifier.
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  [Output Only] A list of instances and any named ports that are assigned to
@@ -4991,13 +5559,14 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_InstanceWithNamedPorts *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_InstanceWithNamedPorts *> *items;
 
 /**
  *  [Output Only] The resource type, which is always
- *  compute#instanceGroupsListInstances for lists of instance groups.
+ *  compute#instanceGroupsListInstances for the list of instances in the
+ *  specified instance group.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -5006,13 +5575,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /**
- *  [Output Only] The URL for this list of instance groups. The server generates
- *  this URL.
+ *  [Output Only] The URL for this list of instances in the specified instance
+ *  groups. The server generates this URL.
  */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -5033,7 +5602,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_InstanceGroupsListInstancesRequest_InstanceState_Running
  *        Value "RUNNING"
  */
-@property(copy, nullable) NSString *instanceState;
+@property(nonatomic, copy, nullable) NSString *instanceState;
 
 @end
 
@@ -5044,7 +5613,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_InstanceGroupsRemoveInstancesRequest : GTLRObject
 
 /** The list of instances to remove from the instance group. */
-@property(strong, nullable) NSArray<GTLRCompute_InstanceReference *> *instances;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_InstanceReference *> *instances;
 
 @end
 
@@ -5057,13 +5626,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 /**
  *  [Output Only] The list of instance groups that are contained in this scope.
  */
-@property(strong, nullable) NSArray<GTLRCompute_InstanceGroup *> *instanceGroups;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_InstanceGroup *> *instanceGroups;
 
 /**
  *  [Output Only] An informational warning that replaces the list of instance
  *  groups when the list is empty.
  */
-@property(strong, nullable) GTLRCompute_InstanceGroupsScopedListWarning *warning;
+@property(nonatomic, strong, nullable) GTLRCompute_InstanceGroupsScopedListWarning *warning;
 
 @end
 
@@ -5085,6 +5654,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        Value "DEPRECATED_RESOURCE_USED"
  *    @arg @c kGTLRCompute_InstanceGroupsScopedListWarning_Code_DiskSizeLargerThanImageSize
  *        Value "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+ *    @arg @c kGTLRCompute_InstanceGroupsScopedListWarning_Code_FieldValueOverriden
+ *        Value "FIELD_VALUE_OVERRIDEN"
  *    @arg @c kGTLRCompute_InstanceGroupsScopedListWarning_Code_InjectedKernelsDeprecated
  *        Value "INJECTED_KERNELS_DEPRECATED"
  *    @arg @c kGTLRCompute_InstanceGroupsScopedListWarning_Code_NextHopAddressNotAssigned
@@ -5110,16 +5681,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_InstanceGroupsScopedListWarning_Code_Unreachable
  *        Value "UNREACHABLE"
  */
-@property(copy, nullable) NSString *code;
+@property(nonatomic, copy, nullable) NSString *code;
 
 /**
  *  [Output Only] Metadata about this warning in key: value format. For example:
  *  "data": [ { "key": "scope", "value": "zones/us-east1-d" }
  */
-@property(strong, nullable) NSArray<GTLRCompute_InstanceGroupsScopedListWarningDataItem *> *data;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_InstanceGroupsScopedListWarningDataItem *> *data;
 
 /** [Output Only] A human-readable description of the warning code. */
-@property(copy, nullable) NSString *message;
+@property(nonatomic, copy, nullable) NSString *message;
 
 @end
 
@@ -5138,10 +5709,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  example, if an instance attempts to perform IP forwarding but is not enabled
  *  for IP forwarding).
  */
-@property(copy, nullable) NSString *key;
+@property(nonatomic, copy, nullable) NSString *key;
 
 /** [Output Only] A warning data value corresponding to the key. */
-@property(copy, nullable) NSString *value;
+@property(nonatomic, copy, nullable) NSString *value;
 
 @end
 
@@ -5162,10 +5733,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  Contains encoded binary data; GTLRBase64 can encode/decode (probably
  *  web-safe format).
  */
-@property(copy, nullable) NSString *fingerprint;
+@property(nonatomic, copy, nullable) NSString *fingerprint;
 
 /** The list of named ports to set for this instance group. */
-@property(strong, nullable) NSArray<GTLRCompute_NamedPort *> *namedPorts;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_NamedPort *> *namedPorts;
 
 @end
 
@@ -5186,7 +5757,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  [Output Only] A list of instances.
@@ -5194,13 +5765,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_Instance *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Instance *> *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#instanceList for lists of
  *  Instance resources.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -5209,10 +5780,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -5229,7 +5800,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  - projects/project/zones/zone
  *  - zones/zone
  */
-@property(copy, nullable) NSString *destinationZone;
+@property(nonatomic, copy, nullable) NSString *destinationZone;
 
 /**
  *  The URL of the target instance to move. This can be a full or partial URL.
@@ -5239,7 +5810,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  - projects/project/zones/zone/instances/instance
  *  - zones/zone/instances/instance
  */
-@property(copy, nullable) NSString *targetInstance;
+@property(nonatomic, copy, nullable) NSString *targetInstance;
 
 @end
 
@@ -5259,7 +5830,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *canIpForward;
+@property(nonatomic, strong, nullable) NSNumber *canIpForward;
 
 /**
  *  An optional text description for the instances that are created from this
@@ -5267,34 +5838,34 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  An array of disks that are associated with the instances that are created
  *  from this template.
  */
-@property(strong, nullable) NSArray<GTLRCompute_AttachedDisk *> *disks;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_AttachedDisk *> *disks;
 
 /**
  *  The machine type to use for instances that are created from this template.
  */
-@property(copy, nullable) NSString *machineType;
+@property(nonatomic, copy, nullable) NSString *machineType;
 
 /**
  *  The metadata key/value pairs to assign to instances that are created from
  *  this template. These pairs can consist of custom metadata or predefined
  *  keys. See Project and instance metadata for more information.
  */
-@property(strong, nullable) GTLRCompute_Metadata *metadata;
+@property(nonatomic, strong, nullable) GTLRCompute_Metadata *metadata;
 
 /** An array of network access configurations for this interface. */
-@property(strong, nullable) NSArray<GTLRCompute_NetworkInterface *> *networkInterfaces;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_NetworkInterface *> *networkInterfaces;
 
 /**
  *  Specifies the scheduling options for the instances that are created from
  *  this template.
  */
-@property(strong, nullable) GTLRCompute_Scheduling *scheduling;
+@property(nonatomic, strong, nullable) GTLRCompute_Scheduling *scheduling;
 
 /**
  *  A list of service accounts with specified scopes. Access tokens for these
@@ -5302,7 +5873,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  template. Use metadata queries to obtain the access tokens for these
  *  instances.
  */
-@property(strong, nullable) NSArray<GTLRCompute_ServiceAccount *> *serviceAccounts;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_ServiceAccount *> *serviceAccounts;
 
 /**
  *  A list of tags to apply to the instances that are created from this
@@ -5310,7 +5881,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  The setTags method can modify this list of tags. Each tag within the list
  *  must comply with RFC1035.
  */
-@property(strong, nullable) GTLRCompute_Tags *tags;
+@property(nonatomic, strong, nullable) GTLRCompute_Tags *tags;
 
 @end
 
@@ -5321,7 +5892,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_InstanceReference : GTLRObject
 
 /** The URL for a specific instance. */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 @end
 
@@ -5332,13 +5903,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_InstancesScopedList : GTLRObject
 
 /** [Output Only] List of instances contained in this scope. */
-@property(strong, nullable) NSArray<GTLRCompute_Instance *> *instances;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Instance *> *instances;
 
 /**
  *  [Output Only] Informational warning which replaces the list of instances
  *  when the list is empty.
  */
-@property(strong, nullable) GTLRCompute_InstancesScopedListWarning *warning;
+@property(nonatomic, strong, nullable) GTLRCompute_InstancesScopedListWarning *warning;
 
 @end
 
@@ -5360,6 +5931,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        Value "DEPRECATED_RESOURCE_USED"
  *    @arg @c kGTLRCompute_InstancesScopedListWarning_Code_DiskSizeLargerThanImageSize
  *        Value "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+ *    @arg @c kGTLRCompute_InstancesScopedListWarning_Code_FieldValueOverriden
+ *        Value "FIELD_VALUE_OVERRIDEN"
  *    @arg @c kGTLRCompute_InstancesScopedListWarning_Code_InjectedKernelsDeprecated
  *        Value "INJECTED_KERNELS_DEPRECATED"
  *    @arg @c kGTLRCompute_InstancesScopedListWarning_Code_NextHopAddressNotAssigned
@@ -5385,16 +5958,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_InstancesScopedListWarning_Code_Unreachable Value
  *        "UNREACHABLE"
  */
-@property(copy, nullable) NSString *code;
+@property(nonatomic, copy, nullable) NSString *code;
 
 /**
  *  [Output Only] Metadata about this warning in key: value format. For example:
  *  "data": [ { "key": "scope", "value": "zones/us-east1-d" }
  */
-@property(strong, nullable) NSArray<GTLRCompute_InstancesScopedListWarningDataItem *> *data;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_InstancesScopedListWarningDataItem *> *data;
 
 /** [Output Only] A human-readable description of the warning code. */
-@property(copy, nullable) NSString *message;
+@property(nonatomic, copy, nullable) NSString *message;
 
 @end
 
@@ -5413,10 +5986,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  example, if an instance attempts to perform IP forwarding but is not enabled
  *  for IP forwarding).
  */
-@property(copy, nullable) NSString *key;
+@property(nonatomic, copy, nullable) NSString *key;
 
 /** [Output Only] A warning data value corresponding to the key. */
-@property(copy, nullable) NSString *value;
+@property(nonatomic, copy, nullable) NSString *value;
 
 @end
 
@@ -5431,7 +6004,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  full list of machine types. For example:
  *  zones/us-central1-f/machineTypes/n1-standard-1
  */
-@property(copy, nullable) NSString *machineType;
+@property(nonatomic, copy, nullable) NSString *machineType;
 
 @end
 
@@ -5449,7 +6022,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  If the disk is not protected with a customer-supplied encryption key it
  *  should not be specified.
  */
-@property(strong, nullable) NSArray<GTLRCompute_CustomerEncryptionKeyProtectedDisk *> *disks;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_CustomerEncryptionKeyProtectedDisk *> *disks;
 
 @end
 
@@ -5463,7 +6036,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  [Output Only] The creation timestamp for this instance template in RFC3339
  *  text format.
  */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -5471,7 +6044,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  [Output Only] A unique identifier for this instance template. The server
@@ -5481,13 +6054,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  [Output Only] The resource type, which is always compute#instanceTemplate
  *  for instance templates.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  Name of the resource; provided by the client when the resource is created.
@@ -5498,16 +6071,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /** The instance properties for this instance template. */
-@property(strong, nullable) GTLRCompute_InstanceProperties *properties;
+@property(nonatomic, strong, nullable) GTLRCompute_InstanceProperties *properties;
 
 /**
  *  [Output Only] The URL for this instance template. The server defines this
  *  URL.
  */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -5528,7 +6101,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  [Output Only] list of InstanceTemplate resources.
@@ -5536,13 +6109,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_InstanceTemplate *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_InstanceTemplate *> *items;
 
 /**
  *  [Output Only] The resource type, which is always
  *  compute#instanceTemplatesListResponse for instance template lists.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -5551,13 +6124,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /**
  *  [Output Only] The URL for this instance template list. The server defines
  *  this URL.
  */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -5568,10 +6141,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_InstanceWithNamedPorts : GTLRObject
 
 /** [Output Only] The URL of the instance. */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 /** [Output Only] The named ports that belong to this instance group. */
-@property(strong, nullable) NSArray<GTLRCompute_NamedPort *> *namedPorts;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_NamedPort *> *namedPorts;
 
 /**
  *  [Output Only] The status of the instance.
@@ -5591,7 +6164,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_InstanceWithNamedPorts_Status_Terminated Value
  *        "TERMINATED"
  */
-@property(copy, nullable) NSString *status;
+@property(nonatomic, copy, nullable) NSString *status;
 
 @end
 
@@ -5607,19 +6180,19 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *chargesUseFee;
+@property(nonatomic, strong, nullable) NSNumber *chargesUseFee;
 
 /** [Output Only] Type of resource. Always compute#license for licenses. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] Name of the resource. The name is 1-63 characters long and
  *  complies with RFC1035.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -5630,24 +6203,24 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_MachineType : GTLRObject
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /** [Output Only] The deprecation status associated with this machine type. */
-@property(strong, nullable) GTLRCompute_DeprecationStatus *deprecated;
+@property(nonatomic, strong, nullable) GTLRCompute_DeprecationStatus *deprecated;
 
 /**
  *  [Output Only] An optional textual description of the resource.
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  [Output Only] The number of virtual CPUs that are available to the instance.
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *guestCpus;
+@property(nonatomic, strong, nullable) NSNumber *guestCpus;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -5657,7 +6230,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  [Deprecated] This property is deprecated and will never be populated with
@@ -5665,7 +6238,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *imageSpaceGb;
+@property(nonatomic, strong, nullable) NSNumber *imageSpaceGb;
 
 /**
  *  [Output Only] Whether this machine type has a shared CPU. See Shared-core
@@ -5673,27 +6246,27 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *isSharedCpu;
+@property(nonatomic, strong, nullable) NSNumber *isSharedCpu;
 
 /**
  *  [Output Only] The type of the resource. Always compute#machineType for
  *  machine types.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] Maximum persistent disks allowed.
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *maximumPersistentDisks;
+@property(nonatomic, strong, nullable) NSNumber *maximumPersistentDisks;
 
 /**
  *  [Output Only] Maximum total persistent disks size (GB) allowed.
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *maximumPersistentDisksSizeGb;
+@property(nonatomic, strong, nullable) NSNumber *maximumPersistentDisksSizeGb;
 
 /**
  *  [Output Only] The amount of physical memory available to the instance,
@@ -5701,16 +6274,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *memoryMb;
+@property(nonatomic, strong, nullable) NSNumber *memoryMb;
 
 /** [Output Only] Name of the resource. */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /** [Output Only] List of extended scratch disks assigned to the instance. */
-@property(strong, nullable) NSArray<GTLRCompute_MachineTypeScratchDisksItem *> *scratchDisks;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_MachineTypeScratchDisksItem *> *scratchDisks;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  [Output Only] The name of the zone where the machine type resides, such as
@@ -5718,7 +6291,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 @end
 
@@ -5733,7 +6306,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *diskGb;
+@property(nonatomic, strong, nullable) NSNumber *diskGb;
 
 @end
 
@@ -5749,16 +6322,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /** [Output Only] A map of scoped machine type lists. */
-@property(strong, nullable) GTLRCompute_MachineTypeAggregatedListItems *items;
+@property(nonatomic, strong, nullable) GTLRCompute_MachineTypeAggregatedListItems *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#machineTypeAggregatedList for
  *  aggregated lists of machine types.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -5767,10 +6340,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -5803,7 +6376,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  [Output Only] A list of Machine Type resources.
@@ -5811,13 +6384,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_MachineType *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_MachineType *> *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#machineTypeList for lists of
  *  machine types.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -5826,10 +6399,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -5840,13 +6413,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_MachineTypesScopedList : GTLRObject
 
 /** [Output Only] List of machine types contained in this scope. */
-@property(strong, nullable) NSArray<GTLRCompute_MachineType *> *machineTypes;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_MachineType *> *machineTypes;
 
 /**
  *  [Output Only] An informational warning that appears when the machine types
  *  list is empty.
  */
-@property(strong, nullable) GTLRCompute_MachineTypesScopedListWarning *warning;
+@property(nonatomic, strong, nullable) GTLRCompute_MachineTypesScopedListWarning *warning;
 
 @end
 
@@ -5868,6 +6441,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        Value "DEPRECATED_RESOURCE_USED"
  *    @arg @c kGTLRCompute_MachineTypesScopedListWarning_Code_DiskSizeLargerThanImageSize
  *        Value "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+ *    @arg @c kGTLRCompute_MachineTypesScopedListWarning_Code_FieldValueOverriden
+ *        Value "FIELD_VALUE_OVERRIDEN"
  *    @arg @c kGTLRCompute_MachineTypesScopedListWarning_Code_InjectedKernelsDeprecated
  *        Value "INJECTED_KERNELS_DEPRECATED"
  *    @arg @c kGTLRCompute_MachineTypesScopedListWarning_Code_NextHopAddressNotAssigned
@@ -5893,16 +6468,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_MachineTypesScopedListWarning_Code_Unreachable Value
  *        "UNREACHABLE"
  */
-@property(copy, nullable) NSString *code;
+@property(nonatomic, copy, nullable) NSString *code;
 
 /**
  *  [Output Only] Metadata about this warning in key: value format. For example:
  *  "data": [ { "key": "scope", "value": "zones/us-east1-d" }
  */
-@property(strong, nullable) NSArray<GTLRCompute_MachineTypesScopedListWarningDataItem *> *data;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_MachineTypesScopedListWarningDataItem *> *data;
 
 /** [Output Only] A human-readable description of the warning code. */
-@property(copy, nullable) NSString *message;
+@property(nonatomic, copy, nullable) NSString *message;
 
 @end
 
@@ -5921,10 +6496,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  example, if an instance attempts to perform IP forwarding but is not enabled
  *  for IP forwarding).
  */
-@property(copy, nullable) NSString *key;
+@property(nonatomic, copy, nullable) NSString *key;
 
 /** [Output Only] A warning data value corresponding to the key. */
-@property(copy, nullable) NSString *value;
+@property(nonatomic, copy, nullable) NSString *value;
 
 @end
 
@@ -5944,7 +6519,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  successful.
  *  - CREATING_WITHOUT_RETRIES The managed instance group is attempting to
  *  create this instance only once. If the group fails to create this instance,
- *  it does not try again and the group's target_size value is decreased.
+ *  it does not try again and the group's targetSize value is decreased instead.
  *  - RECREATING The managed instance group is recreating this instance.
  *  - DELETING The managed instance group is permanently deleting this instance.
  *  - ABANDONING The managed instance group is abandoning this instance. The
@@ -5960,6 +6535,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        "ABANDONING"
  *    @arg @c kGTLRCompute_ManagedInstance_CurrentAction_Creating Value
  *        "CREATING"
+ *    @arg @c kGTLRCompute_ManagedInstance_CurrentAction_CreatingWithoutRetries
+ *        Value "CREATING_WITHOUT_RETRIES"
  *    @arg @c kGTLRCompute_ManagedInstance_CurrentAction_Deleting Value
  *        "DELETING"
  *    @arg @c kGTLRCompute_ManagedInstance_CurrentAction_None Value "NONE"
@@ -5970,7 +6547,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_ManagedInstance_CurrentAction_Restarting Value
  *        "RESTARTING"
  */
-@property(copy, nullable) NSString *currentAction;
+@property(nonatomic, copy, nullable) NSString *currentAction;
 
 /**
  *  [Output only] The unique identifier for this resource. This field is empty
@@ -5980,13 +6557,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  [Output Only] The URL of the instance. The URL can exist even if the
  *  instance has not yet been created.
  */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 /**
  *  [Output Only] The status of the instance. This field is empty when the
@@ -6010,13 +6587,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_ManagedInstance_InstanceStatus_Terminated Value
  *        "TERMINATED"
  */
-@property(copy, nullable) NSString *instanceStatus;
+@property(nonatomic, copy, nullable) NSString *instanceStatus;
 
 /**
  *  [Output Only] Information about the last attempt to create or delete the
  *  instance.
  */
-@property(strong, nullable) GTLRCompute_ManagedInstanceLastAttempt *lastAttempt;
+@property(nonatomic, strong, nullable) GTLRCompute_ManagedInstanceLastAttempt *lastAttempt;
 
 @end
 
@@ -6030,7 +6607,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  [Output Only] Encountered errors during the last attempt to create or delete
  *  the instance.
  */
-@property(strong, nullable) GTLRCompute_ManagedInstanceLastAttemptErrors *errors;
+@property(nonatomic, strong, nullable) GTLRCompute_ManagedInstanceLastAttemptErrors *errors;
 
 @end
 
@@ -6045,7 +6622,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  [Output Only] The array of errors encountered while processing this
  *  operation.
  */
-@property(strong, nullable) NSArray<GTLRCompute_ManagedInstanceLastAttemptErrorsErrorsItem *> *errors;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_ManagedInstanceLastAttemptErrorsErrorsItem *> *errors;
 
 @end
 
@@ -6056,16 +6633,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_ManagedInstanceLastAttemptErrorsErrorsItem : GTLRObject
 
 /** [Output Only] The error type identifier for this error. */
-@property(copy, nullable) NSString *code;
+@property(nonatomic, copy, nullable) NSString *code;
 
 /**
  *  [Output Only] Indicates the field in the request that caused the error. This
  *  property is optional.
  */
-@property(copy, nullable) NSString *location;
+@property(nonatomic, copy, nullable) NSString *location;
 
 /** [Output Only] An optional, human-readable error message. */
-@property(copy, nullable) NSString *message;
+@property(nonatomic, copy, nullable) NSString *message;
 
 @end
 
@@ -6088,7 +6665,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  Contains encoded binary data; GTLRBase64 can encode/decode (probably
  *  web-safe format).
  */
-@property(copy, nullable) NSString *fingerprint;
+@property(nonatomic, copy, nullable) NSString *fingerprint;
 
 /**
  *  Array of key/value pairs. The total size of all keys and values must be less
@@ -6097,12 +6674,12 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_MetadataItemsItem *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_MetadataItemsItem *> *items;
 
 /**
  *  [Output Only] Type of the resource. Always compute#metadata for metadata.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 @end
 
@@ -6118,7 +6695,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  part of a URL in the metadata server. Additionally, to avoid ambiguity, keys
  *  must not conflict with any other metadata keys for the project.
  */
-@property(copy, nullable) NSString *key;
+@property(nonatomic, copy, nullable) NSString *key;
 
 /**
  *  Value for the metadata entry. These are free-form strings, and only have
@@ -6126,7 +6703,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  restriction placed on values is that their size must be less than or equal
  *  to 32768 bytes.
  */
-@property(copy, nullable) NSString *value;
+@property(nonatomic, copy, nullable) NSString *value;
 
 @end
 
@@ -6140,14 +6717,14 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  The name for this named port. The name must be 1-63 characters long, and
  *  comply with RFC1035.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
  *  The port number, which can be a value between 1 and 65535.
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *port;
+@property(nonatomic, strong, nullable) NSNumber *port;
 
 @end
 
@@ -6166,10 +6743,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *autoCreateSubnetworks;
+@property(nonatomic, strong, nullable) NSNumber *autoCreateSubnetworks;
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -6177,14 +6754,14 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  A gateway address for default routing to other networks. This value is read
  *  only and is selected by the Google Compute Engine, typically as the first
  *  usable address in the IPv4Range.
  */
-@property(copy, nullable) NSString *gatewayIPv4;
+@property(nonatomic, copy, nullable) NSString *gatewayIPv4;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -6194,19 +6771,19 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  The range of internal addresses that are legal on this network. This range
  *  is a CIDR specification, for example: 192.168.0.0/16. Provided by the client
  *  when the network is created.
  */
-@property(copy, nullable) NSString *IPv4Range;
+@property(nonatomic, copy, nullable) NSString *IPv4Range;
 
 /**
  *  [Output Only] Type of the resource. Always compute#network for networks.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  Name of the resource. Provided by the client when the resource is created.
@@ -6217,16 +6794,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  [Output Only] Server-defined fully-qualified URLs for all subnetworks in
  *  this network.
  */
-@property(strong, nullable) NSArray<NSString *> *subnetworks;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *subnetworks;
 
 @end
 
@@ -6237,17 +6814,17 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_NetworkInterface : GTLRObject
 
 /**
- *  An array of configurations for this interface. Currently, ONE_TO_ONE_NAT is
- *  the only access config supported. If there are no accessConfigs specified,
- *  then this instance will have no external internet access.
+ *  An array of configurations for this interface. Currently, only one access
+ *  config, ONE_TO_ONE_NAT, is supported. If there are no accessConfigs
+ *  specified, then this instance will have no external internet access.
  */
-@property(strong, nullable) NSArray<GTLRCompute_AccessConfig *> *accessConfigs;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_AccessConfig *> *accessConfigs;
 
 /**
  *  [Output Only] The name of the network interface, generated by the server.
  *  For network devices, these are eth0, eth1, etc.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
  *  URL of the network resource for this instance. This is required for creating
@@ -6261,14 +6838,14 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  - projects/project/global/networks/network
  *  - global/networks/default
  */
-@property(copy, nullable) NSString *network;
+@property(nonatomic, copy, nullable) NSString *network;
 
 /**
  *  An IPv4 internal network address to assign to the instance for this network
  *  interface. If not specified by the user, an unused internal IP is assigned
  *  by the system.
  */
-@property(copy, nullable) NSString *networkIP;
+@property(nonatomic, copy, nullable) NSString *networkIP;
 
 /**
  *  The URL of the Subnetwork resource for this instance. If the network
@@ -6281,7 +6858,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  https://www.googleapis.com/compute/v1/projects/project/regions/region/subnetworks/subnetwork
  *  - regions/region/subnetworks/subnetwork
  */
-@property(copy, nullable) NSString *subnetwork;
+@property(nonatomic, copy, nullable) NSString *subnetwork;
 
 @end
 
@@ -6302,7 +6879,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  [Output Only] A list of Network resources.
@@ -6310,13 +6887,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_Network *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Network *> *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#networkList for lists of
  *  networks.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -6325,10 +6902,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
-/** [Output Only] Server-defined URL for this resource . */
-@property(copy, nullable) NSString *selfLink;
+/** [Output Only] Server-defined URL for this resource. */
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -6339,10 +6916,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_Operation : GTLRObject
 
 /** [Output Only] Reserved for future use. */
-@property(copy, nullable) NSString *clientOperationId;
+@property(nonatomic, copy, nullable) NSString *clientOperationId;
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  [Output Only] A textual description of the operation, which is set when the
@@ -6350,25 +6927,25 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  [Output Only] The time that this operation was completed. This value is in
  *  RFC3339 text format.
  */
-@property(copy, nullable) NSString *endTime;
+@property(nonatomic, copy, nullable) NSString *endTime;
 
 /**
  *  [Output Only] If errors are generated during processing of the operation,
  *  this field will be populated.
  */
-@property(strong, nullable) GTLRCompute_OperationError *error;
+@property(nonatomic, strong, nullable) GTLRCompute_OperationError *error;
 
 /**
  *  [Output Only] If the operation fails, this field contains the HTTP error
  *  message that was returned, such as NOT FOUND.
  */
-@property(copy, nullable) NSString *httpErrorMessage;
+@property(nonatomic, copy, nullable) NSString *httpErrorMessage;
 
 /**
  *  [Output Only] If the operation fails, this field contains the HTTP error
@@ -6377,7 +6954,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *httpErrorStatusCode;
+@property(nonatomic, strong, nullable) NSNumber *httpErrorStatusCode;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -6387,28 +6964,28 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  [Output Only] The time that this operation was requested. This value is in
  *  RFC3339 text format.
  */
-@property(copy, nullable) NSString *insertTime;
+@property(nonatomic, copy, nullable) NSString *insertTime;
 
 /**
  *  [Output Only] Type of the resource. Always compute#operation for Operation
  *  resources.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /** [Output Only] Name of the resource. */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
  *  [Output Only] The type of operation, such as insert, update, or delete, and
  *  so on.
  */
-@property(copy, nullable) NSString *operationType;
+@property(nonatomic, copy, nullable) NSString *operationType;
 
 /**
  *  [Output Only] An optional progress indicator that ranges from 0 to 100.
@@ -6419,22 +6996,22 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *progress;
+@property(nonatomic, strong, nullable) NSNumber *progress;
 
 /**
  *  [Output Only] The URL of the region where the operation resides. Only
  *  available when performing regional operations.
  */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  [Output Only] The time that this operation was started by the server. This
  *  value is in RFC3339 text format.
  */
-@property(copy, nullable) NSString *startTime;
+@property(nonatomic, copy, nullable) NSString *startTime;
 
 /**
  *  [Output Only] The status of the operation, which can be one of the
@@ -6445,13 +7022,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_Operation_Status_Pending Value "PENDING"
  *    @arg @c kGTLRCompute_Operation_Status_Running Value "RUNNING"
  */
-@property(copy, nullable) NSString *status;
+@property(nonatomic, copy, nullable) NSString *status;
 
 /**
  *  [Output Only] An optional textual description of the current status of the
  *  operation.
  */
-@property(copy, nullable) NSString *statusMessage;
+@property(nonatomic, copy, nullable) NSString *statusMessage;
 
 /**
  *  [Output Only] The unique target ID, which identifies a specific incarnation
@@ -6459,22 +7036,26 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *targetId;
+@property(nonatomic, strong, nullable) NSNumber *targetId;
 
-/** [Output Only] The URL of the resource that the operation modifies. */
-@property(copy, nullable) NSString *targetLink;
+/**
+ *  [Output Only] The URL of the resource that the operation modifies. If
+ *  creating a persistent disk snapshot, this points to the persistent disk that
+ *  the snapshot was created from.
+ */
+@property(nonatomic, copy, nullable) NSString *targetLink;
 
 /**
  *  [Output Only] User who requested the operation, for example:
  *  user\@example.com.
  */
-@property(copy, nullable) NSString *user;
+@property(nonatomic, copy, nullable) NSString *user;
 
 /**
  *  [Output Only] If warning messages are generated during processing of the
  *  operation, this field will be populated.
  */
-@property(strong, nullable) NSArray<GTLRCompute_OperationWarningsItem *> *warnings;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_OperationWarningsItem *> *warnings;
 
 /**
  *  [Output Only] The URL of the zone where the operation resides. Only
@@ -6482,7 +7063,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 @end
 
@@ -6497,7 +7078,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  [Output Only] The array of errors encountered while processing this
  *  operation.
  */
-@property(strong, nullable) NSArray<GTLRCompute_OperationErrorErrorsItem *> *errors;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_OperationErrorErrorsItem *> *errors;
 
 @end
 
@@ -6518,6 +7099,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        Value "DEPRECATED_RESOURCE_USED"
  *    @arg @c kGTLRCompute_OperationWarningsItem_Code_DiskSizeLargerThanImageSize
  *        Value "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+ *    @arg @c kGTLRCompute_OperationWarningsItem_Code_FieldValueOverriden Value
+ *        "FIELD_VALUE_OVERRIDEN"
  *    @arg @c kGTLRCompute_OperationWarningsItem_Code_InjectedKernelsDeprecated
  *        Value "INJECTED_KERNELS_DEPRECATED"
  *    @arg @c kGTLRCompute_OperationWarningsItem_Code_NextHopAddressNotAssigned
@@ -6543,16 +7126,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_OperationWarningsItem_Code_Unreachable Value
  *        "UNREACHABLE"
  */
-@property(copy, nullable) NSString *code;
+@property(nonatomic, copy, nullable) NSString *code;
 
 /**
  *  [Output Only] Metadata about this warning in key: value format. For example:
  *  "data": [ { "key": "scope", "value": "zones/us-east1-d" }
  */
-@property(strong, nullable) NSArray<GTLRCompute_OperationWarningsItemDataItem *> *data;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_OperationWarningsItemDataItem *> *data;
 
 /** [Output Only] A human-readable description of the warning code. */
-@property(copy, nullable) NSString *message;
+@property(nonatomic, copy, nullable) NSString *message;
 
 @end
 
@@ -6563,16 +7146,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_OperationErrorErrorsItem : GTLRObject
 
 /** [Output Only] The error type identifier for this error. */
-@property(copy, nullable) NSString *code;
+@property(nonatomic, copy, nullable) NSString *code;
 
 /**
  *  [Output Only] Indicates the field in the request that caused the error. This
  *  property is optional.
  */
-@property(copy, nullable) NSString *location;
+@property(nonatomic, copy, nullable) NSString *location;
 
 /** [Output Only] An optional, human-readable error message. */
-@property(copy, nullable) NSString *message;
+@property(nonatomic, copy, nullable) NSString *message;
 
 @end
 
@@ -6591,10 +7174,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  example, if an instance attempts to perform IP forwarding but is not enabled
  *  for IP forwarding).
  */
-@property(copy, nullable) NSString *key;
+@property(nonatomic, copy, nullable) NSString *key;
 
 /** [Output Only] A warning data value corresponding to the key. */
-@property(copy, nullable) NSString *value;
+@property(nonatomic, copy, nullable) NSString *value;
 
 @end
 
@@ -6610,16 +7193,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /** [Output Only] A map of scoped operation lists. */
-@property(strong, nullable) GTLRCompute_OperationAggregatedListItems *items;
+@property(nonatomic, strong, nullable) GTLRCompute_OperationAggregatedListItems *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#operationAggregatedList for
  *  aggregated lists of operations.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -6628,10 +7211,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -6664,7 +7247,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  [Output Only] A list of Operation resources.
@@ -6672,13 +7255,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_Operation *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Operation *> *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#operations for Operations
  *  resource.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -6687,10 +7270,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -6701,13 +7284,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_OperationsScopedList : GTLRObject
 
 /** [Output Only] List of operations contained in this scope. */
-@property(strong, nullable) NSArray<GTLRCompute_Operation *> *operations;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Operation *> *operations;
 
 /**
  *  [Output Only] Informational warning which replaces the list of operations
  *  when the list is empty.
  */
-@property(strong, nullable) GTLRCompute_OperationsScopedListWarning *warning;
+@property(nonatomic, strong, nullable) GTLRCompute_OperationsScopedListWarning *warning;
 
 @end
 
@@ -6729,6 +7312,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        Value "DEPRECATED_RESOURCE_USED"
  *    @arg @c kGTLRCompute_OperationsScopedListWarning_Code_DiskSizeLargerThanImageSize
  *        Value "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+ *    @arg @c kGTLRCompute_OperationsScopedListWarning_Code_FieldValueOverriden
+ *        Value "FIELD_VALUE_OVERRIDEN"
  *    @arg @c kGTLRCompute_OperationsScopedListWarning_Code_InjectedKernelsDeprecated
  *        Value "INJECTED_KERNELS_DEPRECATED"
  *    @arg @c kGTLRCompute_OperationsScopedListWarning_Code_NextHopAddressNotAssigned
@@ -6754,16 +7339,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_OperationsScopedListWarning_Code_Unreachable Value
  *        "UNREACHABLE"
  */
-@property(copy, nullable) NSString *code;
+@property(nonatomic, copy, nullable) NSString *code;
 
 /**
  *  [Output Only] Metadata about this warning in key: value format. For example:
  *  "data": [ { "key": "scope", "value": "zones/us-east1-d" }
  */
-@property(strong, nullable) NSArray<GTLRCompute_OperationsScopedListWarningDataItem *> *data;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_OperationsScopedListWarningDataItem *> *data;
 
 /** [Output Only] A human-readable description of the warning code. */
-@property(copy, nullable) NSString *message;
+@property(nonatomic, copy, nullable) NSString *message;
 
 @end
 
@@ -6782,10 +7367,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  example, if an instance attempts to perform IP forwarding but is not enabled
  *  for IP forwarding).
  */
-@property(copy, nullable) NSString *key;
+@property(nonatomic, copy, nullable) NSString *key;
 
 /** [Output Only] A warning data value corresponding to the key. */
-@property(copy, nullable) NSString *value;
+@property(nonatomic, copy, nullable) NSString *value;
 
 @end
 
@@ -6807,7 +7392,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  - compute/v1/projects/project/global/backendServices/backendService
  *  - global/backendServices/backendService
  */
-@property(copy, nullable) NSString *defaultService;
+@property(nonatomic, copy, nullable) NSString *defaultService;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -6815,13 +7400,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /** The name to which this PathMatcher is referred by the HostRule. */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /** The list of path rules. */
-@property(strong, nullable) NSArray<GTLRCompute_PathRule *> *pathRules;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_PathRule *> *pathRules;
 
 @end
 
@@ -6838,10 +7423,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  matcher does not include any text after the first ? or #, and those chars
  *  are not allowed here.
  */
-@property(strong, nullable) NSArray<NSString *> *paths;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *paths;
 
 /** The URL of the BackendService resource if this rule is matched. */
-@property(copy, nullable) NSString *service;
+@property(nonatomic, copy, nullable) NSString *service;
 
 @end
 
@@ -6857,25 +7442,25 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  Metadata key/value pairs available to all instances contained in this
  *  project. See Custom metadata for more information.
  */
-@property(strong, nullable) GTLRCompute_Metadata *commonInstanceMetadata;
+@property(nonatomic, strong, nullable) GTLRCompute_Metadata *commonInstanceMetadata;
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  [Output Only] Default service account used by VMs running in this project.
  */
-@property(copy, nullable) NSString *defaultServiceAccount;
+@property(nonatomic, copy, nullable) NSString *defaultServiceAccount;
 
 /**
  *  An optional textual description of the resource.
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /** Restricted features enabled for use on this project. */
-@property(strong, nullable) NSArray<NSString *> *enabledFeatures;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *enabledFeatures;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -6886,30 +7471,30 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  [Output Only] Type of the resource. Always compute#project for projects.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  The project ID. For example: my-example-project. Use the project ID to make
  *  requests to Compute Engine.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /** [Output Only] Quotas assigned to this project. */
-@property(strong, nullable) NSArray<GTLRCompute_Quota *> *quotas;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Quota *> *quotas;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  The naming prefix for daily usage reports and the Google Cloud Storage
  *  bucket where they are stored.
  */
-@property(strong, nullable) GTLRCompute_UsageExportLocation *usageExportLocation;
+@property(nonatomic, strong, nullable) GTLRCompute_UsageExportLocation *usageExportLocation;
 
 @end
 
@@ -6924,7 +7509,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of doubleValue.
  */
-@property(strong, nullable) NSNumber *limit;
+@property(nonatomic, strong, nullable) NSNumber *limit;
 
 /**
  *  [Output Only] Name of the quota metric.
@@ -6948,6 +7533,11 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_Quota_Metric_LocalSsdTotalGb Value
  *        "LOCAL_SSD_TOTAL_GB"
  *    @arg @c kGTLRCompute_Quota_Metric_Networks Value "NETWORKS"
+ *    @arg @c kGTLRCompute_Quota_Metric_PreemptibleCpus Value "PREEMPTIBLE_CPUS"
+ *    @arg @c kGTLRCompute_Quota_Metric_RegionalAutoscalers Value
+ *        "REGIONAL_AUTOSCALERS"
+ *    @arg @c kGTLRCompute_Quota_Metric_RegionalInstanceGroupManagers Value
+ *        "REGIONAL_INSTANCE_GROUP_MANAGERS"
  *    @arg @c kGTLRCompute_Quota_Metric_Routers Value "ROUTERS"
  *    @arg @c kGTLRCompute_Quota_Metric_Routes Value "ROUTES"
  *    @arg @c kGTLRCompute_Quota_Metric_Snapshots Value "SNAPSHOTS"
@@ -6961,19 +7551,21 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        "TARGET_HTTPS_PROXIES"
  *    @arg @c kGTLRCompute_Quota_Metric_TargetInstances Value "TARGET_INSTANCES"
  *    @arg @c kGTLRCompute_Quota_Metric_TargetPools Value "TARGET_POOLS"
+ *    @arg @c kGTLRCompute_Quota_Metric_TargetSslProxies Value
+ *        "TARGET_SSL_PROXIES"
  *    @arg @c kGTLRCompute_Quota_Metric_TargetVpnGateways Value
  *        "TARGET_VPN_GATEWAYS"
  *    @arg @c kGTLRCompute_Quota_Metric_UrlMaps Value "URL_MAPS"
  *    @arg @c kGTLRCompute_Quota_Metric_VpnTunnels Value "VPN_TUNNELS"
  */
-@property(copy, nullable) NSString *metric;
+@property(nonatomic, copy, nullable) NSString *metric;
 
 /**
  *  [Output Only] Current usage of this metric.
  *
  *  Uses NSNumber of doubleValue.
  */
-@property(strong, nullable) NSNumber *usage;
+@property(nonatomic, strong, nullable) NSNumber *usage;
 
 @end
 
@@ -6984,17 +7576,17 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_Region : GTLRObject
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /** [Output Only] The deprecation status associated with this region. */
-@property(strong, nullable) GTLRCompute_DeprecationStatus *deprecated;
+@property(nonatomic, strong, nullable) GTLRCompute_DeprecationStatus *deprecated;
 
 /**
  *  [Output Only] Textual description of the resource.
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -7004,19 +7596,19 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /** [Output Only] Type of the resource. Always compute#region for regions. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /** [Output Only] Name of the resource. */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /** [Output Only] Quotas assigned to this region. */
-@property(strong, nullable) NSArray<GTLRCompute_Quota *> *quotas;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Quota *> *quotas;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  [Output Only] Status of the region, either UP or DOWN.
@@ -7025,13 +7617,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_Region_Status_Down Value "DOWN"
  *    @arg @c kGTLRCompute_Region_Status_Up Value "UP"
  */
-@property(copy, nullable) NSString *status;
+@property(nonatomic, copy, nullable) NSString *status;
 
 /**
  *  [Output Only] A list of zones available in this region, in the form of
  *  resource URLs.
  */
-@property(strong, nullable) NSArray<NSString *> *zones;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *zones;
 
 @end
 
@@ -7052,7 +7644,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  [Output Only] A list of Region resources.
@@ -7060,13 +7652,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_Region *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Region *> *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#regionList for lists of
  *  regions.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -7075,10 +7667,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -7089,9 +7681,9 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_ResourceGroupReference : GTLRObject
 
 /**
- *  A URI referencing one of the resource views listed in the backend service.
+ *  A URI referencing one of the instance groups listed in the backend service.
  */
-@property(copy, nullable) NSString *group;
+@property(nonatomic, copy, nullable) NSString *group;
 
 @end
 
@@ -7115,7 +7707,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_Route : GTLRObject
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -7123,10 +7715,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /** The destination range of outgoing packets that this route applies to. */
-@property(copy, nullable) NSString *destRange;
+@property(nonatomic, copy, nullable) NSString *destRange;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -7136,13 +7728,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  [Output Only] Type of this resource. Always compute#routes for Route
  *  resources.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  Name of the resource. Provided by the client when the resource is created.
@@ -7153,35 +7745,35 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /** Fully-qualified URL of the network that this route applies to. */
-@property(copy, nullable) NSString *network;
+@property(nonatomic, copy, nullable) NSString *network;
 
 /**
  *  The URL to a gateway that should handle matching packets. You can only
  *  specify the internet gateway using a full or partial valid URL:
  *  projects/<project-id>/global/gateways/default-internet-gateway
  */
-@property(copy, nullable) NSString *nextHopGateway;
+@property(nonatomic, copy, nullable) NSString *nextHopGateway;
 
 /**
  *  The URL to an instance that should handle matching packets. You can specify
  *  this as a full or partial URL. For example:
  *  https://www.googleapis.com/compute/v1/projects/project/zones/zone/instances/
  */
-@property(copy, nullable) NSString *nextHopInstance;
+@property(nonatomic, copy, nullable) NSString *nextHopInstance;
 
 /**
  *  The network IP address of an instance that should handle matching packets.
  */
-@property(copy, nullable) NSString *nextHopIp;
+@property(nonatomic, copy, nullable) NSString *nextHopIp;
 
 /** The URL of the local network if it should handle matching packets. */
-@property(copy, nullable) NSString *nextHopNetwork;
+@property(nonatomic, copy, nullable) NSString *nextHopNetwork;
 
 /** The URL to a VpnTunnel that should handle matching packets. */
-@property(copy, nullable) NSString *nextHopVpnTunnel;
+@property(nonatomic, copy, nullable) NSString *nextHopVpnTunnel;
 
 /**
  *  The priority of this route. Priority is used to break ties in cases where
@@ -7191,19 +7783,19 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedIntValue.
  */
-@property(strong, nullable) NSNumber *priority;
+@property(nonatomic, strong, nullable) NSNumber *priority;
 
 /** [Output Only] Server-defined fully-qualified URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /** A list of instance tags to which this route applies. */
-@property(strong, nullable) NSArray<NSString *> *tags;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *tags;
 
 /**
  *  [Output Only] If potential misconfigurations are detected for this route,
  *  this field will be populated with warning messages.
  */
-@property(strong, nullable) NSArray<GTLRCompute_RouteWarningsItem *> *warnings;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_RouteWarningsItem *> *warnings;
 
 @end
 
@@ -7224,6 +7816,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        "DEPRECATED_RESOURCE_USED"
  *    @arg @c kGTLRCompute_RouteWarningsItem_Code_DiskSizeLargerThanImageSize
  *        Value "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+ *    @arg @c kGTLRCompute_RouteWarningsItem_Code_FieldValueOverriden Value
+ *        "FIELD_VALUE_OVERRIDEN"
  *    @arg @c kGTLRCompute_RouteWarningsItem_Code_InjectedKernelsDeprecated
  *        Value "INJECTED_KERNELS_DEPRECATED"
  *    @arg @c kGTLRCompute_RouteWarningsItem_Code_NextHopAddressNotAssigned
@@ -7249,16 +7843,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_RouteWarningsItem_Code_Unreachable Value
  *        "UNREACHABLE"
  */
-@property(copy, nullable) NSString *code;
+@property(nonatomic, copy, nullable) NSString *code;
 
 /**
  *  [Output Only] Metadata about this warning in key: value format. For example:
  *  "data": [ { "key": "scope", "value": "zones/us-east1-d" }
  */
-@property(strong, nullable) NSArray<GTLRCompute_RouteWarningsItemDataItem *> *data;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_RouteWarningsItemDataItem *> *data;
 
 /** [Output Only] A human-readable description of the warning code. */
-@property(copy, nullable) NSString *message;
+@property(nonatomic, copy, nullable) NSString *message;
 
 @end
 
@@ -7277,10 +7871,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  example, if an instance attempts to perform IP forwarding but is not enabled
  *  for IP forwarding).
  */
-@property(copy, nullable) NSString *key;
+@property(nonatomic, copy, nullable) NSString *key;
 
 /** [Output Only] A warning data value corresponding to the key. */
-@property(copy, nullable) NSString *value;
+@property(nonatomic, copy, nullable) NSString *value;
 
 @end
 
@@ -7300,7 +7894,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  [Output Only] A list of Route resources.
@@ -7308,10 +7902,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_Route *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Route *> *items;
 
 /** Type of resource. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -7320,10 +7914,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -7333,11 +7927,18 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  */
 @interface GTLRCompute_Router : GTLRObject
 
-@property(strong, nullable) GTLRCompute_RouterBgp *bgp;
-@property(strong, nullable) NSArray<GTLRCompute_RouterBgpPeer *> *bgpPeers;
+/** BGP information specific to this router. */
+@property(nonatomic, strong, nullable) GTLRCompute_RouterBgp *bgp;
+
+/**
+ *  BGP information that needs to be configured into the routing stack to
+ *  establish the BGP peering. It must specify peer ASN and either interface
+ *  name, IP, or peer IP. Please refer to RFC4273.
+ */
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_RouterBgpPeer *> *bgpPeers;
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -7345,7 +7946,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -7355,12 +7956,17 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
-@property(strong, nullable) NSArray<GTLRCompute_RouterInterface *> *interfaces;
+/**
+ *  Router interfaces. Each interface requires either one linked resource (e.g.
+ *  linkedVpnTunnel), or IP address and IP address range (e.g. ipRange), or
+ *  both.
+ */
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_RouterInterface *> *interfaces;
 
 /** [Output Only] Type of resource. Always compute#router for routers. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  Name of the resource. Provided by the client when the resource is created.
@@ -7371,16 +7977,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /** URI of the network to which this router belongs. */
-@property(copy, nullable) NSString *network;
+@property(nonatomic, copy, nullable) NSString *network;
 
 /** [Output Only] URI of the region where the router resides. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -7396,13 +8002,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /** A map of scoped router lists. */
-@property(strong, nullable) GTLRCompute_RouterAggregatedListItems *items;
+@property(nonatomic, strong, nullable) GTLRCompute_RouterAggregatedListItems *items;
 
 /** Type of resource. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -7411,10 +8017,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -7443,15 +8049,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedIntValue.
  */
-@property(strong, nullable) NSNumber *asn;
+@property(nonatomic, strong, nullable) NSNumber *asn;
 
 @end
 
 
 /**
- *  BGP information that needs to be configured into the routing stack to
- *  establish the BGP peering. It must specify peer ASN and either interface
- *  name, IP, or peer IP. Reference: https://tools.ietf.org/html/rfc4273
+ *  GTLRCompute_RouterBgpPeer
  */
 @interface GTLRCompute_RouterBgpPeer : GTLRObject
 
@@ -7462,19 +8066,19 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedIntValue.
  */
-@property(strong, nullable) NSNumber *advertisedRoutePriority;
+@property(nonatomic, strong, nullable) NSNumber *advertisedRoutePriority;
 
 /** Name of the interface the BGP peer is associated with. */
-@property(copy, nullable) NSString *interfaceName;
+@property(nonatomic, copy, nullable) NSString *interfaceName;
 
 /** IP address of the interface inside Google Cloud Platform. */
-@property(copy, nullable) NSString *ipAddress;
+@property(nonatomic, copy, nullable) NSString *ipAddress;
 
 /**
  *  Name of this BGP peer. The name must be 1-63 characters long and comply with
  *  RFC1035.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
  *  Peer BGP Autonomous System Number (ASN). For VPN use case, this value can be
@@ -7482,17 +8086,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedIntValue.
  */
-@property(strong, nullable) NSNumber *peerAsn;
+@property(nonatomic, strong, nullable) NSNumber *peerAsn;
 
 /** IP address of the BGP interface outside Google cloud. */
-@property(copy, nullable) NSString *peerIpAddress;
+@property(nonatomic, copy, nullable) NSString *peerIpAddress;
 
 @end
 
 
 /**
- *  Router interfaces. Each interface requires either one linked resource (e.g.
- *  linked_vpn_tunnel) or IP address + range (specified in ip_range).
+ *  GTLRCompute_RouterInterface
  */
 @interface GTLRCompute_RouterInterface : GTLRObject
 
@@ -7502,19 +8105,19 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  169.254.0.1/30. NOTE: Do not truncate the address as it represents the IP
  *  address of the interface.
  */
-@property(copy, nullable) NSString *ipRange;
+@property(nonatomic, copy, nullable) NSString *ipRange;
 
 /**
  *  URI of linked VPN tunnel. It must be in the same region as the router. Each
  *  interface can have at most one linked resource.
  */
-@property(copy, nullable) NSString *linkedVpnTunnel;
+@property(nonatomic, copy, nullable) NSString *linkedVpnTunnel;
 
 /**
  *  Name of this interface entry. The name must be 1-63 characters long and
  *  comply with RFC1035.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 @end
 
@@ -7535,7 +8138,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  A list of Router resources.
@@ -7543,10 +8146,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_Router *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Router *> *items;
 
 /** [Output Only] Type of resource. Always compute#router for routers. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -7555,10 +8158,21 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
-/** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+/** [Output Only] Server-defined URL for this resource. */
+@property(nonatomic, copy, nullable) NSString *selfLink;
+
+@end
+
+
+/**
+ *  GTLRCompute_RoutersPreviewResponse
+ */
+@interface GTLRCompute_RoutersPreviewResponse : GTLRObject
+
+/** Preview of given router. */
+@property(nonatomic, strong, nullable) GTLRCompute_Router *resource;
 
 @end
 
@@ -7569,13 +8183,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_RoutersScopedList : GTLRObject
 
 /** List of routers contained in this scope. */
-@property(strong, nullable) NSArray<GTLRCompute_Router *> *routers;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Router *> *routers;
 
 /**
  *  Informational warning which replaces the list of routers when the list is
  *  empty.
  */
-@property(strong, nullable) GTLRCompute_RoutersScopedListWarning *warning;
+@property(nonatomic, strong, nullable) GTLRCompute_RoutersScopedListWarning *warning;
 
 @end
 
@@ -7597,6 +8211,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        Value "DEPRECATED_RESOURCE_USED"
  *    @arg @c kGTLRCompute_RoutersScopedListWarning_Code_DiskSizeLargerThanImageSize
  *        Value "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+ *    @arg @c kGTLRCompute_RoutersScopedListWarning_Code_FieldValueOverriden
+ *        Value "FIELD_VALUE_OVERRIDEN"
  *    @arg @c kGTLRCompute_RoutersScopedListWarning_Code_InjectedKernelsDeprecated
  *        Value "INJECTED_KERNELS_DEPRECATED"
  *    @arg @c kGTLRCompute_RoutersScopedListWarning_Code_NextHopAddressNotAssigned
@@ -7622,16 +8238,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_RoutersScopedListWarning_Code_Unreachable Value
  *        "UNREACHABLE"
  */
-@property(copy, nullable) NSString *code;
+@property(nonatomic, copy, nullable) NSString *code;
 
 /**
  *  [Output Only] Metadata about this warning in key: value format. For example:
  *  "data": [ { "key": "scope", "value": "zones/us-east1-d" }
  */
-@property(strong, nullable) NSArray<GTLRCompute_RoutersScopedListWarningDataItem *> *data;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_RoutersScopedListWarningDataItem *> *data;
 
 /** [Output Only] A human-readable description of the warning code. */
-@property(copy, nullable) NSString *message;
+@property(nonatomic, copy, nullable) NSString *message;
 
 @end
 
@@ -7650,10 +8266,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  example, if an instance attempts to perform IP forwarding but is not enabled
  *  for IP forwarding).
  */
-@property(copy, nullable) NSString *key;
+@property(nonatomic, copy, nullable) NSString *key;
 
 /** [Output Only] A warning data value corresponding to the key. */
-@property(copy, nullable) NSString *value;
+@property(nonatomic, copy, nullable) NSString *value;
 
 @end
 
@@ -7664,12 +8280,12 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_RouterStatus : GTLRObject
 
 /** Best routes for this router's network. */
-@property(strong, nullable) NSArray<GTLRCompute_Route *> *bestRoutes;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Route *> *bestRoutes;
 
-@property(strong, nullable) NSArray<GTLRCompute_RouterStatusBgpPeerStatus *> *bgpPeerStatus;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_RouterStatusBgpPeerStatus *> *bgpPeerStatus;
 
 /** URI of the network to which this router belongs. */
-@property(copy, nullable) NSString *network;
+@property(nonatomic, copy, nullable) NSString *network;
 
 @end
 
@@ -7680,29 +8296,29 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_RouterStatusBgpPeerStatus : GTLRObject
 
 /** Routes that were advertised to the remote BGP peer */
-@property(strong, nullable) NSArray<GTLRCompute_Route *> *advertisedRoutes;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Route *> *advertisedRoutes;
 
 /** IP address of the local BGP interface. */
-@property(copy, nullable) NSString *ipAddress;
+@property(nonatomic, copy, nullable) NSString *ipAddress;
 
 /** URL of the VPN tunnel that this BGP peer controls. */
-@property(copy, nullable) NSString *linkedVpnTunnel;
+@property(nonatomic, copy, nullable) NSString *linkedVpnTunnel;
 
 /** Name of this BGP peer. Unique within the Routers resource. */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
  *  Number of routes learned from the remote BGP Peer.
  *
  *  Uses NSNumber of unsignedIntValue.
  */
-@property(strong, nullable) NSNumber *numLearnedRoutes;
+@property(nonatomic, strong, nullable) NSNumber *numLearnedRoutes;
 
 /** IP address of the remote BGP interface. */
-@property(copy, nullable) NSString *peerIpAddress;
+@property(nonatomic, copy, nullable) NSString *peerIpAddress;
 
 /** BGP state as specified in RFC1771. */
-@property(copy, nullable) NSString *state;
+@property(nonatomic, copy, nullable) NSString *state;
 
 /**
  *  Status of the BGP peer: {UP, DOWN}
@@ -7713,16 +8329,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        "UNKNOWN"
  *    @arg @c kGTLRCompute_RouterStatusBgpPeerStatus_Status_Up Value "UP"
  */
-@property(copy, nullable) NSString *status;
+@property(nonatomic, copy, nullable) NSString *status;
 
 /**
  *  Time this session has been up. Format: 14 years, 51 weeks, 6 days, 23 hours,
  *  59 minutes, 59 seconds
  */
-@property(copy, nullable) NSString *uptime;
+@property(nonatomic, copy, nullable) NSString *uptime;
 
 /** Time this session has been up, in seconds. Format: 145 */
-@property(copy, nullable) NSString *uptimeSeconds;
+@property(nonatomic, copy, nullable) NSString *uptimeSeconds;
 
 @end
 
@@ -7733,9 +8349,9 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_RouterStatusResponse : GTLRObject
 
 /** Type of resource. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
-@property(strong, nullable) GTLRCompute_RouterStatus *result;
+@property(nonatomic, strong, nullable) GTLRCompute_RouterStatus *result;
 
 @end
 
@@ -7753,7 +8369,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *automaticRestart;
+@property(nonatomic, strong, nullable) NSNumber *automaticRestart;
 
 /**
  *  Defines the maintenance behavior for this instance. For standard instances,
@@ -7766,14 +8382,14 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_Scheduling_OnHostMaintenance_Terminate Value
  *        "TERMINATE"
  */
-@property(copy, nullable) NSString *onHostMaintenance;
+@property(nonatomic, copy, nullable) NSString *onHostMaintenance;
 
 /**
  *  Whether the instance is preemptible.
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *preemptible;
+@property(nonatomic, strong, nullable) NSNumber *preemptible;
 
 @end
 
@@ -7784,16 +8400,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_SerialPortOutput : GTLRObject
 
 /** [Output Only] The contents of the console output. */
-@property(copy, nullable) NSString *contents;
+@property(nonatomic, copy, nullable) NSString *contents;
 
 /**
  *  [Output Only] Type of the resource. Always compute#serialPortOutput for
  *  serial port output.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
-/** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+/** [Output Only] Server-defined URL for this resource. */
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -7804,10 +8420,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_ServiceAccount : GTLRObject
 
 /** Email address of the service account. */
-@property(copy, nullable) NSString *email;
+@property(nonatomic, copy, nullable) NSString *email;
 
 /** The list of scopes to be made available for this service account. */
-@property(strong, nullable) NSArray<NSString *> *scopes;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *scopes;
 
 @end
 
@@ -7818,7 +8434,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_Snapshot : GTLRObject
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -7826,14 +8442,14 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  [Output Only] Size of the snapshot, specified in GB.
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *diskSizeGb;
+@property(nonatomic, strong, nullable) NSNumber *diskSizeGb;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -7843,20 +8459,20 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  [Output Only] Type of the resource. Always compute#snapshot for Snapshot
  *  resources.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] A list of public visible licenses that apply to this snapshot.
  *  This can be because the original image had licenses attached (such as a
  *  Windows image).
  */
-@property(strong, nullable) NSArray<NSString *> *licenses;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *licenses;
 
 /**
  *  Name of the resource; provided by the client when the resource is created.
@@ -7867,10 +8483,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  Encrypts the snapshot using a customer-supplied encryption key.
@@ -7884,23 +8500,23 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  snapshot will be encrypted using an automatically generated key and you do
  *  not need to provide a key to use the snapshot later.
  */
-@property(strong, nullable) GTLRCompute_CustomerEncryptionKey *snapshotEncryptionKey;
+@property(nonatomic, strong, nullable) GTLRCompute_CustomerEncryptionKey *snapshotEncryptionKey;
 
 /** [Output Only] The source disk used to create this snapshot. */
-@property(copy, nullable) NSString *sourceDisk;
+@property(nonatomic, copy, nullable) NSString *sourceDisk;
 
 /**
  *  The customer-supplied encryption key of the source disk. Required if the
  *  source disk is protected by a customer-supplied encryption key.
  */
-@property(strong, nullable) GTLRCompute_CustomerEncryptionKey *sourceDiskEncryptionKey;
+@property(nonatomic, strong, nullable) GTLRCompute_CustomerEncryptionKey *sourceDiskEncryptionKey;
 
 /**
  *  [Output Only] The ID value of the disk used to create this snapshot. This
  *  value may be used to determine whether the snapshot was taken from the
  *  current or a previous instance of a given disk name.
  */
-@property(copy, nullable) NSString *sourceDiskId;
+@property(nonatomic, copy, nullable) NSString *sourceDiskId;
 
 /**
  *  [Output Only] The status of the snapshot. This can be CREATING, DELETING,
@@ -7913,7 +8529,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_Snapshot_Status_Ready Value "READY"
  *    @arg @c kGTLRCompute_Snapshot_Status_Uploading Value "UPLOADING"
  */
-@property(copy, nullable) NSString *status;
+@property(nonatomic, copy, nullable) NSString *status;
 
 /**
  *  [Output Only] A size of the the storage used by the snapshot. As snapshots
@@ -7922,7 +8538,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *storageBytes;
+@property(nonatomic, strong, nullable) NSNumber *storageBytes;
 
 /**
  *  [Output Only] An indicator whether storageBytes is in a stable state or it
@@ -7935,7 +8551,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_Snapshot_StorageBytesStatus_UpToDate Value
  *        "UP_TO_DATE"
  */
-@property(copy, nullable) NSString *storageBytesStatus;
+@property(nonatomic, copy, nullable) NSString *storageBytesStatus;
 
 @end
 
@@ -7956,7 +8572,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  [Output Only] A list of Snapshot resources.
@@ -7964,10 +8580,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_Snapshot *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Snapshot *> *items;
 
 /** Type of resource. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -7976,10 +8592,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -7996,10 +8612,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  certificate chain must be no greater than 5 certs long. The chain must
  *  include at least one intermediate cert.
  */
-@property(copy, nullable) NSString *certificate;
+@property(nonatomic, copy, nullable) NSString *certificate;
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -8007,7 +8623,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -8017,13 +8633,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  [Output Only] Type of the resource. Always compute#sslCertificate for SSL
  *  certificates.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  Name of the resource. Provided by the client when the resource is created.
@@ -8034,16 +8650,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
  *  A write-only private key in PEM format. Only insert RPCs will include this
  *  field.
  */
-@property(copy, nullable) NSString *privateKey;
+@property(nonatomic, copy, nullable) NSString *privateKey;
 
 /** [Output only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -8063,7 +8679,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  A list of SslCertificate resources.
@@ -8071,10 +8687,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_SslCertificate *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_SslCertificate *> *items;
 
 /** Type of resource. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -8083,10 +8699,56 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
+
+@end
+
+
+/**
+ *  GTLRCompute_SSLHealthCheck
+ */
+@interface GTLRCompute_SSLHealthCheck : GTLRObject
+
+/**
+ *  The TCP port number for the health check request. The default value is 443.
+ *
+ *  Uses NSNumber of intValue.
+ */
+@property(nonatomic, strong, nullable) NSNumber *port;
+
+/**
+ *  Port name as defined in InstanceGroup#NamedPort#name. If both port and
+ *  port_name are defined, port takes precedence.
+ */
+@property(nonatomic, copy, nullable) NSString *portName;
+
+/**
+ *  Specifies the type of proxy header to append before sending data to the
+ *  backend, either NONE or PROXY_V1. The default is NONE.
+ *
+ *  Likely values:
+ *    @arg @c kGTLRCompute_SSLHealthCheck_ProxyHeader_None Value "NONE"
+ *    @arg @c kGTLRCompute_SSLHealthCheck_ProxyHeader_ProxyV1 Value "PROXY_V1"
+ */
+@property(nonatomic, copy, nullable) NSString *proxyHeader;
+
+/**
+ *  The application data to send once the SSL connection has been established
+ *  (default value is empty). If both request and response are empty, the
+ *  connection establishment alone will indicate health. The request data can
+ *  only be ASCII.
+ */
+@property(nonatomic, copy, nullable) NSString *request;
+
+/**
+ *  The bytes to match against the beginning of the response data. If left empty
+ *  (the default value), any response will indicate health. The response data
+ *  can only be ASCII.
+ */
+@property(nonatomic, copy, nullable) NSString *response;
 
 @end
 
@@ -8097,7 +8759,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_Subnetwork : GTLRObject
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -8105,13 +8767,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  [Output Only] The gateway address for default routes to reach destination
  *  addresses outside this subnetwork.
  */
-@property(copy, nullable) NSString *gatewayAddress;
+@property(nonatomic, copy, nullable) NSString *gatewayAddress;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -8121,20 +8783,20 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  The range of internal addresses that are owned by this subnetwork. Provide
  *  this property when you create the subnetwork. For example, 10.0.0.0/8 or
  *  192.168.0.0/16. Ranges must be unique and non-overlapping within a network.
  */
-@property(copy, nullable) NSString *ipCidrRange;
+@property(nonatomic, copy, nullable) NSString *ipCidrRange;
 
 /**
  *  [Output Only] Type of the resource. Always compute#subnetwork for Subnetwork
  *  resources.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  The name of the resource, provided by the client when initially creating the
@@ -8145,20 +8807,20 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
  *  The URL of the network to which this subnetwork belongs, provided by the
  *  client when initially creating the subnetwork. Only networks that are in the
  *  distributed mode can have subnetworks.
  */
-@property(copy, nullable) NSString *network;
+@property(nonatomic, copy, nullable) NSString *network;
 
 /** URL of the region where the Subnetwork resides. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -8174,16 +8836,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /** [Output] A map of scoped Subnetwork lists. */
-@property(strong, nullable) GTLRCompute_SubnetworkAggregatedListItems *items;
+@property(nonatomic, strong, nullable) GTLRCompute_SubnetworkAggregatedListItems *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#subnetworkAggregatedList for
  *  aggregated lists of subnetworks.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -8192,10 +8854,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -8228,7 +8890,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  The Subnetwork resources.
@@ -8236,13 +8898,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_Subnetwork *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Subnetwork *> *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#subnetworkList for lists of
  *  subnetworks.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -8251,10 +8913,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -8265,12 +8927,12 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_SubnetworksScopedList : GTLRObject
 
 /** List of subnetworks contained in this scope. */
-@property(strong, nullable) NSArray<GTLRCompute_Subnetwork *> *subnetworks;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Subnetwork *> *subnetworks;
 
 /**
  *  An informational warning that appears when the list of addresses is empty.
  */
-@property(strong, nullable) GTLRCompute_SubnetworksScopedListWarning *warning;
+@property(nonatomic, strong, nullable) GTLRCompute_SubnetworksScopedListWarning *warning;
 
 @end
 
@@ -8291,6 +8953,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        Value "DEPRECATED_RESOURCE_USED"
  *    @arg @c kGTLRCompute_SubnetworksScopedListWarning_Code_DiskSizeLargerThanImageSize
  *        Value "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+ *    @arg @c kGTLRCompute_SubnetworksScopedListWarning_Code_FieldValueOverriden
+ *        Value "FIELD_VALUE_OVERRIDEN"
  *    @arg @c kGTLRCompute_SubnetworksScopedListWarning_Code_InjectedKernelsDeprecated
  *        Value "INJECTED_KERNELS_DEPRECATED"
  *    @arg @c kGTLRCompute_SubnetworksScopedListWarning_Code_NextHopAddressNotAssigned
@@ -8316,16 +8980,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_SubnetworksScopedListWarning_Code_Unreachable Value
  *        "UNREACHABLE"
  */
-@property(copy, nullable) NSString *code;
+@property(nonatomic, copy, nullable) NSString *code;
 
 /**
  *  [Output Only] Metadata about this warning in key: value format. For example:
  *  "data": [ { "key": "scope", "value": "zones/us-east1-d" }
  */
-@property(strong, nullable) NSArray<GTLRCompute_SubnetworksScopedListWarningDataItem *> *data;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_SubnetworksScopedListWarningDataItem *> *data;
 
 /** [Output Only] A human-readable description of the warning code. */
-@property(copy, nullable) NSString *message;
+@property(nonatomic, copy, nullable) NSString *message;
 
 @end
 
@@ -8344,10 +9008,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  example, if an instance attempts to perform IP forwarding but is not enabled
  *  for IP forwarding).
  */
-@property(copy, nullable) NSString *key;
+@property(nonatomic, copy, nullable) NSString *key;
 
 /** [Output Only] A warning data value corresponding to the key. */
-@property(copy, nullable) NSString *value;
+@property(nonatomic, copy, nullable) NSString *value;
 
 @end
 
@@ -8368,13 +9032,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  Contains encoded binary data; GTLRBase64 can encode/decode (probably
  *  web-safe format).
  */
-@property(copy, nullable) NSString *fingerprint;
+@property(nonatomic, copy, nullable) NSString *fingerprint;
 
 /**
  *  An array of tags. Each tag must be 1-63 characters long, and comply with
  *  RFC1035.
  */
-@property(strong, nullable) NSArray<NSString *> *items;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *items;
 
 @end
 
@@ -8385,7 +9049,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_TargetHttpProxy : GTLRObject
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -8393,7 +9057,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -8403,13 +9067,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  [Output Only] Type of resource. Always compute#targetHttpProxy for target
  *  HTTP proxies.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  Name of the resource. Provided by the client when the resource is created.
@@ -8420,16 +9084,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  URL to the UrlMap resource that defines the mapping from URL to the
  *  BackendService.
  */
-@property(copy, nullable) NSString *urlMap;
+@property(nonatomic, copy, nullable) NSString *urlMap;
 
 @end
 
@@ -8450,7 +9114,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  A list of TargetHttpProxy resources.
@@ -8458,13 +9122,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_TargetHttpProxy *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_TargetHttpProxy *> *items;
 
 /**
  *  Type of resource. Always compute#targetHttpProxyList for lists of target
  *  HTTP proxies.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -8473,10 +9137,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -8490,7 +9154,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  New set of SslCertificate resources to associate with this TargetHttpsProxy
  *  resource. Currently exactly one SslCertificate resource must be specified.
  */
-@property(strong, nullable) NSArray<NSString *> *sslCertificates;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *sslCertificates;
 
 @end
 
@@ -8501,7 +9165,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_TargetHttpsProxy : GTLRObject
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -8509,7 +9173,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -8519,13 +9183,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  [Output Only] Type of resource. Always compute#targetHttpsProxy for target
  *  HTTPS proxies.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  Name of the resource. Provided by the client when the resource is created.
@@ -8536,17 +9200,17 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  URLs to SslCertificate resources that are used to authenticate connections
  *  between users and the load balancer. Currently, exactly one SSL certificate
  *  must be specified.
  */
-@property(strong, nullable) NSArray<NSString *> *sslCertificates;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *sslCertificates;
 
 /**
  *  A fully-qualified or valid partial URL to the UrlMap resource that defines
@@ -8556,7 +9220,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  - projects/project/global/urlMaps/url-map
  *  - global/urlMaps/url-map
  */
-@property(copy, nullable) NSString *urlMap;
+@property(nonatomic, copy, nullable) NSString *urlMap;
 
 @end
 
@@ -8577,7 +9241,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  A list of TargetHttpsProxy resources.
@@ -8585,13 +9249,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_TargetHttpsProxy *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_TargetHttpsProxy *> *items;
 
 /**
  *  Type of resource. Always compute#targetHttpsProxyList for lists of target
  *  HTTPS proxies.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -8600,10 +9264,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -8615,7 +9279,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_TargetInstance : GTLRObject
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -8623,7 +9287,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -8633,7 +9297,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  A URL to the virtual machine instance that handles traffic for this target
@@ -8645,13 +9309,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  - projects/project/zones/zone/instances/instance
  *  - zones/zone/instances/instance
  */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 /**
  *  [Output Only] The type of the resource. Always compute#targetInstance for
  *  target instances.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  Name of the resource. Provided by the client when the resource is created.
@@ -8662,7 +9326,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
  *  NAT option controlling how IPs are NAT'ed to the instance. Currently only
@@ -8671,17 +9335,17 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  Likely values:
  *    @arg @c kGTLRCompute_TargetInstance_NatPolicy_NoNat Value "NO_NAT"
  */
-@property(copy, nullable) NSString *natPolicy;
+@property(nonatomic, copy, nullable) NSString *natPolicy;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  [Output Only] URL of the zone where the target instance resides.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 @end
 
@@ -8696,13 +9360,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /** A map of scoped target instance lists. */
-@property(strong, nullable) GTLRCompute_TargetInstanceAggregatedListItems *items;
+@property(nonatomic, strong, nullable) GTLRCompute_TargetInstanceAggregatedListItems *items;
 
 /** Type of resource. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -8711,10 +9375,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -8747,7 +9411,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  A list of TargetInstance resources.
@@ -8755,10 +9419,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_TargetInstance *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_TargetInstance *> *items;
 
 /** Type of resource. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -8767,10 +9431,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -8781,13 +9445,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_TargetInstancesScopedList : GTLRObject
 
 /** List of target instances contained in this scope. */
-@property(strong, nullable) NSArray<GTLRCompute_TargetInstance *> *targetInstances;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_TargetInstance *> *targetInstances;
 
 /**
  *  Informational warning which replaces the list of addresses when the list is
  *  empty.
  */
-@property(strong, nullable) GTLRCompute_TargetInstancesScopedListWarning *warning;
+@property(nonatomic, strong, nullable) GTLRCompute_TargetInstancesScopedListWarning *warning;
 
 @end
 
@@ -8809,6 +9473,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        Value "DEPRECATED_RESOURCE_USED"
  *    @arg @c kGTLRCompute_TargetInstancesScopedListWarning_Code_DiskSizeLargerThanImageSize
  *        Value "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+ *    @arg @c kGTLRCompute_TargetInstancesScopedListWarning_Code_FieldValueOverriden
+ *        Value "FIELD_VALUE_OVERRIDEN"
  *    @arg @c kGTLRCompute_TargetInstancesScopedListWarning_Code_InjectedKernelsDeprecated
  *        Value "INJECTED_KERNELS_DEPRECATED"
  *    @arg @c kGTLRCompute_TargetInstancesScopedListWarning_Code_NextHopAddressNotAssigned
@@ -8834,16 +9500,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_TargetInstancesScopedListWarning_Code_Unreachable
  *        Value "UNREACHABLE"
  */
-@property(copy, nullable) NSString *code;
+@property(nonatomic, copy, nullable) NSString *code;
 
 /**
  *  [Output Only] Metadata about this warning in key: value format. For example:
  *  "data": [ { "key": "scope", "value": "zones/us-east1-d" }
  */
-@property(strong, nullable) NSArray<GTLRCompute_TargetInstancesScopedListWarningDataItem *> *data;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_TargetInstancesScopedListWarningDataItem *> *data;
 
 /** [Output Only] A human-readable description of the warning code. */
-@property(copy, nullable) NSString *message;
+@property(nonatomic, copy, nullable) NSString *message;
 
 @end
 
@@ -8862,10 +9528,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  example, if an instance attempts to perform IP forwarding but is not enabled
  *  for IP forwarding).
  */
-@property(copy, nullable) NSString *key;
+@property(nonatomic, copy, nullable) NSString *key;
 
 /** [Output Only] A warning data value corresponding to the key. */
-@property(copy, nullable) NSString *value;
+@property(nonatomic, copy, nullable) NSString *value;
 
 @end
 
@@ -8890,10 +9556,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  healthy instances with the best effort, or to all instances when no instance
  *  is healthy.
  */
-@property(copy, nullable) NSString *backupPool;
+@property(nonatomic, copy, nullable) NSString *backupPool;
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -8901,7 +9567,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  This field is applicable only when the containing target pool is serving a
@@ -8918,7 +9584,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of floatValue.
  */
-@property(strong, nullable) NSNumber *failoverRatio;
+@property(nonatomic, strong, nullable) NSNumber *failoverRatio;
 
 /**
  *  A list of URLs to the HttpHealthCheck resource. A member instance in this
@@ -8926,7 +9592,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  An empty list means all member instances will be considered healthy at all
  *  times.
  */
-@property(strong, nullable) NSArray<NSString *> *healthChecks;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *healthChecks;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -8936,19 +9602,19 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  A list of resource URLs to the virtual machine instances serving this pool.
  *  They must live in zones contained in the same region as this pool.
  */
-@property(strong, nullable) NSArray<NSString *> *instances;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *instances;
 
 /**
  *  [Output Only] Type of the resource. Always compute#targetPool for target
  *  pools.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  Name of the resource. Provided by the client when the resource is created.
@@ -8959,13 +9625,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /** [Output Only] URL of the region where the target pool resides. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  Sesssion affinity option, must be one of the following values:
@@ -8981,9 +9647,11 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_TargetPool_SessionAffinity_ClientIp Value "CLIENT_IP"
  *    @arg @c kGTLRCompute_TargetPool_SessionAffinity_ClientIpProto Value
  *        "CLIENT_IP_PROTO"
+ *    @arg @c kGTLRCompute_TargetPool_SessionAffinity_GeneratedCookie Value
+ *        "GENERATED_COOKIE"
  *    @arg @c kGTLRCompute_TargetPool_SessionAffinity_None Value "NONE"
  */
-@property(copy, nullable) NSString *sessionAffinity;
+@property(nonatomic, copy, nullable) NSString *sessionAffinity;
 
 @end
 
@@ -8998,16 +9666,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /** [Output Only] A map of scoped target pool lists. */
-@property(strong, nullable) GTLRCompute_TargetPoolAggregatedListItems *items;
+@property(nonatomic, strong, nullable) GTLRCompute_TargetPoolAggregatedListItems *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#targetPoolAggregatedList for
  *  aggregated lists of target pools.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -9016,10 +9684,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -9041,13 +9709,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  */
 @interface GTLRCompute_TargetPoolInstanceHealth : GTLRObject
 
-@property(strong, nullable) NSArray<GTLRCompute_HealthStatus *> *healthStatus;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_HealthStatus *> *healthStatus;
 
 /**
  *  [Output Only] Type of resource. Always compute#targetPoolInstanceHealth when
  *  checking the health of an instance.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 @end
 
@@ -9067,7 +9735,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  A list of TargetPool resources.
@@ -9075,13 +9743,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_TargetPool *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_TargetPool *> *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#targetPoolList for lists of
  *  target pools.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -9090,10 +9758,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -9104,7 +9772,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_TargetPoolsAddHealthCheckRequest : GTLRObject
 
 /** A list of HttpHealthCheck resources to add to the target pool. */
-@property(strong, nullable) NSArray<GTLRCompute_HealthCheckReference *> *healthChecks;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_HealthCheckReference *> *healthChecks;
 
 @end
 
@@ -9122,7 +9790,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  - projects/project-id/zones/zone/instances/instance-name
  *  - zones/zone/instances/instance-name
  */
-@property(strong, nullable) NSArray<GTLRCompute_InstanceReference *> *instances;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_InstanceReference *> *instances;
 
 @end
 
@@ -9140,7 +9808,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  - projects/project/global/httpHealthChecks/health-check
  *  - global/httpHealthChecks/health-check
  */
-@property(strong, nullable) NSArray<GTLRCompute_HealthCheckReference *> *healthChecks;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_HealthCheckReference *> *healthChecks;
 
 @end
 
@@ -9151,7 +9819,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_TargetPoolsRemoveInstanceRequest : GTLRObject
 
 /** URLs of the instances to be removed from target pool. */
-@property(strong, nullable) NSArray<GTLRCompute_InstanceReference *> *instances;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_InstanceReference *> *instances;
 
 @end
 
@@ -9162,13 +9830,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_TargetPoolsScopedList : GTLRObject
 
 /** List of target pools contained in this scope. */
-@property(strong, nullable) NSArray<GTLRCompute_TargetPool *> *targetPools;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_TargetPool *> *targetPools;
 
 /**
  *  Informational warning which replaces the list of addresses when the list is
  *  empty.
  */
-@property(strong, nullable) GTLRCompute_TargetPoolsScopedListWarning *warning;
+@property(nonatomic, strong, nullable) GTLRCompute_TargetPoolsScopedListWarning *warning;
 
 @end
 
@@ -9190,6 +9858,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        Value "DEPRECATED_RESOURCE_USED"
  *    @arg @c kGTLRCompute_TargetPoolsScopedListWarning_Code_DiskSizeLargerThanImageSize
  *        Value "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+ *    @arg @c kGTLRCompute_TargetPoolsScopedListWarning_Code_FieldValueOverriden
+ *        Value "FIELD_VALUE_OVERRIDEN"
  *    @arg @c kGTLRCompute_TargetPoolsScopedListWarning_Code_InjectedKernelsDeprecated
  *        Value "INJECTED_KERNELS_DEPRECATED"
  *    @arg @c kGTLRCompute_TargetPoolsScopedListWarning_Code_NextHopAddressNotAssigned
@@ -9215,16 +9885,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_TargetPoolsScopedListWarning_Code_Unreachable Value
  *        "UNREACHABLE"
  */
-@property(copy, nullable) NSString *code;
+@property(nonatomic, copy, nullable) NSString *code;
 
 /**
  *  [Output Only] Metadata about this warning in key: value format. For example:
  *  "data": [ { "key": "scope", "value": "zones/us-east1-d" }
  */
-@property(strong, nullable) NSArray<GTLRCompute_TargetPoolsScopedListWarningDataItem *> *data;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_TargetPoolsScopedListWarningDataItem *> *data;
 
 /** [Output Only] A human-readable description of the warning code. */
-@property(copy, nullable) NSString *message;
+@property(nonatomic, copy, nullable) NSString *message;
 
 @end
 
@@ -9243,10 +9913,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  example, if an instance attempts to perform IP forwarding but is not enabled
  *  for IP forwarding).
  */
-@property(copy, nullable) NSString *key;
+@property(nonatomic, copy, nullable) NSString *key;
 
 /** [Output Only] A warning data value corresponding to the key. */
-@property(copy, nullable) NSString *value;
+@property(nonatomic, copy, nullable) NSString *value;
 
 @end
 
@@ -9256,18 +9926,63 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  */
 @interface GTLRCompute_TargetReference : GTLRObject
 
-@property(copy, nullable) NSString *target;
+@property(nonatomic, copy, nullable) NSString *target;
 
 @end
 
 
 /**
- *  Represents a Target VPN gateway resource.
+ *  GTLRCompute_TargetSslProxiesSetBackendServiceRequest
  */
-@interface GTLRCompute_TargetVpnGateway : GTLRObject
+@interface GTLRCompute_TargetSslProxiesSetBackendServiceRequest : GTLRObject
+
+/** The URL of the new BackendService resource for the targetSslProxy. */
+@property(nonatomic, copy, nullable) NSString *service;
+
+@end
+
+
+/**
+ *  GTLRCompute_TargetSslProxiesSetProxyHeaderRequest
+ */
+@interface GTLRCompute_TargetSslProxiesSetProxyHeaderRequest : GTLRObject
+
+/**
+ *  The new type of proxy header to append before sending data to the backend.
+ *  NONE or PROXY_V1 are allowed.
+ *
+ *  Likely values:
+ *    @arg @c kGTLRCompute_TargetSslProxiesSetProxyHeaderRequest_ProxyHeader_None
+ *        Value "NONE"
+ *    @arg @c kGTLRCompute_TargetSslProxiesSetProxyHeaderRequest_ProxyHeader_ProxyV1
+ *        Value "PROXY_V1"
+ */
+@property(nonatomic, copy, nullable) NSString *proxyHeader;
+
+@end
+
+
+/**
+ *  GTLRCompute_TargetSslProxiesSetSslCertificatesRequest
+ */
+@interface GTLRCompute_TargetSslProxiesSetSslCertificatesRequest : GTLRObject
+
+/**
+ *  New set of URLs to SslCertificate resources to associate with this
+ *  TargetSslProxy. Currently exactly one ssl certificate must be specified.
+ */
+@property(nonatomic, strong, nullable) NSArray<NSString *> *sslCertificates;
+
+@end
+
+
+/**
+ *  A TargetSslProxy resource. This resource defines an SSL proxy.
+ */
+@interface GTLRCompute_TargetSslProxy : GTLRObject
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -9275,14 +9990,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
-
-/**
- *  [Output Only] A list of URLs to the ForwardingRule resources.
- *  ForwardingRules are created using compute.forwardingRules.insert and
- *  associated to a VPN gateway.
- */
-@property(strong, nullable) NSArray<NSString *> *forwardingRules;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -9292,13 +10000,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
- *  [Output Only] Type of resource. Always compute#targetVpnGateway for target
- *  VPN gateways.
+ *  [Output Only] Type of the resource. Always compute#targetSslProxy for target
+ *  SSL proxies.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  Name of the resource. Provided by the client when the resource is created.
@@ -9309,19 +10017,138 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
+
+/**
+ *  Specifies the type of proxy header to append before sending data to the
+ *  backend, either NONE or PROXY_V1. The default is NONE.
+ *
+ *  Likely values:
+ *    @arg @c kGTLRCompute_TargetSslProxy_ProxyHeader_None Value "NONE"
+ *    @arg @c kGTLRCompute_TargetSslProxy_ProxyHeader_ProxyV1 Value "PROXY_V1"
+ */
+@property(nonatomic, copy, nullable) NSString *proxyHeader;
+
+/** [Output Only] Server-defined URL for the resource. */
+@property(nonatomic, copy, nullable) NSString *selfLink;
+
+/** URL to the BackendService resource. */
+@property(nonatomic, copy, nullable) NSString *service;
+
+/**
+ *  URLs to SslCertificate resources that are used to authenticate connections
+ *  to Backends. Currently exactly one SSL certificate must be specified.
+ */
+@property(nonatomic, strong, nullable) NSArray<NSString *> *sslCertificates;
+
+@end
+
+
+/**
+ *  Contains a list of TargetSslProxy resources.
+ *
+ *  @note This class supports NSFastEnumeration and indexed subscripting over
+ *        its "items" property. If returned as the result of a query, it should
+ *        support automatic pagination (when @c shouldFetchNextPages is
+ *        enabled).
+ */
+@interface GTLRCompute_TargetSslProxyList : GTLRCollectionObject
+
+/**
+ *  [Output Only] The unique identifier for the resource. This identifier is
+ *  defined by the server.
+ *
+ *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
+ */
+@property(nonatomic, copy, nullable) NSString *identifier;
+
+/**
+ *  A list of TargetSslProxy resources.
+ *
+ *  @note This property is used to support NSFastEnumeration and indexed
+ *        subscripting on this class.
+ */
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_TargetSslProxy *> *items;
+
+/** Type of resource. */
+@property(nonatomic, copy, nullable) NSString *kind;
+
+/**
+ *  [Output Only] This token allows you to get the next page of results for list
+ *  requests. If the number of results is larger than maxResults, use the
+ *  nextPageToken as a value for the query parameter pageToken in the next list
+ *  request. Subsequent list requests will have their own nextPageToken to
+ *  continue paging through the results.
+ */
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
+
+/** [Output Only] Server-defined URL for this resource. */
+@property(nonatomic, copy, nullable) NSString *selfLink;
+
+@end
+
+
+/**
+ *  Represents a Target VPN gateway resource.
+ */
+@interface GTLRCompute_TargetVpnGateway : GTLRObject
+
+/** [Output Only] Creation timestamp in RFC3339 text format. */
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
+
+/**
+ *  An optional description of this resource. Provide this property when you
+ *  create the resource.
+ *
+ *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
+ */
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
+
+/**
+ *  [Output Only] A list of URLs to the ForwardingRule resources.
+ *  ForwardingRules are created using compute.forwardingRules.insert and
+ *  associated to a VPN gateway.
+ */
+@property(nonatomic, strong, nullable) NSArray<NSString *> *forwardingRules;
+
+/**
+ *  [Output Only] The unique identifier for the resource. This identifier is
+ *  defined by the server.
+ *
+ *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
+ *
+ *  Uses NSNumber of unsignedLongLongValue.
+ */
+@property(nonatomic, strong, nullable) NSNumber *identifier;
+
+/**
+ *  [Output Only] Type of resource. Always compute#targetVpnGateway for target
+ *  VPN gateways.
+ */
+@property(nonatomic, copy, nullable) NSString *kind;
+
+/**
+ *  Name of the resource. Provided by the client when the resource is created.
+ *  The name must be 1-63 characters long, and comply with RFC1035.
+ *  Specifically, the name must be 1-63 characters long and match the regular
+ *  expression [a-z]([-a-z0-9]*[a-z0-9])? which means the first character must
+ *  be a lowercase letter, and all following characters must be a dash,
+ *  lowercase letter, or digit, except the last character, which cannot be a
+ *  dash.
+ */
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
  *  URL of the network to which this VPN gateway is attached. Provided by the
  *  client when the VPN gateway is created.
  */
-@property(copy, nullable) NSString *network;
+@property(nonatomic, copy, nullable) NSString *network;
 
 /** [Output Only] URL of the region where the target VPN gateway resides. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  [Output Only] The status of the VPN gateway.
@@ -9332,13 +10159,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_TargetVpnGateway_Status_Failed Value "FAILED"
  *    @arg @c kGTLRCompute_TargetVpnGateway_Status_Ready Value "READY"
  */
-@property(copy, nullable) NSString *status;
+@property(nonatomic, copy, nullable) NSString *status;
 
 /**
  *  [Output Only] A list of URLs to VpnTunnel resources. VpnTunnels are created
  *  using compute.vpntunnels.insert method and associated to a VPN gateway.
  */
-@property(strong, nullable) NSArray<NSString *> *tunnels;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *tunnels;
 
 @end
 
@@ -9354,16 +10181,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /** A map of scoped target vpn gateway lists. */
-@property(strong, nullable) GTLRCompute_TargetVpnGatewayAggregatedListItems *items;
+@property(nonatomic, strong, nullable) GTLRCompute_TargetVpnGatewayAggregatedListItems *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#targetVpnGateway for target
  *  VPN gateways.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -9372,10 +10199,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
-/** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+/** [Output Only] Server-defined URL for this resource. */
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -9409,7 +10236,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  [Output Only] A list of TargetVpnGateway resources.
@@ -9417,13 +10244,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_TargetVpnGateway *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_TargetVpnGateway *> *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#targetVpnGateway for target
  *  VPN gateways.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -9432,10 +10259,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
-/** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+/** [Output Only] Server-defined URL for this resource. */
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -9446,13 +10273,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_TargetVpnGatewaysScopedList : GTLRObject
 
 /** [Output Only] List of target vpn gateways contained in this scope. */
-@property(strong, nullable) NSArray<GTLRCompute_TargetVpnGateway *> *targetVpnGateways;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_TargetVpnGateway *> *targetVpnGateways;
 
 /**
  *  [Output Only] Informational warning which replaces the list of addresses
  *  when the list is empty.
  */
-@property(strong, nullable) GTLRCompute_TargetVpnGatewaysScopedListWarning *warning;
+@property(nonatomic, strong, nullable) GTLRCompute_TargetVpnGatewaysScopedListWarning *warning;
 
 @end
 
@@ -9474,6 +10301,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        Value "DEPRECATED_RESOURCE_USED"
  *    @arg @c kGTLRCompute_TargetVpnGatewaysScopedListWarning_Code_DiskSizeLargerThanImageSize
  *        Value "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+ *    @arg @c kGTLRCompute_TargetVpnGatewaysScopedListWarning_Code_FieldValueOverriden
+ *        Value "FIELD_VALUE_OVERRIDEN"
  *    @arg @c kGTLRCompute_TargetVpnGatewaysScopedListWarning_Code_InjectedKernelsDeprecated
  *        Value "INJECTED_KERNELS_DEPRECATED"
  *    @arg @c kGTLRCompute_TargetVpnGatewaysScopedListWarning_Code_NextHopAddressNotAssigned
@@ -9499,16 +10328,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_TargetVpnGatewaysScopedListWarning_Code_Unreachable
  *        Value "UNREACHABLE"
  */
-@property(copy, nullable) NSString *code;
+@property(nonatomic, copy, nullable) NSString *code;
 
 /**
  *  [Output Only] Metadata about this warning in key: value format. For example:
  *  "data": [ { "key": "scope", "value": "zones/us-east1-d" }
  */
-@property(strong, nullable) NSArray<GTLRCompute_TargetVpnGatewaysScopedListWarningDataItem *> *data;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_TargetVpnGatewaysScopedListWarningDataItem *> *data;
 
 /** [Output Only] A human-readable description of the warning code. */
-@property(copy, nullable) NSString *message;
+@property(nonatomic, copy, nullable) NSString *message;
 
 @end
 
@@ -9527,10 +10356,56 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  example, if an instance attempts to perform IP forwarding but is not enabled
  *  for IP forwarding).
  */
-@property(copy, nullable) NSString *key;
+@property(nonatomic, copy, nullable) NSString *key;
 
 /** [Output Only] A warning data value corresponding to the key. */
-@property(copy, nullable) NSString *value;
+@property(nonatomic, copy, nullable) NSString *value;
+
+@end
+
+
+/**
+ *  GTLRCompute_TCPHealthCheck
+ */
+@interface GTLRCompute_TCPHealthCheck : GTLRObject
+
+/**
+ *  The TCP port number for the health check request. The default value is 80.
+ *
+ *  Uses NSNumber of intValue.
+ */
+@property(nonatomic, strong, nullable) NSNumber *port;
+
+/**
+ *  Port name as defined in InstanceGroup#NamedPort#name. If both port and
+ *  port_name are defined, port takes precedence.
+ */
+@property(nonatomic, copy, nullable) NSString *portName;
+
+/**
+ *  Specifies the type of proxy header to append before sending data to the
+ *  backend, either NONE or PROXY_V1. The default is NONE.
+ *
+ *  Likely values:
+ *    @arg @c kGTLRCompute_TCPHealthCheck_ProxyHeader_None Value "NONE"
+ *    @arg @c kGTLRCompute_TCPHealthCheck_ProxyHeader_ProxyV1 Value "PROXY_V1"
+ */
+@property(nonatomic, copy, nullable) NSString *proxyHeader;
+
+/**
+ *  The application data to send once the TCP connection has been established
+ *  (default value is empty). If both request and response are empty, the
+ *  connection establishment alone will indicate health. The request data can
+ *  only be ASCII.
+ */
+@property(nonatomic, copy, nullable) NSString *request;
+
+/**
+ *  The bytes to match against the beginning of the response data. If left empty
+ *  (the default value), any response will indicate health. The response data
+ *  can only be ASCII.
+ */
+@property(nonatomic, copy, nullable) NSString *response;
 
 @end
 
@@ -9540,10 +10415,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  */
 @interface GTLRCompute_TestFailure : GTLRObject
 
-@property(copy, nullable) NSString *actualService;
-@property(copy, nullable) NSString *expectedService;
-@property(copy, nullable) NSString *host;
-@property(copy, nullable) NSString *path;
+@property(nonatomic, copy, nullable) NSString *actualService;
+@property(nonatomic, copy, nullable) NSString *expectedService;
+@property(nonatomic, copy, nullable) NSString *host;
+@property(nonatomic, copy, nullable) NSString *path;
 
 @end
 
@@ -9556,10 +10431,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_UrlMap : GTLRObject
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /** The URL of the BackendService resource if none of the hostRules match. */
-@property(copy, nullable) NSString *defaultService;
+@property(nonatomic, copy, nullable) NSString *defaultService;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -9567,7 +10442,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  Fingerprint of this resource. A hash of the contents stored in this object.
@@ -9578,10 +10453,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  Contains encoded binary data; GTLRBase64 can encode/decode (probably
  *  web-safe format).
  */
-@property(copy, nullable) NSString *fingerprint;
+@property(nonatomic, copy, nullable) NSString *fingerprint;
 
 /** The list of HostRules to use against the URL. */
-@property(strong, nullable) NSArray<GTLRCompute_HostRule *> *hostRules;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_HostRule *> *hostRules;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -9591,12 +10466,12 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  [Output Only] Type of the resource. Always compute#urlMaps for url maps.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  Name of the resource. Provided by the client when the resource is created.
@@ -9607,19 +10482,19 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /** The list of named PathMatchers to use against the URL. */
-@property(strong, nullable) NSArray<GTLRCompute_PathMatcher *> *pathMatchers;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_PathMatcher *> *pathMatchers;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  The list of expected URL mappings. Request to update this UrlMap will
  *  succeed only if all of the test cases pass.
  */
-@property(strong, nullable) NSArray<GTLRCompute_UrlMapTest *> *tests;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_UrlMapTest *> *tests;
 
 @end
 
@@ -9639,7 +10514,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  A list of UrlMap resources.
@@ -9647,10 +10522,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_UrlMap *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_UrlMap *> *items;
 
 /** Type of resource. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -9659,10 +10534,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -9672,7 +10547,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  */
 @interface GTLRCompute_UrlMapReference : GTLRObject
 
-@property(copy, nullable) NSString *urlMap;
+@property(nonatomic, copy, nullable) NSString *urlMap;
 
 @end
 
@@ -9683,7 +10558,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_UrlMapsValidateRequest : GTLRObject
 
 /** Content of the UrlMap to be validated. */
-@property(strong, nullable) GTLRCompute_UrlMap *resource;
+@property(nonatomic, strong, nullable) GTLRCompute_UrlMap *resource;
 
 @end
 
@@ -9693,7 +10568,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  */
 @interface GTLRCompute_UrlMapsValidateResponse : GTLRObject
 
-@property(strong, nullable) GTLRCompute_UrlMapValidationResult *result;
+@property(nonatomic, strong, nullable) GTLRCompute_UrlMapValidationResult *result;
 
 @end
 
@@ -9708,16 +10583,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /** Host portion of the URL. */
-@property(copy, nullable) NSString *host;
+@property(nonatomic, copy, nullable) NSString *host;
 
 /** Path portion of the URL. */
-@property(copy, nullable) NSString *path;
+@property(nonatomic, copy, nullable) NSString *path;
 
 /** Expected BackendService resource the given URL should be mapped to. */
-@property(copy, nullable) NSString *service;
+@property(nonatomic, copy, nullable) NSString *service;
 
 @end
 
@@ -9727,7 +10602,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  */
 @interface GTLRCompute_UrlMapValidationResult : GTLRObject
 
-@property(strong, nullable) NSArray<NSString *> *loadErrors;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *loadErrors;
 
 /**
  *  Whether the given UrlMap can be successfully loaded. If false, 'loadErrors'
@@ -9735,9 +10610,9 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *loadSucceeded;
+@property(nonatomic, strong, nullable) NSNumber *loadSucceeded;
 
-@property(strong, nullable) NSArray<GTLRCompute_TestFailure *> *testFailures;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_TestFailure *> *testFailures;
 
 /**
  *  If successfully loaded, this field indicates whether the test passed. If
@@ -9745,7 +10620,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *testPassed;
+@property(nonatomic, strong, nullable) NSNumber *testPassed;
 
 @end
 
@@ -9763,7 +10638,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  example-bucket, or the bucket name with gs:// or
  *  https://storage.googleapis.com/ in front of it, such as gs://example-bucket.
  */
-@property(copy, nullable) NSString *bucketName;
+@property(nonatomic, copy, nullable) NSString *bucketName;
 
 /**
  *  An optional prefix for the name of the usage report object stored in
@@ -9772,7 +10647,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  of the usage according to Pacific Time. If you supply a prefix, it should
  *  conform to Cloud Storage object naming conventions.
  */
-@property(copy, nullable) NSString *reportNamePrefix;
+@property(nonatomic, copy, nullable) NSString *reportNamePrefix;
 
 @end
 
@@ -9783,7 +10658,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_VpnTunnel : GTLRObject
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /**
  *  An optional description of this resource. Provide this property when you
@@ -9791,10 +10666,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /** [Output Only] Detailed status message for the VPN tunnel. */
-@property(copy, nullable) NSString *detailedStatus;
+@property(nonatomic, copy, nullable) NSString *detailedStatus;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -9804,7 +10679,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /**
  *  IKE protocol version to use when establishing the VPN tunnel with peer VPN
@@ -9812,19 +10687,19 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *ikeVersion;
+@property(nonatomic, strong, nullable) NSNumber *ikeVersion;
 
 /**
  *  [Output Only] Type of resource. Always compute#vpnTunnel for VPN tunnels.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  Local traffic selector to use when establishing the VPN tunnel with peer VPN
  *  gateway. The value should be a CIDR formatted string, for example:
  *  192.168.0.0/16. The ranges should be disjoint.
  */
-@property(strong, nullable) NSArray<NSString *> *localTrafficSelector;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *localTrafficSelector;
 
 /**
  *  Name of the resource. Provided by the client when the resource is created.
@@ -9835,35 +10710,35 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  lowercase letter, or digit, except the last character, which cannot be a
  *  dash.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /** IP address of the peer VPN gateway. */
-@property(copy, nullable) NSString *peerIp;
+@property(nonatomic, copy, nullable) NSString *peerIp;
 
 /** [Output Only] URL of the region where the VPN tunnel resides. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Remote traffic selectors to use when establishing the VPN tunnel with peer
  *  VPN gateway. The value should be a CIDR formatted string, for example:
  *  192.168.0.0/16. The ranges should be disjoint.
  */
-@property(strong, nullable) NSArray<NSString *> *remoteTrafficSelector;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *remoteTrafficSelector;
 
 /** URL of router resource to be used for dynamic routing. */
-@property(copy, nullable) NSString *router;
+@property(nonatomic, copy, nullable) NSString *router;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  Shared secret used to set the secure session between the Cloud VPN gateway
  *  and the peer VPN gateway.
  */
-@property(copy, nullable) NSString *sharedSecret;
+@property(nonatomic, copy, nullable) NSString *sharedSecret;
 
 /** Hash of the shared secret. */
-@property(copy, nullable) NSString *sharedSecretHash;
+@property(nonatomic, copy, nullable) NSString *sharedSecretHash;
 
 /**
  *  [Output Only] The status of the VPN tunnel.
@@ -9889,13 +10764,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_VpnTunnel_Status_WaitingForFullConfig Value
  *        "WAITING_FOR_FULL_CONFIG"
  */
-@property(copy, nullable) NSString *status;
+@property(nonatomic, copy, nullable) NSString *status;
 
 /**
  *  URL of the VPN gateway with which this VPN tunnel is associated. Provided by
  *  the client when the VPN tunnel is created.
  */
-@property(copy, nullable) NSString *targetVpnGateway;
+@property(nonatomic, copy, nullable) NSString *targetVpnGateway;
 
 @end
 
@@ -9911,15 +10786,15 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /** [Output Only] A map of scoped vpn tunnel lists. */
-@property(strong, nullable) GTLRCompute_VpnTunnelAggregatedListItems *items;
+@property(nonatomic, strong, nullable) GTLRCompute_VpnTunnelAggregatedListItems *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#vpnTunnel for VPN tunnels.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -9928,10 +10803,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -9964,7 +10839,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  [Output Only] A list of VpnTunnel resources.
@@ -9972,12 +10847,12 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_VpnTunnel *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_VpnTunnel *> *items;
 
 /**
  *  [Output Only] Type of resource. Always compute#vpnTunnel for VPN tunnels.
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -9986,10 +10861,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
-/** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+/** [Output Only] Server-defined URL for this resource. */
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 
@@ -10000,13 +10875,13 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_VpnTunnelsScopedList : GTLRObject
 
 /** List of vpn tunnels contained in this scope. */
-@property(strong, nullable) NSArray<GTLRCompute_VpnTunnel *> *vpnTunnels;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_VpnTunnel *> *vpnTunnels;
 
 /**
  *  Informational warning which replaces the list of addresses when the list is
  *  empty.
  */
-@property(strong, nullable) GTLRCompute_VpnTunnelsScopedListWarning *warning;
+@property(nonatomic, strong, nullable) GTLRCompute_VpnTunnelsScopedListWarning *warning;
 
 @end
 
@@ -10028,6 +10903,8 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *        Value "DEPRECATED_RESOURCE_USED"
  *    @arg @c kGTLRCompute_VpnTunnelsScopedListWarning_Code_DiskSizeLargerThanImageSize
  *        Value "DISK_SIZE_LARGER_THAN_IMAGE_SIZE"
+ *    @arg @c kGTLRCompute_VpnTunnelsScopedListWarning_Code_FieldValueOverriden
+ *        Value "FIELD_VALUE_OVERRIDEN"
  *    @arg @c kGTLRCompute_VpnTunnelsScopedListWarning_Code_InjectedKernelsDeprecated
  *        Value "INJECTED_KERNELS_DEPRECATED"
  *    @arg @c kGTLRCompute_VpnTunnelsScopedListWarning_Code_NextHopAddressNotAssigned
@@ -10053,16 +10930,16 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_VpnTunnelsScopedListWarning_Code_Unreachable Value
  *        "UNREACHABLE"
  */
-@property(copy, nullable) NSString *code;
+@property(nonatomic, copy, nullable) NSString *code;
 
 /**
  *  [Output Only] Metadata about this warning in key: value format. For example:
  *  "data": [ { "key": "scope", "value": "zones/us-east1-d" }
  */
-@property(strong, nullable) NSArray<GTLRCompute_VpnTunnelsScopedListWarningDataItem *> *data;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_VpnTunnelsScopedListWarningDataItem *> *data;
 
 /** [Output Only] A human-readable description of the warning code. */
-@property(copy, nullable) NSString *message;
+@property(nonatomic, copy, nullable) NSString *message;
 
 @end
 
@@ -10081,10 +10958,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  example, if an instance attempts to perform IP forwarding but is not enabled
  *  for IP forwarding).
  */
-@property(copy, nullable) NSString *key;
+@property(nonatomic, copy, nullable) NSString *key;
 
 /** [Output Only] A warning data value corresponding to the key. */
-@property(copy, nullable) NSString *value;
+@property(nonatomic, copy, nullable) NSString *value;
 
 @end
 
@@ -10095,17 +10972,17 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
 @interface GTLRCompute_Zone : GTLRObject
 
 /** [Output Only] Creation timestamp in RFC3339 text format. */
-@property(copy, nullable) NSString *creationTimestamp;
+@property(nonatomic, copy, nullable) NSString *creationTimestamp;
 
 /** [Output Only] The deprecation status associated with this zone. */
-@property(strong, nullable) GTLRCompute_DeprecationStatus *deprecated;
+@property(nonatomic, strong, nullable) GTLRCompute_DeprecationStatus *deprecated;
 
 /**
  *  [Output Only] Textual description of the resource.
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  [Output Only] The unique identifier for the resource. This identifier is
@@ -10115,19 +10992,19 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  Uses NSNumber of unsignedLongLongValue.
  */
-@property(strong, nullable) NSNumber *identifier;
+@property(nonatomic, strong, nullable) NSNumber *identifier;
 
 /** [Output Only] Type of the resource. Always compute#zone for zones. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /** [Output Only] Name of the resource. */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /** [Output Only] Full URL reference to the region which hosts the zone. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** [Output Only] Server-defined URL for the resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 /**
  *  [Output Only] Status of the zone, either UP or DOWN.
@@ -10136,7 +11013,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *    @arg @c kGTLRCompute_Zone_Status_Down Value "DOWN"
  *    @arg @c kGTLRCompute_Zone_Status_Up Value "UP"
  */
-@property(copy, nullable) NSString *status;
+@property(nonatomic, copy, nullable) NSString *status;
 
 @end
 
@@ -10156,7 +11033,7 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  [Output Only] A list of Zone resources.
@@ -10164,10 +11041,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRCompute_Zone *> *items;
+@property(nonatomic, strong, nullable) NSArray<GTLRCompute_Zone *> *items;
 
 /** Type of resource. */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /**
  *  [Output Only] This token allows you to get the next page of results for list
@@ -10176,10 +11053,10 @@ GTLR_EXTERN NSString * const kGTLRCompute_Zone_Status_Up;
  *  request. Subsequent list requests will have their own nextPageToken to
  *  continue paging through the results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /** [Output Only] Server-defined URL for this resource. */
-@property(copy, nullable) NSString *selfLink;
+@property(nonatomic, copy, nullable) NSString *selfLink;
 
 @end
 

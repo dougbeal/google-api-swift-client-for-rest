@@ -30,6 +30,7 @@
 @class GTLRCompute_DisksResizeRequest;
 @class GTLRCompute_Firewall;
 @class GTLRCompute_ForwardingRule;
+@class GTLRCompute_HealthCheck;
 @class GTLRCompute_HttpHealthCheck;
 @class GTLRCompute_HttpsHealthCheck;
 @class GTLRCompute_Image;
@@ -70,6 +71,10 @@
 @class GTLRCompute_TargetPoolsRemoveHealthCheckRequest;
 @class GTLRCompute_TargetPoolsRemoveInstanceRequest;
 @class GTLRCompute_TargetReference;
+@class GTLRCompute_TargetSslProxiesSetBackendServiceRequest;
+@class GTLRCompute_TargetSslProxiesSetProxyHeaderRequest;
+@class GTLRCompute_TargetSslProxiesSetSslCertificatesRequest;
+@class GTLRCompute_TargetSslProxy;
 @class GTLRCompute_TargetVpnGateway;
 @class GTLRCompute_UrlMap;
 @class GTLRCompute_UrlMapReference;
@@ -85,7 +90,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface GTLRComputeQuery : GTLRQuery
 
 /** Selector specifying which fields to include in a partial response. */
-@property(copy, nullable) NSString *fields;
+@property(nonatomic, copy, nullable) NSString *fields;
 
 @end
 
@@ -116,18 +121,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -138,16 +141,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_AddressAggregatedList.
@@ -176,13 +191,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForAddressesDeleteWithproject:region:address:]
 
 /** Name of the address resource to delete. */
-@property(copy, nullable) NSString *address;
+@property(nonatomic, copy, nullable) NSString *address;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -216,13 +231,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForAddressesGetWithproject:region:address:]
 
 /** Name of the address resource to return. */
-@property(copy, nullable) NSString *address;
+@property(nonatomic, copy, nullable) NSString *address;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_Address.
@@ -256,10 +271,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForAddressesInsertWithObject:project:region:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -306,18 +321,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -328,19 +341,31 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_AddressList.
@@ -388,18 +413,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -410,16 +433,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_AutoscalerAggregatedList.
@@ -448,17 +483,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForAutoscalersDeleteWithproject:zoneProperty:autoscaler:]
 
 /** Name of the autoscaler to delete. */
-@property(copy, nullable) NSString *autoscaler;
+@property(nonatomic, copy, nullable) NSString *autoscaler;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -493,17 +528,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForAutoscalersGetWithproject:zoneProperty:autoscaler:]
 
 /** Name of the autoscaler to return. */
-@property(copy, nullable) NSString *autoscaler;
+@property(nonatomic, copy, nullable) NSString *autoscaler;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Autoscaler.
@@ -538,14 +573,14 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForAutoscalersInsertWithObject:project:zoneProperty:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -592,18 +627,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -614,23 +647,35 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_AutoscalerList.
@@ -666,17 +711,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForAutoscalersPatchWithObject:project:zoneProperty:autoscaler:]
 
 /** Name of the autoscaler to update. */
-@property(copy, nullable) NSString *autoscaler;
+@property(nonatomic, copy, nullable) NSString *autoscaler;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -713,17 +758,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForAutoscalersUpdateWithObject:project:zoneProperty:]
 
 /** Name of the autoscaler to update. */
-@property(copy, nullable) NSString *autoscaler;
+@property(nonatomic, copy, nullable) NSString *autoscaler;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -757,10 +802,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForBackendServicesDeleteWithproject:backendService:]
 
 /** Name of the BackendService resource to delete. */
-@property(copy, nullable) NSString *backendService;
+@property(nonatomic, copy, nullable) NSString *backendService;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -793,10 +838,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForBackendServicesGetWithproject:backendService:]
 
 /** Name of the BackendService resource to return. */
-@property(copy, nullable) NSString *backendService;
+@property(nonatomic, copy, nullable) NSString *backendService;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_BackendService.
@@ -831,9 +876,9 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Name of the BackendService resource to which the queried instance belongs.
  */
-@property(copy, nullable) NSString *backendService;
+@property(nonatomic, copy, nullable) NSString *backendService;
 
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_BackendServiceGroupHealth.
@@ -871,7 +916,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForBackendServicesInsertWithObject:project:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -919,18 +964,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -941,16 +984,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_BackendServiceList.
@@ -971,10 +1026,10 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 /**
- *  Updates the entire content of the BackendService resource. There are several
- *  restrictions and guidelines to keep in mind when updating a backend service.
- *  Read Restrictions and Guidelines for more information. This method supports
- *  patch semantics.
+ *  Updates the specified BackendService resource with the data included in the
+ *  request. There are several restrictions and guidelines to keep in mind when
+ *  updating a backend service. Read Restrictions and Guidelines for more
+ *  information. This method supports patch semantics.
  *
  *  Method: compute.backendServices.patch
  *
@@ -987,18 +1042,18 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForBackendServicesPatchWithObject:project:backendService:]
 
 /** Name of the BackendService resource to update. */
-@property(copy, nullable) NSString *backendService;
+@property(nonatomic, copy, nullable) NSString *backendService;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
  *
- *  Updates the entire content of the BackendService resource. There are several
- *  restrictions and guidelines to keep in mind when updating a backend service.
- *  Read Restrictions and Guidelines for more information. This method supports
- *  patch semantics.
+ *  Updates the specified BackendService resource with the data included in the
+ *  request. There are several restrictions and guidelines to keep in mind when
+ *  updating a backend service. Read Restrictions and Guidelines for more
+ *  information. This method supports patch semantics.
  *
  *  @param object The @c GTLRCompute_BackendService to include in the query.
  *  @param project Project ID for this request.
@@ -1013,9 +1068,10 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 /**
- *  Updates the entire content of the BackendService resource. There are several
- *  restrictions and guidelines to keep in mind when updating a backend service.
- *  Read Restrictions and Guidelines for more information.
+ *  Updates the specified BackendService resource with the data included in the
+ *  request. There are several restrictions and guidelines to keep in mind when
+ *  updating a backend service. Read Restrictions and Guidelines for more
+ *  information.
  *
  *  Method: compute.backendServices.update
  *
@@ -1028,17 +1084,18 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForBackendServicesUpdateWithObject:project:backendService:]
 
 /** Name of the BackendService resource to update. */
-@property(copy, nullable) NSString *backendService;
+@property(nonatomic, copy, nullable) NSString *backendService;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
  *
- *  Updates the entire content of the BackendService resource. There are several
- *  restrictions and guidelines to keep in mind when updating a backend service.
- *  Read Restrictions and Guidelines for more information.
+ *  Updates the specified BackendService resource with the data included in the
+ *  request. There are several restrictions and guidelines to keep in mind when
+ *  updating a backend service. Read Restrictions and Guidelines for more
+ *  information.
  *
  *  @param object The @c GTLRCompute_BackendService to include in the query.
  *  @param project Project ID for this request.
@@ -1079,18 +1136,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -1101,16 +1156,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_DiskAggregatedList.
@@ -1139,17 +1206,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForDisksCreateSnapshotWithObject:project:zoneProperty:disk:]
 
 /** Name of the persistent disk to snapshot. */
-@property(copy, nullable) NSString *disk;
+@property(nonatomic, copy, nullable) NSString *disk;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -1187,17 +1254,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForDisksDeleteWithproject:zoneProperty:disk:]
 
 /** Name of the persistent disk to delete. */
-@property(copy, nullable) NSString *disk;
+@property(nonatomic, copy, nullable) NSString *disk;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -1235,17 +1302,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForDisksGetWithproject:zoneProperty:disk:]
 
 /** Name of the persistent disk to return. */
-@property(copy, nullable) NSString *disk;
+@property(nonatomic, copy, nullable) NSString *disk;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Disk.
@@ -1283,17 +1350,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForDisksInsertWithObject:project:zoneProperty:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Optional. Source image to restore onto a disk. */
-@property(copy, nullable) NSString *sourceImage;
+@property(nonatomic, copy, nullable) NSString *sourceImage;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -1343,18 +1410,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -1365,23 +1430,35 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_DiskList.
@@ -1416,17 +1493,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForDisksResizeWithObject:project:zoneProperty:disk:]
 
 /** The name of the persistent disk. */
-@property(copy, nullable) NSString *disk;
+@property(nonatomic, copy, nullable) NSString *disk;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -1474,18 +1551,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -1496,16 +1571,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_DiskTypeAggregatedList.
@@ -1536,17 +1623,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForDiskTypesGetWithproject:zoneProperty:diskType:]
 
 /** Name of the disk type to return. */
-@property(copy, nullable) NSString *diskType;
+@property(nonatomic, copy, nullable) NSString *diskType;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_DiskType.
@@ -1593,18 +1680,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -1615,23 +1700,35 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_DiskTypeList.
@@ -1666,10 +1763,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForFirewallsDeleteWithproject:firewall:]
 
 /** Name of the firewall rule to delete. */
-@property(copy, nullable) NSString *firewall;
+@property(nonatomic, copy, nullable) NSString *firewall;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -1701,10 +1798,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForFirewallsGetWithproject:firewall:]
 
 /** Name of the firewall rule to return. */
-@property(copy, nullable) NSString *firewall;
+@property(nonatomic, copy, nullable) NSString *firewall;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Firewall.
@@ -1736,7 +1833,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForFirewallsInsertWithObject:project:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -1781,18 +1878,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -1803,16 +1898,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_FirewallList.
@@ -1846,10 +1953,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForFirewallsPatchWithObject:project:firewall:]
 
 /** Name of the firewall rule to update. */
-@property(copy, nullable) NSString *firewall;
+@property(nonatomic, copy, nullable) NSString *firewall;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -1883,10 +1990,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForFirewallsUpdateWithObject:project:firewall:]
 
 /** Name of the firewall rule to update. */
-@property(copy, nullable) NSString *firewall;
+@property(nonatomic, copy, nullable) NSString *firewall;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -1932,18 +2039,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -1954,16 +2059,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_ForwardingRuleAggregatedList.
@@ -1992,13 +2109,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForForwardingRulesDeleteWithproject:region:forwardingRule:]
 
 /** Name of the ForwardingRule resource to delete. */
-@property(copy, nullable) NSString *forwardingRule;
+@property(nonatomic, copy, nullable) NSString *forwardingRule;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region scoping this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -2032,13 +2149,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForForwardingRulesGetWithproject:region:forwardingRule:]
 
 /** Name of the ForwardingRule resource to return. */
-@property(copy, nullable) NSString *forwardingRule;
+@property(nonatomic, copy, nullable) NSString *forwardingRule;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region scoping this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_ForwardingRule.
@@ -2072,10 +2189,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForForwardingRulesInsertWithObject:project:region:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region scoping this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -2123,18 +2240,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -2145,19 +2260,31 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region scoping this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_ForwardingRuleList.
@@ -2194,13 +2321,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForForwardingRulesSetTargetWithObject:project:region:forwardingRule:]
 
 /** Name of the ForwardingRule resource in which target is to be set. */
-@property(copy, nullable) NSString *forwardingRule;
+@property(nonatomic, copy, nullable) NSString *forwardingRule;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region scoping this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -2237,10 +2364,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForGlobalAddressesDeleteWithproject:address:]
 
 /** Name of the address resource to delete. */
-@property(copy, nullable) NSString *address;
+@property(nonatomic, copy, nullable) NSString *address;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -2273,10 +2400,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForGlobalAddressesGetWithproject:address:]
 
 /** Name of the address resource to return. */
-@property(copy, nullable) NSString *address;
+@property(nonatomic, copy, nullable) NSString *address;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Address.
@@ -2309,7 +2436,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForGlobalAddressesInsertWithObject:project:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -2354,18 +2481,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -2376,16 +2501,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_AddressList.
@@ -2418,10 +2555,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForGlobalForwardingRulesDeleteWithproject:forwardingRule:]
 
 /** Name of the ForwardingRule resource to delete. */
-@property(copy, nullable) NSString *forwardingRule;
+@property(nonatomic, copy, nullable) NSString *forwardingRule;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -2454,10 +2591,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForGlobalForwardingRulesGetWithproject:forwardingRule:]
 
 /** Name of the ForwardingRule resource to return. */
-@property(copy, nullable) NSString *forwardingRule;
+@property(nonatomic, copy, nullable) NSString *forwardingRule;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_ForwardingRule.
@@ -2490,7 +2627,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForGlobalForwardingRulesInsertWithObject:project:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -2536,18 +2673,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -2558,16 +2693,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_ForwardingRuleList.
@@ -2602,10 +2749,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForGlobalForwardingRulesSetTargetWithObject:project:forwardingRule:]
 
 /** Name of the ForwardingRule resource in which target is to be set. */
-@property(copy, nullable) NSString *forwardingRule;
+@property(nonatomic, copy, nullable) NSString *forwardingRule;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -2653,18 +2800,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -2675,16 +2820,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_OperationAggregatedList.
@@ -2713,10 +2870,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForGlobalOperationsDeleteWithproject:operation:]
 
 /** Name of the Operations resource to delete. */
-@property(copy, nullable) NSString *operation;
+@property(nonatomic, copy, nullable) NSString *operation;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Upon successful completion, the callback's object and error parameters will
@@ -2750,10 +2907,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForGlobalOperationsGetWithproject:operation:]
 
 /** Name of the Operations resource to return. */
-@property(copy, nullable) NSString *operation;
+@property(nonatomic, copy, nullable) NSString *operation;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -2799,18 +2956,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -2821,16 +2976,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_OperationList.
@@ -2851,6 +3018,275 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 /**
+ *  Deletes the specified HealthCheck resource.
+ *
+ *  Method: compute.healthChecks.delete
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeCompute
+ *    @c kGTLRAuthScopeComputeCloudPlatform
+ */
+@interface GTLRComputeQuery_HealthChecksDelete : GTLRComputeQuery
+// Previous library name was
+//   +[GTLQueryCompute queryForHealthChecksDeleteWithproject:healthCheck:]
+
+/** Name of the HealthCheck resource to delete. */
+@property(nonatomic, copy, nullable) NSString *healthCheck;
+
+/** Project ID for this request. */
+@property(nonatomic, copy, nullable) NSString *project;
+
+/**
+ *  Fetches a @c GTLRCompute_Operation.
+ *
+ *  Deletes the specified HealthCheck resource.
+ *
+ *  @param project Project ID for this request.
+ *  @param healthCheck Name of the HealthCheck resource to delete.
+ *
+ *  @returns GTLRComputeQuery_HealthChecksDelete
+ */
++ (instancetype)queryWithProject:(NSString *)project
+                     healthCheck:(NSString *)healthCheck;
+
+@end
+
+/**
+ *  Returns the specified HealthCheck resource. Get a list of available health
+ *  checks by making a list() request.
+ *
+ *  Method: compute.healthChecks.get
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeCompute
+ *    @c kGTLRAuthScopeComputeCloudPlatform
+ *    @c kGTLRAuthScopeComputeReadonly
+ */
+@interface GTLRComputeQuery_HealthChecksGet : GTLRComputeQuery
+// Previous library name was
+//   +[GTLQueryCompute queryForHealthChecksGetWithproject:healthCheck:]
+
+/** Name of the HealthCheck resource to return. */
+@property(nonatomic, copy, nullable) NSString *healthCheck;
+
+/** Project ID for this request. */
+@property(nonatomic, copy, nullable) NSString *project;
+
+/**
+ *  Fetches a @c GTLRCompute_HealthCheck.
+ *
+ *  Returns the specified HealthCheck resource. Get a list of available health
+ *  checks by making a list() request.
+ *
+ *  @param project Project ID for this request.
+ *  @param healthCheck Name of the HealthCheck resource to return.
+ *
+ *  @returns GTLRComputeQuery_HealthChecksGet
+ */
++ (instancetype)queryWithProject:(NSString *)project
+                     healthCheck:(NSString *)healthCheck;
+
+@end
+
+/**
+ *  Creates a HealthCheck resource in the specified project using the data
+ *  included in the request.
+ *
+ *  Method: compute.healthChecks.insert
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeCompute
+ *    @c kGTLRAuthScopeComputeCloudPlatform
+ */
+@interface GTLRComputeQuery_HealthChecksInsert : GTLRComputeQuery
+// Previous library name was
+//   +[GTLQueryCompute queryForHealthChecksInsertWithObject:project:]
+
+/** Project ID for this request. */
+@property(nonatomic, copy, nullable) NSString *project;
+
+/**
+ *  Fetches a @c GTLRCompute_Operation.
+ *
+ *  Creates a HealthCheck resource in the specified project using the data
+ *  included in the request.
+ *
+ *  @param object The @c GTLRCompute_HealthCheck to include in the query.
+ *  @param project Project ID for this request.
+ *
+ *  @returns GTLRComputeQuery_HealthChecksInsert
+ */
++ (instancetype)queryWithObject:(GTLRCompute_HealthCheck *)object
+                        project:(NSString *)project;
+
+@end
+
+/**
+ *  Retrieves the list of HealthCheck resources available to the specified
+ *  project.
+ *
+ *  Method: compute.healthChecks.list
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeCompute
+ *    @c kGTLRAuthScopeComputeCloudPlatform
+ *    @c kGTLRAuthScopeComputeReadonly
+ */
+@interface GTLRComputeQuery_HealthChecksList : GTLRComputeQuery
+// Previous library name was
+//   +[GTLQueryCompute queryForHealthChecksListWithproject:]
+
+/**
+ *  Sets a filter expression for filtering listed resources, in the form
+ *  filter={expression}. Your {expression} must be in the format: field_name
+ *  comparison_string literal_string.
+ *  The field_name is the name of the field you want to compare. Only atomic
+ *  field types are supported (string, number, boolean). The comparison_string
+ *  must be either eq (equals) or ne (not equals). The literal_string is the
+ *  string value to filter to. The literal value must be valid for the type of
+ *  field you are filtering by (string, number, boolean). For string fields, the
+ *  literal value is interpreted as a regular expression using RE2 syntax. The
+ *  literal value must match the entire field.
+ *  For example, to filter for instances that do not have a name of
+ *  example-instance, you would use filter=name ne example-instance.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
+ */
+@property(nonatomic, copy, nullable) NSString *filter;
+
+/**
+ *  The maximum number of results per page that should be returned. If the
+ *  number of available results is larger than maxResults, Compute Engine
+ *  returns a nextPageToken that can be used to get the next page of results in
+ *  subsequent list requests.
+ *
+ *  @note If not set, the documented server-side default will be 500 (from the
+ *        range 0..500).
+ */
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
+
+/**
+ *  Specifies a page token to use. Set pageToken to the nextPageToken returned
+ *  by a previous list request to get the next page of results.
+ */
+@property(nonatomic, copy, nullable) NSString *pageToken;
+
+/** Project ID for this request. */
+@property(nonatomic, copy, nullable) NSString *project;
+
+/**
+ *  Fetches a @c GTLRCompute_HealthCheckList.
+ *
+ *  Retrieves the list of HealthCheck resources available to the specified
+ *  project.
+ *
+ *  @param project Project ID for this request.
+ *
+ *  @returns GTLRComputeQuery_HealthChecksList
+ *
+ *  @note Automatic pagination will be done when @c shouldFetchNextPages is
+ *        enabled. See @c shouldFetchNextPages on @c GTLRService for more
+ *        information.
+ */
++ (instancetype)queryWithProject:(NSString *)project;
+
+@end
+
+/**
+ *  Updates a HealthCheck resource in the specified project using the data
+ *  included in the request. This method supports patch semantics.
+ *
+ *  Method: compute.healthChecks.patch
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeCompute
+ *    @c kGTLRAuthScopeComputeCloudPlatform
+ */
+@interface GTLRComputeQuery_HealthChecksPatch : GTLRComputeQuery
+// Previous library name was
+//   +[GTLQueryCompute queryForHealthChecksPatchWithObject:project:healthCheck:]
+
+/** Name of the HealthCheck resource to update. */
+@property(nonatomic, copy, nullable) NSString *healthCheck;
+
+/** Project ID for this request. */
+@property(nonatomic, copy, nullable) NSString *project;
+
+/**
+ *  Fetches a @c GTLRCompute_Operation.
+ *
+ *  Updates a HealthCheck resource in the specified project using the data
+ *  included in the request. This method supports patch semantics.
+ *
+ *  @param object The @c GTLRCompute_HealthCheck to include in the query.
+ *  @param project Project ID for this request.
+ *  @param healthCheck Name of the HealthCheck resource to update.
+ *
+ *  @returns GTLRComputeQuery_HealthChecksPatch
+ */
++ (instancetype)queryWithObject:(GTLRCompute_HealthCheck *)object
+                        project:(NSString *)project
+                    healthCheck:(NSString *)healthCheck;
+
+@end
+
+/**
+ *  Updates a HealthCheck resource in the specified project using the data
+ *  included in the request.
+ *
+ *  Method: compute.healthChecks.update
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeCompute
+ *    @c kGTLRAuthScopeComputeCloudPlatform
+ */
+@interface GTLRComputeQuery_HealthChecksUpdate : GTLRComputeQuery
+// Previous library name was
+//   +[GTLQueryCompute queryForHealthChecksUpdateWithObject:project:healthCheck:]
+
+/** Name of the HealthCheck resource to update. */
+@property(nonatomic, copy, nullable) NSString *healthCheck;
+
+/** Project ID for this request. */
+@property(nonatomic, copy, nullable) NSString *project;
+
+/**
+ *  Fetches a @c GTLRCompute_Operation.
+ *
+ *  Updates a HealthCheck resource in the specified project using the data
+ *  included in the request.
+ *
+ *  @param object The @c GTLRCompute_HealthCheck to include in the query.
+ *  @param project Project ID for this request.
+ *  @param healthCheck Name of the HealthCheck resource to update.
+ *
+ *  @returns GTLRComputeQuery_HealthChecksUpdate
+ */
++ (instancetype)queryWithObject:(GTLRCompute_HealthCheck *)object
+                        project:(NSString *)project
+                    healthCheck:(NSString *)healthCheck;
+
+@end
+
+/**
  *  Deletes the specified HttpHealthCheck resource.
  *
  *  Method: compute.httpHealthChecks.delete
@@ -2864,10 +3300,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForHttpHealthChecksDeleteWithproject:httpHealthCheck:]
 
 /** Name of the HttpHealthCheck resource to delete. */
-@property(copy, nullable) NSString *httpHealthCheck;
+@property(nonatomic, copy, nullable) NSString *httpHealthCheck;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -2900,10 +3336,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForHttpHealthChecksGetWithproject:httpHealthCheck:]
 
 /** Name of the HttpHealthCheck resource to return. */
-@property(copy, nullable) NSString *httpHealthCheck;
+@property(nonatomic, copy, nullable) NSString *httpHealthCheck;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_HttpHealthCheck.
@@ -2936,7 +3372,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForHttpHealthChecksInsertWithObject:project:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -2982,18 +3418,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -3004,16 +3438,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_HttpHealthCheckList.
@@ -3048,10 +3494,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForHttpHealthChecksPatchWithObject:project:httpHealthCheck:]
 
 /** Name of the HttpHealthCheck resource to update. */
-@property(copy, nullable) NSString *httpHealthCheck;
+@property(nonatomic, copy, nullable) NSString *httpHealthCheck;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -3086,10 +3532,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForHttpHealthChecksUpdateWithObject:project:httpHealthCheck:]
 
 /** Name of the HttpHealthCheck resource to update. */
-@property(copy, nullable) NSString *httpHealthCheck;
+@property(nonatomic, copy, nullable) NSString *httpHealthCheck;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -3123,10 +3569,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForHttpsHealthChecksDeleteWithproject:httpsHealthCheck:]
 
 /** Name of the HttpsHealthCheck resource to delete. */
-@property(copy, nullable) NSString *httpsHealthCheck;
+@property(nonatomic, copy, nullable) NSString *httpsHealthCheck;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -3159,10 +3605,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForHttpsHealthChecksGetWithproject:httpsHealthCheck:]
 
 /** Name of the HttpsHealthCheck resource to return. */
-@property(copy, nullable) NSString *httpsHealthCheck;
+@property(nonatomic, copy, nullable) NSString *httpsHealthCheck;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_HttpsHealthCheck.
@@ -3195,7 +3641,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForHttpsHealthChecksInsertWithObject:project:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -3241,18 +3687,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -3263,16 +3707,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_HttpsHealthCheckList.
@@ -3307,10 +3763,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForHttpsHealthChecksPatchWithObject:project:httpsHealthCheck:]
 
 /** Name of the HttpsHealthCheck resource to update. */
-@property(copy, nullable) NSString *httpsHealthCheck;
+@property(nonatomic, copy, nullable) NSString *httpsHealthCheck;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -3345,10 +3801,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForHttpsHealthChecksUpdateWithObject:project:httpsHealthCheck:]
 
 /** Name of the HttpsHealthCheck resource to update. */
-@property(copy, nullable) NSString *httpsHealthCheck;
+@property(nonatomic, copy, nullable) NSString *httpsHealthCheck;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -3382,10 +3838,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForImagesDeleteWithproject:image:]
 
 /** Name of the image resource to delete. */
-@property(copy, nullable) NSString *image;
+@property(nonatomic, copy, nullable) NSString *image;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -3417,10 +3873,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForImagesDeprecateWithObject:project:image:]
 
 /** Image name. */
-@property(copy, nullable) NSString *image;
+@property(nonatomic, copy, nullable) NSString *image;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -3456,10 +3912,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForImagesGetWithproject:image:]
 
 /** Name of the image resource to return. */
-@property(copy, nullable) NSString *image;
+@property(nonatomic, copy, nullable) NSString *image;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Image.
@@ -3492,11 +3948,11 @@ NS_ASSUME_NONNULL_BEGIN
 // Previous library name was
 //   +[GTLQueryCompute queryForImagesGetFromFamilyWithproject:family:]
 
-/** Name of the image resource to return. */
-@property(copy, nullable) NSString *family;
+/** Name of the image family to search for. */
+@property(nonatomic, copy, nullable) NSString *family;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Image.
@@ -3505,7 +3961,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  deprecated.
  *
  *  @param project Project ID for this request.
- *  @param family Name of the image resource to return.
+ *  @param family Name of the image family to search for.
  *
  *  @returns GTLRComputeQuery_ImagesGetFromFamily
  */
@@ -3532,7 +3988,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForImagesInsertWithObject:project:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -3582,18 +4038,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -3604,16 +4058,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_ImageList.
@@ -3658,17 +4124,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstanceGroupManagersAbandonInstancesWithObject:project:zoneProperty:instanceGroupManager:]
 
 /** The name of the managed instance group. */
-@property(copy, nullable) NSString *instanceGroupManager;
+@property(nonatomic, copy, nullable) NSString *instanceGroupManager;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone where the managed instance group is located.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -3726,18 +4192,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -3748,16 +4212,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_InstanceGroupManagerAggregatedList.
@@ -3788,17 +4264,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstanceGroupManagersDeleteWithproject:zoneProperty:instanceGroupManager:]
 
 /** The name of the managed instance group to delete. */
-@property(copy, nullable) NSString *instanceGroupManager;
+@property(nonatomic, copy, nullable) NSString *instanceGroupManager;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone where the managed instance group is located.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -3841,17 +4317,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstanceGroupManagersDeleteInstancesWithObject:project:zoneProperty:instanceGroupManager:]
 
 /** The name of the managed instance group. */
-@property(copy, nullable) NSString *instanceGroupManager;
+@property(nonatomic, copy, nullable) NSString *instanceGroupManager;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone where the managed instance group is located.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -3896,17 +4372,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstanceGroupManagersGetWithproject:zoneProperty:instanceGroupManager:]
 
 /** The name of the managed instance group. */
-@property(copy, nullable) NSString *instanceGroupManager;
+@property(nonatomic, copy, nullable) NSString *instanceGroupManager;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone where the managed instance group is located.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_InstanceGroupManager.
@@ -3946,14 +4422,14 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstanceGroupManagersInsertWithObject:project:zoneProperty:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone where you want to create the managed instance group.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -4007,18 +4483,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -4029,23 +4503,35 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone where the managed instance group is located.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_InstanceGroupManagerList.
@@ -4087,17 +4573,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstanceGroupManagersListManagedInstancesWithproject:zoneProperty:instanceGroupManager:]
 
 /** The name of the managed instance group. */
-@property(copy, nullable) NSString *instanceGroupManager;
+@property(nonatomic, copy, nullable) NSString *instanceGroupManager;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone where the managed instance group is located.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_InstanceGroupManagersListManagedInstancesResponse.
@@ -4140,17 +4626,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstanceGroupManagersRecreateInstancesWithObject:project:zoneProperty:instanceGroupManager:]
 
 /** The name of the managed instance group. */
-@property(copy, nullable) NSString *instanceGroupManager;
+@property(nonatomic, copy, nullable) NSString *instanceGroupManager;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone where the managed instance group is located.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -4198,24 +4684,24 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstanceGroupManagersResizeWithproject:zoneProperty:instanceGroupManager:size:]
 
 /** The name of the managed instance group. */
-@property(copy, nullable) NSString *instanceGroupManager;
+@property(nonatomic, copy, nullable) NSString *instanceGroupManager;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The number of running instances that the managed instance group should
  *  maintain at any given time. The group automatically adds or removes
  *  instances to maintain the number of instances specified by this parameter.
  */
-@property(assign) NSInteger size;
+@property(nonatomic, assign) NSInteger size;
 
 /**
  *  The name of the zone where the managed instance group is located.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -4260,17 +4746,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstanceGroupManagersSetInstanceTemplateWithObject:project:zoneProperty:instanceGroupManager:]
 
 /** The name of the managed instance group. */
-@property(copy, nullable) NSString *instanceGroupManager;
+@property(nonatomic, copy, nullable) NSString *instanceGroupManager;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone where the managed instance group is located.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -4315,17 +4801,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstanceGroupManagersSetTargetPoolsWithObject:project:zoneProperty:instanceGroupManager:]
 
 /** The name of the managed instance group. */
-@property(copy, nullable) NSString *instanceGroupManager;
+@property(nonatomic, copy, nullable) NSString *instanceGroupManager;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone where the managed instance group is located.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -4369,17 +4855,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstanceGroupsAddInstancesWithObject:project:zoneProperty:instanceGroup:]
 
 /** The name of the instance group where you are adding instances. */
-@property(copy, nullable) NSString *instanceGroup;
+@property(nonatomic, copy, nullable) NSString *instanceGroup;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone where the instance group is located.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -4432,18 +4918,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -4454,16 +4938,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_InstanceGroupAggregatedList.
@@ -4494,17 +4990,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstanceGroupsDeleteWithproject:zoneProperty:instanceGroup:]
 
 /** The name of the instance group to delete. */
-@property(copy, nullable) NSString *instanceGroup;
+@property(nonatomic, copy, nullable) NSString *instanceGroup;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone where the instance group is located.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -4542,17 +5038,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstanceGroupsGetWithproject:zoneProperty:instanceGroup:]
 
 /** The name of the instance group. */
-@property(copy, nullable) NSString *instanceGroup;
+@property(nonatomic, copy, nullable) NSString *instanceGroup;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone where the instance group is located.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_InstanceGroup.
@@ -4588,14 +5084,14 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstanceGroupsInsertWithObject:project:zoneProperty:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone where you want to create the instance group.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -4644,18 +5140,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -4666,23 +5160,35 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone where the instance group is located.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_InstanceGroupList.
@@ -4732,24 +5238,22 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The name of the instance group from which you want to generate a list of
  *  included instances.
  */
-@property(copy, nullable) NSString *instanceGroup;
+@property(nonatomic, copy, nullable) NSString *instanceGroup;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -4760,23 +5264,35 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone where the instance group is located.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_InstanceGroupsListInstances.
@@ -4822,17 +5338,17 @@ NS_ASSUME_NONNULL_BEGIN
  *  The name of the instance group where the specified instances will be
  *  removed.
  */
-@property(copy, nullable) NSString *instanceGroup;
+@property(nonatomic, copy, nullable) NSString *instanceGroup;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone where the instance group is located.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -4871,17 +5387,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstanceGroupsSetNamedPortsWithObject:project:zoneProperty:instanceGroup:]
 
 /** The name of the instance group where the named ports are updated. */
-@property(copy, nullable) NSString *instanceGroup;
+@property(nonatomic, copy, nullable) NSString *instanceGroup;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone where the instance group is located.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -4919,20 +5435,20 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstancesAddAccessConfigWithObject:project:zoneProperty:instance:networkInterface:]
 
 /** The instance name for this request. */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 /** The name of the network interface to add to this instance. */
-@property(copy, nullable) NSString *networkInterface;
+@property(nonatomic, copy, nullable) NSString *networkInterface;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -4983,18 +5499,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -5005,16 +5519,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_InstanceAggregatedList.
@@ -5043,17 +5569,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstancesAttachDiskWithObject:project:zoneProperty:instance:]
 
 /** The instance name for this request. */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -5089,17 +5615,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstancesDeleteWithproject:zoneProperty:instance:]
 
 /** Name of the instance resource to delete. */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -5133,23 +5659,23 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstancesDeleteAccessConfigWithproject:zoneProperty:instance:accessConfig:networkInterface:]
 
 /** The name of the access config to delete. */
-@property(copy, nullable) NSString *accessConfig;
+@property(nonatomic, copy, nullable) NSString *accessConfig;
 
 /** The instance name for this request. */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 /** The name of the network interface. */
-@property(copy, nullable) NSString *networkInterface;
+@property(nonatomic, copy, nullable) NSString *networkInterface;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -5186,20 +5712,20 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstancesDetachDiskWithproject:zoneProperty:instance:deviceName:]
 
 /** Disk device name to detach. */
-@property(copy, nullable) NSString *deviceName;
+@property(nonatomic, copy, nullable) NSString *deviceName;
 
 /** Instance name. */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -5236,17 +5762,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstancesGetWithproject:zoneProperty:instance:]
 
 /** Name of the instance resource to return. */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Instance.
@@ -5281,7 +5807,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstancesGetSerialPortOutputWithproject:zoneProperty:instance:]
 
 /** Name of the instance scoping this request. */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 /**
  *  Specifies which COM or serial port to retrieve data from.
@@ -5289,17 +5815,17 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 1 (from the
  *        range 1..4).
  */
-@property(assign) NSInteger port;
+@property(nonatomic, assign) NSInteger port;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_SerialPortOutput.
@@ -5333,14 +5859,14 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstancesInsertWithObject:project:zoneProperty:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -5387,18 +5913,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -5409,23 +5933,35 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_InstanceList.
@@ -5460,17 +5996,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstancesResetWithproject:zoneProperty:instance:]
 
 /** Name of the instance scoping this request. */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -5503,23 +6039,23 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstancesSetDiskAutoDeleteWithproject:zoneProperty:instance:autoDelete:deviceName:]
 
 /** Whether to auto-delete the disk when the instance is deleted. */
-@property(assign) BOOL autoDelete;
+@property(nonatomic, assign) BOOL autoDelete;
 
 /** The device name of the disk to modify. */
-@property(copy, nullable) NSString *deviceName;
+@property(nonatomic, copy, nullable) NSString *deviceName;
 
 /** The instance name. */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -5558,17 +6094,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstancesSetMachineTypeWithObject:project:zoneProperty:instance:]
 
 /** Name of the instance scoping this request. */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -5606,17 +6142,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstancesSetMetadataWithObject:project:zoneProperty:instance:]
 
 /** Name of the instance scoping this request. */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -5652,17 +6188,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstancesSetSchedulingWithObject:project:zoneProperty:instance:]
 
 /** Instance name. */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -5697,17 +6233,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstancesSetTagsWithObject:project:zoneProperty:instance:]
 
 /** Name of the instance scoping this request. */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -5743,17 +6279,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstancesStartWithproject:zoneProperty:instance:]
 
 /** Name of the instance resource to start. */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -5788,17 +6324,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstancesStartWithEncryptionKeyWithObject:project:zoneProperty:instance:]
 
 /** Name of the instance resource to start. */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -5840,17 +6376,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstancesStopWithproject:zoneProperty:instance:]
 
 /** Name of the instance resource to stop. */
-@property(copy, nullable) NSString *instance;
+@property(nonatomic, copy, nullable) NSString *instance;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -5891,10 +6427,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstanceTemplatesDeleteWithproject:instanceTemplate:]
 
 /** The name of the instance template to delete. */
-@property(copy, nullable) NSString *instanceTemplate;
+@property(nonatomic, copy, nullable) NSString *instanceTemplate;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -5930,10 +6466,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstanceTemplatesGetWithproject:instanceTemplate:]
 
 /** The name of the instance template. */
-@property(copy, nullable) NSString *instanceTemplate;
+@property(nonatomic, copy, nullable) NSString *instanceTemplate;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_InstanceTemplate.
@@ -5968,7 +6504,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForInstanceTemplatesInsertWithObject:project:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -6016,18 +6552,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -6038,16 +6572,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_InstanceTemplateList.
@@ -6083,10 +6629,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForLicensesGetWithproject:license:]
 
 /** Name of the License resource to return. */
-@property(copy, nullable) NSString *license;
+@property(nonatomic, copy, nullable) NSString *license;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_License.
@@ -6131,18 +6677,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -6153,16 +6697,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_MachineTypeAggregatedList.
@@ -6193,17 +6749,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForMachineTypesGetWithproject:zoneProperty:machineType:]
 
 /** Name of the machine type to return. */
-@property(copy, nullable) NSString *machineType;
+@property(nonatomic, copy, nullable) NSString *machineType;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_MachineType.
@@ -6250,18 +6806,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -6272,23 +6826,35 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  The name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_MachineTypeList.
@@ -6323,10 +6889,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForNetworksDeleteWithproject:network:]
 
 /** Name of the network to delete. */
-@property(copy, nullable) NSString *network;
+@property(nonatomic, copy, nullable) NSString *network;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -6359,10 +6925,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForNetworksGetWithproject:network:]
 
 /** Name of the network to return. */
-@property(copy, nullable) NSString *network;
+@property(nonatomic, copy, nullable) NSString *network;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Network.
@@ -6395,7 +6961,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForNetworksInsertWithObject:project:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -6440,18 +7006,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -6462,16 +7026,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_NetworkList.
@@ -6505,7 +7081,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForProjectsGetWithproject:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Project.
@@ -6534,7 +7110,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForProjectsMoveDiskWithObject:project:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -6566,7 +7142,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForProjectsMoveInstanceWithObject:project:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -6600,7 +7176,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForProjectsSetCommonInstanceMetadataWithObject:project:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -6637,7 +7213,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForProjectsSetUsageExportBucketWithObject:project:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -6671,13 +7247,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForRegionOperationsDeleteWithproject:region:operation:]
 
 /** Name of the Operations resource to delete. */
-@property(copy, nullable) NSString *operation;
+@property(nonatomic, copy, nullable) NSString *operation;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Upon successful completion, the callback's object and error parameters will
@@ -6712,13 +7288,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForRegionOperationsGetWithproject:region:operation:]
 
 /** Name of the Operations resource to return. */
-@property(copy, nullable) NSString *operation;
+@property(nonatomic, copy, nullable) NSString *operation;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -6765,18 +7341,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -6787,19 +7361,31 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_OperationList.
@@ -6837,10 +7423,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForRegionsGetWithproject:region:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region resource to return. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_Region.
@@ -6885,18 +7471,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -6907,16 +7491,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_RegionList.
@@ -6962,18 +7558,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -6984,16 +7578,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_RouterAggregatedList.
@@ -7022,13 +7628,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForRoutersDeleteWithproject:region:router:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** Name of the Router resource to delete. */
-@property(copy, nullable) NSString *router;
+@property(nonatomic, copy, nullable) NSString *router;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -7063,13 +7669,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForRoutersGetWithproject:region:router:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** Name of the Router resource to return. */
-@property(copy, nullable) NSString *router;
+@property(nonatomic, copy, nullable) NSString *router;
 
 /**
  *  Fetches a @c GTLRCompute_Router.
@@ -7104,13 +7710,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForRoutersGetRouterStatusWithproject:region:router:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** Name of the Router resource to query. */
-@property(copy, nullable) NSString *router;
+@property(nonatomic, copy, nullable) NSString *router;
 
 /**
  *  Fetches a @c GTLRCompute_RouterStatusResponse.
@@ -7144,10 +7750,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForRoutersInsertWithObject:project:region:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -7194,18 +7800,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -7216,19 +7820,31 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_RouterList.
@@ -7250,8 +7866,8 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 /**
- *  Updates the entire content of the Router resource. This method supports
- *  patch semantics.
+ *  Updates the specified Router resource with the data included in the request.
+ *  This method supports patch semantics.
  *
  *  Method: compute.routers.patch
  *
@@ -7264,19 +7880,19 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForRoutersPatchWithObject:project:region:router:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** Name of the Router resource to update. */
-@property(copy, nullable) NSString *router;
+@property(nonatomic, copy, nullable) NSString *router;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
  *
- *  Updates the entire content of the Router resource. This method supports
- *  patch semantics.
+ *  Updates the specified Router resource with the data included in the request.
+ *  This method supports patch semantics.
  *
  *  @param object The @c GTLRCompute_Router to include in the query.
  *  @param project Project ID for this request.
@@ -7293,7 +7909,51 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 /**
- *  Updates the entire content of the Router resource.
+ *  Preview fields auto-generated during router create and update operations.
+ *  Calling this method does NOT create or update the router.
+ *
+ *  Method: compute.routers.preview
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeCompute
+ *    @c kGTLRAuthScopeComputeCloudPlatform
+ *    @c kGTLRAuthScopeComputeReadonly
+ */
+@interface GTLRComputeQuery_RoutersPreview : GTLRComputeQuery
+// Previous library name was
+//   +[GTLQueryCompute queryForRoutersPreviewWithObject:project:region:router:]
+
+/** Project ID for this request. */
+@property(nonatomic, copy, nullable) NSString *project;
+
+/** Name of the region for this request. */
+@property(nonatomic, copy, nullable) NSString *region;
+
+/** Name of the Router resource to query. */
+@property(nonatomic, copy, nullable) NSString *router;
+
+/**
+ *  Fetches a @c GTLRCompute_RoutersPreviewResponse.
+ *
+ *  Preview fields auto-generated during router create and update operations.
+ *  Calling this method does NOT create or update the router.
+ *
+ *  @param object The @c GTLRCompute_Router to include in the query.
+ *  @param project Project ID for this request.
+ *  @param region Name of the region for this request.
+ *  @param router Name of the Router resource to query.
+ *
+ *  @returns GTLRComputeQuery_RoutersPreview
+ */
++ (instancetype)queryWithObject:(GTLRCompute_Router *)object
+                        project:(NSString *)project
+                         region:(NSString *)region
+                         router:(NSString *)router;
+
+@end
+
+/**
+ *  Updates the specified Router resource with the data included in the request.
  *
  *  Method: compute.routers.update
  *
@@ -7306,18 +7966,18 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForRoutersUpdateWithObject:project:region:router:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** Name of the Router resource to update. */
-@property(copy, nullable) NSString *router;
+@property(nonatomic, copy, nullable) NSString *router;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
  *
- *  Updates the entire content of the Router resource.
+ *  Updates the specified Router resource with the data included in the request.
  *
  *  @param object The @c GTLRCompute_Router to include in the query.
  *  @param project Project ID for this request.
@@ -7347,10 +8007,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForRoutesDeleteWithproject:route:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the Route resource to delete. */
-@property(copy, nullable) NSString *route;
+@property(nonatomic, copy, nullable) NSString *route;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -7383,10 +8043,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForRoutesGetWithproject:route:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the Route resource to return. */
-@property(copy, nullable) NSString *route;
+@property(nonatomic, copy, nullable) NSString *route;
 
 /**
  *  Fetches a @c GTLRCompute_Route.
@@ -7419,7 +8079,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForRoutesInsertWithObject:project:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -7464,18 +8124,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -7486,16 +8144,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_RouteList.
@@ -7532,10 +8202,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForSnapshotsDeleteWithproject:snapshot:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the Snapshot resource to delete. */
-@property(copy, nullable) NSString *snapshot;
+@property(nonatomic, copy, nullable) NSString *snapshot;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -7572,10 +8242,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForSnapshotsGetWithproject:snapshot:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the Snapshot resource to return. */
-@property(copy, nullable) NSString *snapshot;
+@property(nonatomic, copy, nullable) NSString *snapshot;
 
 /**
  *  Fetches a @c GTLRCompute_Snapshot.
@@ -7621,18 +8291,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -7643,16 +8311,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_SnapshotList.
@@ -7686,10 +8366,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForSslCertificatesDeleteWithproject:sslCertificate:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the SslCertificate resource to delete. */
-@property(copy, nullable) NSString *sslCertificate;
+@property(nonatomic, copy, nullable) NSString *sslCertificate;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -7722,10 +8402,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForSslCertificatesGetWithproject:sslCertificate:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the SslCertificate resource to return. */
-@property(copy, nullable) NSString *sslCertificate;
+@property(nonatomic, copy, nullable) NSString *sslCertificate;
 
 /**
  *  Fetches a @c GTLRCompute_SslCertificate.
@@ -7758,7 +8438,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForSslCertificatesInsertWithObject:project:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -7804,18 +8484,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -7826,16 +8504,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_SslCertificateList.
@@ -7882,18 +8572,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -7904,16 +8592,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_SubnetworkAggregatedList.
@@ -7942,13 +8642,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForSubnetworksDeleteWithproject:region:subnetwork:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region scoping this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** Name of the Subnetwork resource to delete. */
-@property(copy, nullable) NSString *subnetwork;
+@property(nonatomic, copy, nullable) NSString *subnetwork;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -7983,13 +8683,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForSubnetworksGetWithproject:region:subnetwork:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region scoping this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** Name of the Subnetwork resource to return. */
-@property(copy, nullable) NSString *subnetwork;
+@property(nonatomic, copy, nullable) NSString *subnetwork;
 
 /**
  *  Fetches a @c GTLRCompute_Subnetwork.
@@ -8024,10 +8724,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForSubnetworksInsertWithObject:project:region:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region scoping this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -8074,18 +8774,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -8096,19 +8794,31 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region scoping this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_SubnetworkList.
@@ -8143,10 +8853,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetHttpProxiesDeleteWithproject:targetHttpProxy:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the TargetHttpProxy resource to delete. */
-@property(copy, nullable) NSString *targetHttpProxy;
+@property(nonatomic, copy, nullable) NSString *targetHttpProxy;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -8179,10 +8889,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetHttpProxiesGetWithproject:targetHttpProxy:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the TargetHttpProxy resource to return. */
-@property(copy, nullable) NSString *targetHttpProxy;
+@property(nonatomic, copy, nullable) NSString *targetHttpProxy;
 
 /**
  *  Fetches a @c GTLRCompute_TargetHttpProxy.
@@ -8215,7 +8925,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetHttpProxiesInsertWithObject:project:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -8261,18 +8971,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -8283,16 +8991,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_TargetHttpProxyList.
@@ -8326,10 +9046,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetHttpProxiesSetUrlMapWithObject:project:targetHttpProxy:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the TargetHttpProxy to set a URL map for. */
-@property(copy, nullable) NSString *targetHttpProxy;
+@property(nonatomic, copy, nullable) NSString *targetHttpProxy;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -8362,10 +9082,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetHttpsProxiesDeleteWithproject:targetHttpsProxy:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the TargetHttpsProxy resource to delete. */
-@property(copy, nullable) NSString *targetHttpsProxy;
+@property(nonatomic, copy, nullable) NSString *targetHttpsProxy;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -8398,10 +9118,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetHttpsProxiesGetWithproject:targetHttpsProxy:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the TargetHttpsProxy resource to return. */
-@property(copy, nullable) NSString *targetHttpsProxy;
+@property(nonatomic, copy, nullable) NSString *targetHttpsProxy;
 
 /**
  *  Fetches a @c GTLRCompute_TargetHttpsProxy.
@@ -8434,7 +9154,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetHttpsProxiesInsertWithObject:project:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -8480,18 +9200,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -8502,16 +9220,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_TargetHttpsProxyList.
@@ -8545,13 +9275,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetHttpsProxiesSetSslCertificatesWithObject:project:targetHttpsProxy:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Name of the TargetHttpsProxy resource to set an SslCertificates resource
  *  for.
  */
-@property(copy, nullable) NSString *targetHttpsProxy;
+@property(nonatomic, copy, nullable) NSString *targetHttpsProxy;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -8586,10 +9316,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetHttpsProxiesSetUrlMapWithObject:project:targetHttpsProxy:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the TargetHttpsProxy resource whose URL map is to be set. */
-@property(copy, nullable) NSString *targetHttpsProxy;
+@property(nonatomic, copy, nullable) NSString *targetHttpsProxy;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -8636,18 +9366,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -8658,16 +9386,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_TargetInstanceAggregatedList.
@@ -8696,17 +9436,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetInstancesDeleteWithproject:zoneProperty:targetInstance:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the TargetInstance resource to delete. */
-@property(copy, nullable) NSString *targetInstance;
+@property(nonatomic, copy, nullable) NSString *targetInstance;
 
 /**
  *  Name of the zone scoping this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -8741,17 +9481,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetInstancesGetWithproject:zoneProperty:targetInstance:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the TargetInstance resource to return. */
-@property(copy, nullable) NSString *targetInstance;
+@property(nonatomic, copy, nullable) NSString *targetInstance;
 
 /**
  *  Name of the zone scoping this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_TargetInstance.
@@ -8786,14 +9526,14 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetInstancesInsertWithObject:project:zoneProperty:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Name of the zone scoping this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -8841,18 +9581,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -8863,23 +9601,35 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Name of the zone scoping this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_TargetInstanceList.
@@ -8915,13 +9665,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetPoolsAddHealthCheckWithObject:project:region:targetPool:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region scoping this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** Name of the target pool to add a health check to. */
-@property(copy, nullable) NSString *targetPool;
+@property(nonatomic, copy, nullable) NSString *targetPool;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -8957,13 +9707,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetPoolsAddInstanceWithObject:project:region:targetPool:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region scoping this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** Name of the TargetPool resource to add instances to. */
-@property(copy, nullable) NSString *targetPool;
+@property(nonatomic, copy, nullable) NSString *targetPool;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -9012,18 +9762,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -9034,16 +9782,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_TargetPoolAggregatedList.
@@ -9072,13 +9832,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetPoolsDeleteWithproject:region:targetPool:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region scoping this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** Name of the TargetPool resource to delete. */
-@property(copy, nullable) NSString *targetPool;
+@property(nonatomic, copy, nullable) NSString *targetPool;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -9113,13 +9873,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetPoolsGetWithproject:region:targetPool:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region scoping this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** Name of the TargetPool resource to return. */
-@property(copy, nullable) NSString *targetPool;
+@property(nonatomic, copy, nullable) NSString *targetPool;
 
 /**
  *  Fetches a @c GTLRCompute_TargetPool.
@@ -9155,13 +9915,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetPoolsGetHealthWithObject:project:region:targetPool:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region scoping this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** Name of the TargetPool resource to which the queried instance belongs. */
-@property(copy, nullable) NSString *targetPool;
+@property(nonatomic, copy, nullable) NSString *targetPool;
 
 /**
  *  Fetches a @c GTLRCompute_TargetPoolInstanceHealth.
@@ -9199,10 +9959,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetPoolsInsertWithObject:project:region:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region scoping this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -9250,18 +10010,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -9272,19 +10030,31 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region scoping this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_TargetPoolList.
@@ -9320,13 +10090,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetPoolsRemoveHealthCheckWithObject:project:region:targetPool:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** Name of the target pool to remove health checks from. */
-@property(copy, nullable) NSString *targetPool;
+@property(nonatomic, copy, nullable) NSString *targetPool;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -9362,13 +10132,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetPoolsRemoveInstanceWithObject:project:region:targetPool:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region scoping this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** Name of the TargetPool resource to remove instances from. */
-@property(copy, nullable) NSString *targetPool;
+@property(nonatomic, copy, nullable) NSString *targetPool;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -9404,16 +10174,16 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetPoolsSetBackupWithObject:project:region:targetPool:]
 
 /** New failoverRatio value for the target pool. */
-@property(assign) float failoverRatio;
+@property(nonatomic, assign) float failoverRatio;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region scoping this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** Name of the TargetPool resource to set a backup pool for. */
-@property(copy, nullable) NSString *targetPool;
+@property(nonatomic, copy, nullable) NSString *targetPool;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -9431,6 +10201,319 @@ NS_ASSUME_NONNULL_BEGIN
                         project:(NSString *)project
                          region:(NSString *)region
                      targetPool:(NSString *)targetPool;
+
+@end
+
+/**
+ *  Deletes the specified TargetSslProxy resource.
+ *
+ *  Method: compute.targetSslProxies.delete
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeCompute
+ *    @c kGTLRAuthScopeComputeCloudPlatform
+ */
+@interface GTLRComputeQuery_TargetSslProxiesDelete : GTLRComputeQuery
+// Previous library name was
+//   +[GTLQueryCompute queryForTargetSslProxiesDeleteWithproject:targetSslProxy:]
+
+/** Project ID for this request. */
+@property(nonatomic, copy, nullable) NSString *project;
+
+/** Name of the TargetSslProxy resource to delete. */
+@property(nonatomic, copy, nullable) NSString *targetSslProxy;
+
+/**
+ *  Fetches a @c GTLRCompute_Operation.
+ *
+ *  Deletes the specified TargetSslProxy resource.
+ *
+ *  @param project Project ID for this request.
+ *  @param targetSslProxy Name of the TargetSslProxy resource to delete.
+ *
+ *  @returns GTLRComputeQuery_TargetSslProxiesDelete
+ */
++ (instancetype)queryWithProject:(NSString *)project
+                  targetSslProxy:(NSString *)targetSslProxy;
+
+@end
+
+/**
+ *  Returns the specified TargetSslProxy resource. Get a list of available
+ *  target SSL proxies by making a list() request.
+ *
+ *  Method: compute.targetSslProxies.get
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeCompute
+ *    @c kGTLRAuthScopeComputeCloudPlatform
+ *    @c kGTLRAuthScopeComputeReadonly
+ */
+@interface GTLRComputeQuery_TargetSslProxiesGet : GTLRComputeQuery
+// Previous library name was
+//   +[GTLQueryCompute queryForTargetSslProxiesGetWithproject:targetSslProxy:]
+
+/** Project ID for this request. */
+@property(nonatomic, copy, nullable) NSString *project;
+
+/** Name of the TargetSslProxy resource to return. */
+@property(nonatomic, copy, nullable) NSString *targetSslProxy;
+
+/**
+ *  Fetches a @c GTLRCompute_TargetSslProxy.
+ *
+ *  Returns the specified TargetSslProxy resource. Get a list of available
+ *  target SSL proxies by making a list() request.
+ *
+ *  @param project Project ID for this request.
+ *  @param targetSslProxy Name of the TargetSslProxy resource to return.
+ *
+ *  @returns GTLRComputeQuery_TargetSslProxiesGet
+ */
++ (instancetype)queryWithProject:(NSString *)project
+                  targetSslProxy:(NSString *)targetSslProxy;
+
+@end
+
+/**
+ *  Creates a TargetSslProxy resource in the specified project using the data
+ *  included in the request.
+ *
+ *  Method: compute.targetSslProxies.insert
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeCompute
+ *    @c kGTLRAuthScopeComputeCloudPlatform
+ */
+@interface GTLRComputeQuery_TargetSslProxiesInsert : GTLRComputeQuery
+// Previous library name was
+//   +[GTLQueryCompute queryForTargetSslProxiesInsertWithObject:project:]
+
+/** Project ID for this request. */
+@property(nonatomic, copy, nullable) NSString *project;
+
+/**
+ *  Fetches a @c GTLRCompute_Operation.
+ *
+ *  Creates a TargetSslProxy resource in the specified project using the data
+ *  included in the request.
+ *
+ *  @param object The @c GTLRCompute_TargetSslProxy to include in the query.
+ *  @param project Project ID for this request.
+ *
+ *  @returns GTLRComputeQuery_TargetSslProxiesInsert
+ */
++ (instancetype)queryWithObject:(GTLRCompute_TargetSslProxy *)object
+                        project:(NSString *)project;
+
+@end
+
+/**
+ *  Retrieves the list of TargetSslProxy resources available to the specified
+ *  project.
+ *
+ *  Method: compute.targetSslProxies.list
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeCompute
+ *    @c kGTLRAuthScopeComputeCloudPlatform
+ *    @c kGTLRAuthScopeComputeReadonly
+ */
+@interface GTLRComputeQuery_TargetSslProxiesList : GTLRComputeQuery
+// Previous library name was
+//   +[GTLQueryCompute queryForTargetSslProxiesListWithproject:]
+
+/**
+ *  Sets a filter expression for filtering listed resources, in the form
+ *  filter={expression}. Your {expression} must be in the format: field_name
+ *  comparison_string literal_string.
+ *  The field_name is the name of the field you want to compare. Only atomic
+ *  field types are supported (string, number, boolean). The comparison_string
+ *  must be either eq (equals) or ne (not equals). The literal_string is the
+ *  string value to filter to. The literal value must be valid for the type of
+ *  field you are filtering by (string, number, boolean). For string fields, the
+ *  literal value is interpreted as a regular expression using RE2 syntax. The
+ *  literal value must match the entire field.
+ *  For example, to filter for instances that do not have a name of
+ *  example-instance, you would use filter=name ne example-instance.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
+ */
+@property(nonatomic, copy, nullable) NSString *filter;
+
+/**
+ *  The maximum number of results per page that should be returned. If the
+ *  number of available results is larger than maxResults, Compute Engine
+ *  returns a nextPageToken that can be used to get the next page of results in
+ *  subsequent list requests.
+ *
+ *  @note If not set, the documented server-side default will be 500 (from the
+ *        range 0..500).
+ */
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
+
+/**
+ *  Specifies a page token to use. Set pageToken to the nextPageToken returned
+ *  by a previous list request to get the next page of results.
+ */
+@property(nonatomic, copy, nullable) NSString *pageToken;
+
+/** Project ID for this request. */
+@property(nonatomic, copy, nullable) NSString *project;
+
+/**
+ *  Fetches a @c GTLRCompute_TargetSslProxyList.
+ *
+ *  Retrieves the list of TargetSslProxy resources available to the specified
+ *  project.
+ *
+ *  @param project Project ID for this request.
+ *
+ *  @returns GTLRComputeQuery_TargetSslProxiesList
+ *
+ *  @note Automatic pagination will be done when @c shouldFetchNextPages is
+ *        enabled. See @c shouldFetchNextPages on @c GTLRService for more
+ *        information.
+ */
++ (instancetype)queryWithProject:(NSString *)project;
+
+@end
+
+/**
+ *  Changes the BackendService for TargetSslProxy.
+ *
+ *  Method: compute.targetSslProxies.setBackendService
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeCompute
+ *    @c kGTLRAuthScopeComputeCloudPlatform
+ */
+@interface GTLRComputeQuery_TargetSslProxiesSetBackendService : GTLRComputeQuery
+// Previous library name was
+//   +[GTLQueryCompute queryForTargetSslProxiesSetBackendServiceWithObject:project:targetSslProxy:]
+
+/** Project ID for this request. */
+@property(nonatomic, copy, nullable) NSString *project;
+
+/**
+ *  Name of the TargetSslProxy resource whose BackendService resource is to be
+ *  set.
+ */
+@property(nonatomic, copy, nullable) NSString *targetSslProxy;
+
+/**
+ *  Fetches a @c GTLRCompute_Operation.
+ *
+ *  Changes the BackendService for TargetSslProxy.
+ *
+ *  @param object The @c GTLRCompute_TargetSslProxiesSetBackendServiceRequest to
+ *    include in the query.
+ *  @param project Project ID for this request.
+ *  @param targetSslProxy Name of the TargetSslProxy resource whose
+ *    BackendService resource is to be set.
+ *
+ *  @returns GTLRComputeQuery_TargetSslProxiesSetBackendService
+ */
++ (instancetype)queryWithObject:(GTLRCompute_TargetSslProxiesSetBackendServiceRequest *)object
+                        project:(NSString *)project
+                 targetSslProxy:(NSString *)targetSslProxy;
+
+@end
+
+/**
+ *  Changes the ProxyHeaderType for TargetSslProxy.
+ *
+ *  Method: compute.targetSslProxies.setProxyHeader
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeCompute
+ *    @c kGTLRAuthScopeComputeCloudPlatform
+ */
+@interface GTLRComputeQuery_TargetSslProxiesSetProxyHeader : GTLRComputeQuery
+// Previous library name was
+//   +[GTLQueryCompute queryForTargetSslProxiesSetProxyHeaderWithObject:project:targetSslProxy:]
+
+/** Project ID for this request. */
+@property(nonatomic, copy, nullable) NSString *project;
+
+/** Name of the TargetSslProxy resource whose ProxyHeader is to be set. */
+@property(nonatomic, copy, nullable) NSString *targetSslProxy;
+
+/**
+ *  Fetches a @c GTLRCompute_Operation.
+ *
+ *  Changes the ProxyHeaderType for TargetSslProxy.
+ *
+ *  @param object The @c GTLRCompute_TargetSslProxiesSetProxyHeaderRequest to
+ *    include in the query.
+ *  @param project Project ID for this request.
+ *  @param targetSslProxy Name of the TargetSslProxy resource whose ProxyHeader
+ *    is to be set.
+ *
+ *  @returns GTLRComputeQuery_TargetSslProxiesSetProxyHeader
+ */
++ (instancetype)queryWithObject:(GTLRCompute_TargetSslProxiesSetProxyHeaderRequest *)object
+                        project:(NSString *)project
+                 targetSslProxy:(NSString *)targetSslProxy;
+
+@end
+
+/**
+ *  Changes SslCertificates for TargetSslProxy.
+ *
+ *  Method: compute.targetSslProxies.setSslCertificates
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeCompute
+ *    @c kGTLRAuthScopeComputeCloudPlatform
+ */
+@interface GTLRComputeQuery_TargetSslProxiesSetSslCertificates : GTLRComputeQuery
+// Previous library name was
+//   +[GTLQueryCompute queryForTargetSslProxiesSetSslCertificatesWithObject:project:targetSslProxy:]
+
+/** Project ID for this request. */
+@property(nonatomic, copy, nullable) NSString *project;
+
+/**
+ *  Name of the TargetSslProxy resource whose SslCertificate resource is to be
+ *  set.
+ */
+@property(nonatomic, copy, nullable) NSString *targetSslProxy;
+
+/**
+ *  Fetches a @c GTLRCompute_Operation.
+ *
+ *  Changes SslCertificates for TargetSslProxy.
+ *
+ *  @param object The @c GTLRCompute_TargetSslProxiesSetSslCertificatesRequest
+ *    to include in the query.
+ *  @param project Project ID for this request.
+ *  @param targetSslProxy Name of the TargetSslProxy resource whose
+ *    SslCertificate resource is to be set.
+ *
+ *  @returns GTLRComputeQuery_TargetSslProxiesSetSslCertificates
+ */
++ (instancetype)queryWithObject:(GTLRCompute_TargetSslProxiesSetSslCertificatesRequest *)object
+                        project:(NSString *)project
+                 targetSslProxy:(NSString *)targetSslProxy;
 
 @end
 
@@ -9461,18 +10544,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -9483,16 +10564,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_TargetVpnGatewayAggregatedList.
@@ -9521,13 +10614,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetVpnGatewaysDeleteWithproject:region:targetVpnGateway:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** Name of the target VPN gateway to delete. */
-@property(copy, nullable) NSString *targetVpnGateway;
+@property(nonatomic, copy, nullable) NSString *targetVpnGateway;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -9562,13 +10655,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetVpnGatewaysGetWithproject:region:targetVpnGateway:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** Name of the target VPN gateway to return. */
-@property(copy, nullable) NSString *targetVpnGateway;
+@property(nonatomic, copy, nullable) NSString *targetVpnGateway;
 
 /**
  *  Fetches a @c GTLRCompute_TargetVpnGateway.
@@ -9603,10 +10696,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForTargetVpnGatewaysInsertWithObject:project:region:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -9654,18 +10747,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -9676,19 +10767,31 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_TargetVpnGatewayList.
@@ -9724,10 +10827,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForUrlMapsDeleteWithproject:urlMap:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the UrlMap resource to delete. */
-@property(copy, nullable) NSString *urlMap;
+@property(nonatomic, copy, nullable) NSString *urlMap;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -9760,10 +10863,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForUrlMapsGetWithproject:urlMap:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the UrlMap resource to return. */
-@property(copy, nullable) NSString *urlMap;
+@property(nonatomic, copy, nullable) NSString *urlMap;
 
 /**
  *  Fetches a @c GTLRCompute_UrlMap.
@@ -9796,7 +10899,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForUrlMapsInsertWithObject:project:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -9829,10 +10932,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForUrlMapsInvalidateCacheWithObject:project:urlMap:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the UrlMap scoping this request. */
-@property(copy, nullable) NSString *urlMap;
+@property(nonatomic, copy, nullable) NSString *urlMap;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -9880,18 +10983,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -9902,16 +11003,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_UrlMapList.
@@ -9931,8 +11044,8 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 /**
- *  Updates the entire content of the UrlMap resource. This method supports
- *  patch semantics.
+ *  Updates the specified UrlMap resource with the data included in the request.
+ *  This method supports patch semantics.
  *
  *  Method: compute.urlMaps.patch
  *
@@ -9945,16 +11058,16 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForUrlMapsPatchWithObject:project:urlMap:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the UrlMap resource to update. */
-@property(copy, nullable) NSString *urlMap;
+@property(nonatomic, copy, nullable) NSString *urlMap;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
  *
- *  Updates the entire content of the UrlMap resource. This method supports
- *  patch semantics.
+ *  Updates the specified UrlMap resource with the data included in the request.
+ *  This method supports patch semantics.
  *
  *  @param object The @c GTLRCompute_UrlMap to include in the query.
  *  @param project Project ID for this request.
@@ -9969,7 +11082,7 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 /**
- *  Updates the entire content of the UrlMap resource.
+ *  Updates the specified UrlMap resource with the data included in the request.
  *
  *  Method: compute.urlMaps.update
  *
@@ -9982,15 +11095,15 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForUrlMapsUpdateWithObject:project:urlMap:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the UrlMap resource to update. */
-@property(copy, nullable) NSString *urlMap;
+@property(nonatomic, copy, nullable) NSString *urlMap;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
  *
- *  Updates the entire content of the UrlMap resource.
+ *  Updates the specified UrlMap resource with the data included in the request.
  *
  *  @param object The @c GTLRCompute_UrlMap to include in the query.
  *  @param project Project ID for this request.
@@ -10019,10 +11132,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForUrlMapsValidateWithObject:project:urlMap:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the UrlMap resource to be validated as. */
-@property(copy, nullable) NSString *urlMap;
+@property(nonatomic, copy, nullable) NSString *urlMap;
 
 /**
  *  Fetches a @c GTLRCompute_UrlMapsValidateResponse.
@@ -10070,18 +11183,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -10092,16 +11203,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_VpnTunnelAggregatedList.
@@ -10130,13 +11253,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForVpnTunnelsDeleteWithproject:region:vpnTunnel:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** Name of the VpnTunnel resource to delete. */
-@property(copy, nullable) NSString *vpnTunnel;
+@property(nonatomic, copy, nullable) NSString *vpnTunnel;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -10171,13 +11294,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForVpnTunnelsGetWithproject:region:vpnTunnel:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /** Name of the VpnTunnel resource to return. */
-@property(copy, nullable) NSString *vpnTunnel;
+@property(nonatomic, copy, nullable) NSString *vpnTunnel;
 
 /**
  *  Fetches a @c GTLRCompute_VpnTunnel.
@@ -10212,10 +11335,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForVpnTunnelsInsertWithObject:project:region:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -10263,18 +11386,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -10285,19 +11406,31 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /** Name of the region for this request. */
-@property(copy, nullable) NSString *region;
+@property(nonatomic, copy, nullable) NSString *region;
 
 /**
  *  Fetches a @c GTLRCompute_VpnTunnelList.
@@ -10333,17 +11466,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForZoneOperationsDeleteWithproject:zoneProperty:operation:]
 
 /** Name of the Operations resource to delete. */
-@property(copy, nullable) NSString *operation;
+@property(nonatomic, copy, nullable) NSString *operation;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Upon successful completion, the callback's object and error parameters will
@@ -10378,17 +11511,17 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForZoneOperationsGetWithproject:zoneProperty:operation:]
 
 /** Name of the Operations resource to return. */
-@property(copy, nullable) NSString *operation;
+@property(nonatomic, copy, nullable) NSString *operation;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Name of the zone for this request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Operation.
@@ -10434,18 +11567,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -10456,23 +11587,35 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Name of the zone for request.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_OperationList.
@@ -10509,14 +11652,14 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryCompute queryForZonesGetWithproject:zoneProperty:]
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Name of the zone resource to return.
  *
  *  Remapped to 'zoneProperty' to avoid NSObject's 'zone'.
  */
-@property(copy, nullable) NSString *zoneProperty;
+@property(nonatomic, copy, nullable) NSString *zoneProperty;
 
 /**
  *  Fetches a @c GTLRCompute_Zone.
@@ -10561,18 +11704,16 @@ NS_ASSUME_NONNULL_BEGIN
  *  literal value must match the entire field.
  *  For example, to filter for instances that do not have a name of
  *  example-instance, you would use filter=name ne example-instance.
- *  Compute Engine Beta API Only: When filtering in the Beta API, you can also
- *  filter on nested fields. For example, you could filter on instances that
- *  have set the scheduling.automaticRestart field to true. Use filtering on
- *  nested fields to take advantage of labels to organize and search for results
- *  based on label values.
- *  The Beta API also supports filtering on multiple expressions by providing
- *  each separate expression within parentheses. For example,
- *  (scheduling.automaticRestart eq true) (zone eq us-central1-f). Multiple
- *  expressions are treated as AND expressions, meaning that resources must
- *  match all expressions to pass the filters.
+ *  You can filter on nested fields. For example, you could filter on instances
+ *  that have set the scheduling.automaticRestart field to true. Use filtering
+ *  on nested fields to take advantage of labels to organize and search for
+ *  results based on label values.
+ *  To filter on multiple expressions, provide each separate expression within
+ *  parentheses. For example, (scheduling.automaticRestart eq true) (zone eq
+ *  us-central1-f). Multiple expressions are treated as AND expressions, meaning
+ *  that resources must match all expressions to pass the filters.
  */
-@property(copy, nullable) NSString *filter;
+@property(nonatomic, copy, nullable) NSString *filter;
 
 /**
  *  The maximum number of results per page that should be returned. If the
@@ -10583,16 +11724,28 @@ NS_ASSUME_NONNULL_BEGIN
  *  @note If not set, the documented server-side default will be 500 (from the
  *        range 0..500).
  */
-@property(assign) NSUInteger maxResults;
+@property(nonatomic, assign) NSUInteger maxResults;
+
+/**
+ *  Sorts list results by a certain order. By default, results are returned in
+ *  alphanumerical order based on the resource name.
+ *  You can also sort results in descending order based on the creation
+ *  timestamp using orderBy="creationTimestamp desc". This sorts results based
+ *  on the creationTimestamp field in reverse chronological order (newest result
+ *  first). Use this to sort resources like operations so that the newest
+ *  operation is returned first.
+ *  Currently, only sorting by name or creationTimestamp desc is supported.
+ */
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Specifies a page token to use. Set pageToken to the nextPageToken returned
  *  by a previous list request to get the next page of results.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /** Project ID for this request. */
-@property(copy, nullable) NSString *project;
+@property(nonatomic, copy, nullable) NSString *project;
 
 /**
  *  Fetches a @c GTLRCompute_ZoneList.

@@ -250,11 +250,11 @@
 @implementation GTLRAdExchangeBuyer_Creative
 @dynamic accountId, adChoicesDestinationUrl, advertiserId, advertiserName,
          agencyId, apiUploadTimestamp, attribute, buyerCreativeId,
-         clickThroughUrl, corrections, dealsStatus, filteringReasons, height,
-         HTMLSnippet, impressionTrackingUrl, kind, languages, nativeAd,
-         openAuctionStatus, productCategories, restrictedCategories,
-         sensitiveCategories, servingRestrictions, vendorType, version,
-         videoURL, width;
+         clickThroughUrl, corrections, dealsStatus, detectedDomains,
+         filteringReasons, height, HTMLSnippet, impressionTrackingUrl, kind,
+         languages, nativeAd, openAuctionStatus, productCategories,
+         restrictedCategories, sensitiveCategories, servingRestrictions,
+         vendorType, version, videoURL, width;
 
 + (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
   NSDictionary<NSString *, Class> *map = @{
@@ -262,6 +262,7 @@
     @"attribute" : [NSNumber class],
     @"clickThroughUrl" : [NSString class],
     @"corrections" : [GTLRAdExchangeBuyer_CreativeCorrectionsItem class],
+    @"detectedDomains" : [NSString class],
     @"impressionTrackingUrl" : [NSString class],
     @"languages" : [NSString class],
     @"productCategories" : [NSNumber class],
@@ -320,7 +321,7 @@
 
 @implementation GTLRAdExchangeBuyer_CreativeNativeAd
 @dynamic advertiser, appIcon, body, callToAction, clickTrackingUrl, headline,
-         image, impressionTrackingUrl, logo, price, starRating, store;
+         image, impressionTrackingUrl, logo, price, starRating, store, videoURL;
 
 + (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
   NSDictionary<NSString *, Class> *map = @{
@@ -451,6 +452,34 @@
 
 // ----------------------------------------------------------------------------
 //
+//   GTLRAdExchangeBuyer_CreativeDealIds
+//
+
+@implementation GTLRAdExchangeBuyer_CreativeDealIds
+@dynamic dealStatuses, kind;
+
++ (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
+  NSDictionary<NSString *, Class> *map = @{
+    @"dealStatuses" : [GTLRAdExchangeBuyer_CreativeDealIdsDealStatusesItem class]
+  };
+  return map;
+}
+
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRAdExchangeBuyer_CreativeDealIdsDealStatusesItem
+//
+
+@implementation GTLRAdExchangeBuyer_CreativeDealIdsDealStatusesItem
+@dynamic arcStatus, dealId, webPropertyId;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
 //   GTLRAdExchangeBuyer_CreativesList
 //
 
@@ -483,7 +512,8 @@
 //
 
 @implementation GTLRAdExchangeBuyer_DealServingMetadataDealPauseStatus
-@dynamic firstPausedBy, hasBuyerPaused, hasSellerPaused;
+@dynamic buyerPauseReason, firstPausedBy, hasBuyerPaused, hasSellerPaused,
+         sellerPauseReason;
 @end
 
 
@@ -493,9 +523,10 @@
 //
 
 @implementation GTLRAdExchangeBuyer_DealTerms
-@dynamic brandingType, descriptionProperty, estimatedGrossSpend,
-         estimatedImpressionsPerDay, guaranteedFixedPriceTerms,
-         nonGuaranteedAuctionTerms, nonGuaranteedFixedPriceTerms,
+@dynamic brandingType, crossListedExternalDealIdType, descriptionProperty,
+         estimatedGrossSpend, estimatedImpressionsPerDay,
+         guaranteedFixedPriceTerms, nonGuaranteedAuctionTerms,
+         nonGuaranteedFixedPriceTerms, rubiconNonGuaranteedTerms,
          sellerTimeZone;
 
 + (NSDictionary<NSString *, NSString *> *)propertyToJSONKeyMap {
@@ -511,7 +542,8 @@
 //
 
 @implementation GTLRAdExchangeBuyer_DealTermsGuaranteedFixedPriceTerms
-@dynamic billingInfo, fixedPrices, guaranteedImpressions, guaranteedLooks;
+@dynamic billingInfo, fixedPrices, guaranteedImpressions, guaranteedLooks,
+         minimumDailyLooks;
 
 + (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
   NSDictionary<NSString *, Class> *map = @{
@@ -567,6 +599,16 @@
   return map;
 }
 
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRAdExchangeBuyer_DealTermsRubiconNonGuaranteedTerms
+//
+
+@implementation GTLRAdExchangeBuyer_DealTermsRubiconNonGuaranteedTerms
+@dynamic priorityPrice, standardPrice;
 @end
 
 
@@ -802,10 +844,10 @@
 @dynamic buyerPrivateData, creationTimeMs, creativePreApprovalPolicy,
          creativeSafeFrameCompatibility, dealId, dealServingMetadata,
          deliveryControl, externalDealId, flightEndTimeMs, flightStartTimeMs,
-         inventoryDescription, kind, lastUpdateTimeMs, name, productId,
-         productRevisionNumber, programmaticCreativeSource, proposalId,
-         sellerContacts, sharedTargetings, syndicationProduct, terms,
-         webPropertyCode;
+         inventoryDescription, isRfpTemplate, kind, lastUpdateTimeMs, name,
+         productId, productRevisionNumber, programmaticCreativeSource,
+         proposalId, sellerContacts, sharedTargetings, syndicationProduct,
+         terms, webPropertyCode;
 
 + (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
   NSDictionary<NSString *, Class> *map = @{
@@ -999,7 +1041,7 @@
 //
 
 @implementation GTLRAdExchangeBuyer_Price
-@dynamic amountMicros, currencyCode, pricingType;
+@dynamic amountMicros, currencyCode, expectedCpmMicros, pricingType;
 @end
 
 
@@ -1053,15 +1095,17 @@
 //
 
 @implementation GTLRAdExchangeBuyer_Proposal
-@dynamic billedBuyer, buyer, buyerContacts, buyerPrivateData, hasBuyerSignedOff,
-         hasSellerSignedOff, inventorySource, isRenegotiating, isSetupComplete,
-         kind, labels, lastUpdaterOrCommentorRole, name, negotiationId,
-         originatorRole, privateAuctionId, proposalId, proposalState,
-         revisionNumber, revisionTimeMs, seller, sellerContacts;
+@dynamic billedBuyer, buyer, buyerContacts, buyerPrivateData, dbmAdvertiserIds,
+         hasBuyerSignedOff, hasSellerSignedOff, inventorySource,
+         isRenegotiating, isSetupComplete, kind, labels,
+         lastUpdaterOrCommentorRole, name, negotiationId, originatorRole,
+         privateAuctionId, proposalId, proposalState, revisionNumber,
+         revisionTimeMs, seller, sellerContacts;
 
 + (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
   NSDictionary<NSString *, Class> *map = @{
     @"buyerContacts" : [GTLRAdExchangeBuyer_ContactInformation class],
+    @"dbmAdvertiserIds" : [NSString class],
     @"labels" : [GTLRAdExchangeBuyer_MarketplaceLabel class],
     @"sellerContacts" : [GTLRAdExchangeBuyer_ContactInformation class]
   };

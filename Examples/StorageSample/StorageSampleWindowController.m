@@ -322,7 +322,7 @@ NSString *const kKeychainItemName = @"StorageSample: Google Cloud Storage";
 }
 
 - (GTLRStorage_Bucket *)selectedBucketListEntry {
-  int rowIndex = _bucketListTable.selectedRow;
+  NSInteger rowIndex = _bucketListTable.selectedRow;
   if (rowIndex > -1) {
     // GTLCollectionObjects like GTLRStorage_Buckets support indexed
     // access to the collection items
@@ -347,7 +347,7 @@ NSString *const kKeychainItemName = @"StorageSample: Google Cloud Storage";
 }
 
 - (id)selectedDetailItem {
-  int rowIndex = _detailTable.selectedRow;
+  NSInteger rowIndex = _detailTable.selectedRow;
   if (rowIndex > -1) {
     NSArray *items = [self detailCollectionItems];
     return items[rowIndex];
@@ -643,14 +643,14 @@ NSString *const kKeychainItemName = @"StorageSample: Google Cloud Storage";
 #pragma mark Sign In
 
 - (void)runSigninThenHandler:(void (^)(void))handler {
-  // Applications should have client ID and client secret strings
-  // hardcoded into the source, but the sample application asks the
-  // developer for the strings.
+    // Applications should have client ID hardcoded into the source
+    // but the sample application asks the developer for the strings.
+    // Client secret is now left blank.
   NSString *clientID = _clientIDField.stringValue;
   NSString *clientSecret = _clientSecretField.stringValue;
 
-  if ([clientID length] == 0 || [clientSecret length] == 0) {
-    // Remind the developer that client ID and client secret are needed
+  if ([clientID length] == 0) {
+    // Remind the developer that client ID is needed. Client Secret is now left blank
     [_clientIDButton performSelector:@selector(performClick:)
                           withObject:self
                           afterDelay:0.5];
@@ -857,7 +857,7 @@ NSString *const kKeychainItemName = @"StorageSample: Google Cloud Storage";
 }
 
 // Table view data source methods
-- (int)numberOfRowsInTableView:(NSTableView *)tableView {
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
   NSArray *items;
   if (tableView == _bucketListTable) {
     items = _bucketList.items;

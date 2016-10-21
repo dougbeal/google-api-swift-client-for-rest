@@ -2,10 +2,9 @@
 
 // ----------------------------------------------------------------------------
 // API:
-//   Google Cloud Logging API (logging/v2beta1)
+//   Stackdriver Logging API (logging/v2)
 // Description:
-//   Writes log entries and manages your logs, log sinks, and logs-based
-//   metrics.
+//   Writes log entries and manages your Stackdriver Logging configuration.
 // Documentation:
 //   https://cloud.google.com/logging/docs/
 
@@ -41,6 +40,10 @@ NSString * const kGTLRLogging_LogLine_Severity_Info      = @"INFO";
 NSString * const kGTLRLogging_LogLine_Severity_Notice    = @"NOTICE";
 NSString * const kGTLRLogging_LogLine_Severity_Warning   = @"WARNING";
 
+// GTLRLogging_LogMetric.version
+NSString * const kGTLRLogging_LogMetric_Version_V1 = @"V1";
+NSString * const kGTLRLogging_LogMetric_Version_V2 = @"V2";
+
 // GTLRLogging_LogSink.outputVersionFormat
 NSString * const kGTLRLogging_LogSink_OutputVersionFormat_V1   = @"V1";
 NSString * const kGTLRLogging_LogSink_OutputVersionFormat_V2   = @"V2";
@@ -62,8 +65,8 @@ NSString * const kGTLRLogging_LogSink_OutputVersionFormat_VersionFormatUnspecifi
 
 @implementation GTLRLogging_HttpRequest
 @dynamic cacheFillBytes, cacheHit, cacheLookup, cacheValidatedWithOriginServer,
-         referer, remoteIp, requestMethod, requestSize, requestUrl,
-         responseSize, status, userAgent;
+         latency, referer, remoteIp, requestMethod, requestSize, requestUrl,
+         responseSize, serverIp, status, userAgent;
 @end
 
 
@@ -88,11 +91,12 @@ NSString * const kGTLRLogging_LogSink_OutputVersionFormat_VersionFormatUnspecifi
 //
 
 @implementation GTLRLogging_ListLogEntriesRequest
-@dynamic filter, orderBy, pageSize, pageToken, partialSuccess, projectIds;
+@dynamic filter, orderBy, pageSize, pageToken, projectIds, resourceNames;
 
 + (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
   NSDictionary<NSString *, Class> *map = @{
-    @"projectIds" : [NSString class]
+    @"projectIds" : [NSString class],
+    @"resourceNames" : [NSString class]
   };
   return map;
 }
@@ -106,7 +110,7 @@ NSString * const kGTLRLogging_LogSink_OutputVersionFormat_VersionFormatUnspecifi
 //
 
 @implementation GTLRLogging_ListLogEntriesResponse
-@dynamic entries, nextPageToken, projectIdErrors;
+@dynamic entries, nextPageToken;
 
 + (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
   NSDictionary<NSString *, Class> *map = @{
@@ -117,20 +121,6 @@ NSString * const kGTLRLogging_LogSink_OutputVersionFormat_VersionFormatUnspecifi
 
 + (NSString *)collectionItemsKey {
   return @"entries";
-}
-
-@end
-
-
-// ----------------------------------------------------------------------------
-//
-//   GTLRLogging_ListLogEntriesResponseProjectIdErrors
-//
-
-@implementation GTLRLogging_ListLogEntriesResponseProjectIdErrors
-
-+ (Class)classForAdditionalProperties {
-  return [GTLRLogging_Status class];
 }
 
 @end
@@ -286,7 +276,7 @@ NSString * const kGTLRLogging_LogSink_OutputVersionFormat_VersionFormatUnspecifi
 //
 
 @implementation GTLRLogging_LogMetric
-@dynamic descriptionProperty, filter, name;
+@dynamic descriptionProperty, filter, name, version;
 
 + (NSDictionary<NSString *, NSString *> *)propertyToJSONKeyMap {
   return @{ @"descriptionProperty" : @"description" };
@@ -301,7 +291,8 @@ NSString * const kGTLRLogging_LogSink_OutputVersionFormat_VersionFormatUnspecifi
 //
 
 @implementation GTLRLogging_LogSink
-@dynamic destination, filter, name, outputVersionFormat;
+@dynamic destination, endTime, filter, name, outputVersionFormat, startTime,
+         writerIdentity;
 @end
 
 
@@ -392,38 +383,6 @@ NSString * const kGTLRLogging_LogSink_OutputVersionFormat_VersionFormatUnspecifi
 
 @implementation GTLRLogging_SourceReference
 @dynamic repository, revisionId;
-@end
-
-
-// ----------------------------------------------------------------------------
-//
-//   GTLRLogging_Status
-//
-
-@implementation GTLRLogging_Status
-@dynamic code, details, message;
-
-+ (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
-  NSDictionary<NSString *, Class> *map = @{
-    @"details" : [GTLRLogging_StatusDetailsItem class]
-  };
-  return map;
-}
-
-@end
-
-
-// ----------------------------------------------------------------------------
-//
-//   GTLRLogging_StatusDetailsItem
-//
-
-@implementation GTLRLogging_StatusDetailsItem
-
-+ (Class)classForAdditionalProperties {
-  return [NSObject class];
-}
-
 @end
 
 

@@ -4,7 +4,8 @@
 // API:
 //   Google Civic Information API (civicinfo/v2)
 // Description:
-//   An API for accessing civic information.
+//   Provides polling places, early vote locations, contest data, election
+//   officials, and government representatives for U.S. residential addresses.
 // Documentation:
 //   https://developers.google.com/civic-information
 
@@ -43,8 +44,8 @@
 //
 
 @implementation GTLRCivicInfo_AdministrativeBody
-@dynamic absenteeVotingInfoUrl, ballotInfoUrl, correspondenceAddress,
-         electionInfoUrl, electionOfficials,
+@dynamic absenteeVotingInfoUrl, addressLines, ballotInfoUrl,
+         correspondenceAddress, electionInfoUrl, electionOfficials,
          electionRegistrationConfirmationUrl, electionRegistrationUrl,
          electionRulesUrl, hoursOfOperation, name, physicalAddress,
          voterServices, votingLocationFinderUrl;
@@ -55,6 +56,7 @@
 
 + (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
   NSDictionary<NSString *, Class> *map = @{
+    @"addressLines" : [NSString class],
     @"electionOfficials" : [GTLRCivicInfo_ElectionOfficial class],
     @"voter_services" : [NSString class]
   };
@@ -132,6 +134,36 @@
 
 // ----------------------------------------------------------------------------
 //
+//   GTLRCivicInfo_ContextParams
+//
+
+@implementation GTLRCivicInfo_ContextParams
+@dynamic clientProfile;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRCivicInfo_DivisionRepresentativeInfoRequest
+//
+
+@implementation GTLRCivicInfo_DivisionRepresentativeInfoRequest
+@dynamic contextParams;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRCivicInfo_DivisionSearchRequest
+//
+
+@implementation GTLRCivicInfo_DivisionSearchRequest
+@dynamic contextParams;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
 //   GTLRCivicInfo_DivisionSearchResponse
 //
 
@@ -193,6 +225,16 @@
 
 // ----------------------------------------------------------------------------
 //
+//   GTLRCivicInfo_ElectionsQueryRequest
+//
+
+@implementation GTLRCivicInfo_ElectionsQueryRequest
+@dynamic contextParams;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
 //   GTLRCivicInfo_ElectionsQueryResponse
 //
 
@@ -215,7 +257,7 @@
 //
 
 @implementation GTLRCivicInfo_ElectoralDistrict
-@dynamic identifier, name, scope;
+@dynamic identifier, kgForeignKey, name, scope;
 
 + (NSDictionary<NSString *, NSString *> *)propertyToJSONKeyMap {
   return @{ @"identifier" : @"id" };
@@ -344,6 +386,16 @@
 
 // ----------------------------------------------------------------------------
 //
+//   GTLRCivicInfo_RepresentativeInfoRequest
+//
+
+@implementation GTLRCivicInfo_RepresentativeInfoRequest
+@dynamic contextParams;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
 //   GTLRCivicInfo_RepresentativeInfoResponse
 //
 
@@ -392,6 +444,16 @@
 
 @implementation GTLRCivicInfo_Source
 @dynamic name, official;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRCivicInfo_VoterInfoRequest
+//
+
+@implementation GTLRCivicInfo_VoterInfoRequest
+@dynamic contextParams;
 @end
 
 

@@ -19,6 +19,10 @@
 NSString * const kGTLRSheetsDateTimeRenderOptionFormattedString = @"FORMATTED_STRING";
 NSString * const kGTLRSheetsDateTimeRenderOptionSerialNumber   = @"SERIAL_NUMBER";
 
+// insertDataOption
+NSString * const kGTLRSheetsInsertDataOptionInsertRows = @"INSERT_ROWS";
+NSString * const kGTLRSheetsInsertDataOptionOverwrite  = @"OVERWRITE";
+
 // majorDimension
 NSString * const kGTLRSheetsMajorDimensionColumns              = @"COLUMNS";
 NSString * const kGTLRSheetsMajorDimensionDimensionUnspecified = @"DIMENSION_UNSPECIFIED";
@@ -144,6 +148,60 @@ NSString * const kGTLRSheetsValueRenderOptionUnformattedValue = @"UNFORMATTED_VA
 
 @end
 
+@implementation GTLRSheetsQuery_SpreadsheetsValuesAppend
+
+@dynamic insertDataOption, range, spreadsheetId, valueInputOption;
+
++ (instancetype)queryWithObject:(GTLRSheets_ValueRange *)object
+                  spreadsheetId:(NSString *)spreadsheetId
+                          range:(NSString *)range {
+  if (object == nil) {
+    GTLR_DEBUG_ASSERT(object != nil, @"Got a nil object");
+    return nil;
+  }
+  NSArray *pathParams = @[
+    @"range", @"spreadsheetId"
+  ];
+  NSString *pathURITemplate = @"v4/spreadsheets/{spreadsheetId}/values/{range}:append";
+  GTLRSheetsQuery_SpreadsheetsValuesAppend *query =
+    [[self alloc] initWithPathURITemplate:pathURITemplate
+                               HTTPMethod:@"POST"
+                       pathParameterNames:pathParams];
+  query.bodyObject = object;
+  query.spreadsheetId = spreadsheetId;
+  query.range = range;
+  query.expectedObjectClass = [GTLRSheets_AppendValuesResponse class];
+  query.loggingName = @"sheets.spreadsheets.values.append";
+  return query;
+}
+
+@end
+
+@implementation GTLRSheetsQuery_SpreadsheetsValuesBatchClear
+
+@dynamic spreadsheetId;
+
++ (instancetype)queryWithObject:(GTLRSheets_BatchClearValuesRequest *)object
+                  spreadsheetId:(NSString *)spreadsheetId {
+  if (object == nil) {
+    GTLR_DEBUG_ASSERT(object != nil, @"Got a nil object");
+    return nil;
+  }
+  NSArray *pathParams = @[ @"spreadsheetId" ];
+  NSString *pathURITemplate = @"v4/spreadsheets/{spreadsheetId}/values:batchClear";
+  GTLRSheetsQuery_SpreadsheetsValuesBatchClear *query =
+    [[self alloc] initWithPathURITemplate:pathURITemplate
+                               HTTPMethod:@"POST"
+                       pathParameterNames:pathParams];
+  query.bodyObject = object;
+  query.spreadsheetId = spreadsheetId;
+  query.expectedObjectClass = [GTLRSheets_BatchClearValuesResponse class];
+  query.loggingName = @"sheets.spreadsheets.values.batchClear";
+  return query;
+}
+
+@end
+
 @implementation GTLRSheetsQuery_SpreadsheetsValuesBatchGet
 
 @dynamic dateTimeRenderOption, majorDimension, ranges, spreadsheetId,
@@ -191,6 +249,35 @@ NSString * const kGTLRSheetsValueRenderOptionUnformattedValue = @"UNFORMATTED_VA
   query.spreadsheetId = spreadsheetId;
   query.expectedObjectClass = [GTLRSheets_BatchUpdateValuesResponse class];
   query.loggingName = @"sheets.spreadsheets.values.batchUpdate";
+  return query;
+}
+
+@end
+
+@implementation GTLRSheetsQuery_SpreadsheetsValuesClear
+
+@dynamic range, spreadsheetId;
+
++ (instancetype)queryWithObject:(GTLRSheets_ClearValuesRequest *)object
+                  spreadsheetId:(NSString *)spreadsheetId
+                          range:(NSString *)range {
+  if (object == nil) {
+    GTLR_DEBUG_ASSERT(object != nil, @"Got a nil object");
+    return nil;
+  }
+  NSArray *pathParams = @[
+    @"range", @"spreadsheetId"
+  ];
+  NSString *pathURITemplate = @"v4/spreadsheets/{spreadsheetId}/values/{range}:clear";
+  GTLRSheetsQuery_SpreadsheetsValuesClear *query =
+    [[self alloc] initWithPathURITemplate:pathURITemplate
+                               HTTPMethod:@"POST"
+                       pathParameterNames:pathParams];
+  query.bodyObject = object;
+  query.spreadsheetId = spreadsheetId;
+  query.range = range;
+  query.expectedObjectClass = [GTLRSheets_ClearValuesResponse class];
+  query.loggingName = @"sheets.spreadsheets.values.clear";
   return query;
 }
 

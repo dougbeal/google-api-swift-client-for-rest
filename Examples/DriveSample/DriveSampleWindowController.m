@@ -396,7 +396,7 @@ NSString *const kKeychainItemName = @"DriveSample: Google Drive";
 }
 
 - (GTLRDrive_File *)selectedFileListEntry {
-  int rowIndex = [_fileListTable selectedRow];
+  NSInteger rowIndex = [_fileListTable selectedRow];
   if (rowIndex > -1) {
     GTLRDrive_File *item = _fileList.files[rowIndex];
     return item;
@@ -421,7 +421,7 @@ NSString *const kKeychainItemName = @"DriveSample: Google Drive";
 }
 
 - (id)selectedDetailItem {
-  int rowIndex = [_detailTable selectedRow];
+  NSInteger rowIndex = [_detailTable selectedRow];
   if (rowIndex > -1) {
     NSArray *array = [self detailCollectionArray];
     GTLRObject *item = array[rowIndex];
@@ -812,14 +812,14 @@ NSString *const kKeychainItemName = @"DriveSample: Google Drive";
 #pragma mark Sign In
 
 - (void)runSigninThenHandler:(void (^)(void))handler {
-  // Applications should have client ID and client secret strings
-  // hardcoded into the source, but the sample application asks the
-  // developer for the strings.
+    // Applications should have client ID hardcoded into the source
+    // but the sample application asks the developer for the strings.
+    // Client secret is now left blank.
   NSString *clientID = [_clientIDField stringValue];
   NSString *clientSecret = [_clientSecretField stringValue];
 
-  if (clientID.length == 0 || clientSecret.length == 0) {
-    // Remind the developer that client ID and client secret are needed
+  if (clientID.length == 0) {
+    // Remind the developer that client ID is needed. Client secret is now left blank
     [_clientIDButton performSelector:@selector(performClick:)
                           withObject:self
                           afterDelay:0.5];
@@ -1075,7 +1075,7 @@ NSString *const kKeychainItemName = @"DriveSample: Google Drive";
 }
 
 // Table view data source methods
-- (int)numberOfRowsInTableView:(NSTableView *)tableView {
+- (NSInteger)numberOfRowsInTableView:(NSTableView *)tableView {
   NSArray *array;
   if (tableView == _fileListTable) {
     array = _fileList.files;

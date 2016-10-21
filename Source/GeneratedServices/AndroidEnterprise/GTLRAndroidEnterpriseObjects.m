@@ -12,6 +12,44 @@
 
 // ----------------------------------------------------------------------------
 //
+//   GTLRAndroidEnterprise_Administrator
+//
+
+@implementation GTLRAndroidEnterprise_Administrator
+@dynamic email;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRAndroidEnterprise_AdministratorWebToken
+//
+
+@implementation GTLRAndroidEnterprise_AdministratorWebToken
+@dynamic kind, token;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRAndroidEnterprise_AdministratorWebTokenSpec
+//
+
+@implementation GTLRAndroidEnterprise_AdministratorWebTokenSpec
+@dynamic kind, parent, permission;
+
++ (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
+  NSDictionary<NSString *, Class> *map = @{
+    @"permission" : [NSString class]
+  };
+  return map;
+}
+
+@end
+
+
+// ----------------------------------------------------------------------------
+//
 //   GTLRAndroidEnterprise_AppRestrictionsSchema
 //
 
@@ -30,12 +68,22 @@
 
 // ----------------------------------------------------------------------------
 //
+//   GTLRAndroidEnterprise_AppRestrictionsSchemaChangeEvent
+//
+
+@implementation GTLRAndroidEnterprise_AppRestrictionsSchemaChangeEvent
+@dynamic productId;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
 //   GTLRAndroidEnterprise_AppRestrictionsSchemaRestriction
 //
 
 @implementation GTLRAndroidEnterprise_AppRestrictionsSchemaRestriction
 @dynamic defaultValue, descriptionProperty, entry, entryValue, key,
-         restrictionType, title;
+         nestedRestriction, restrictionType, title;
 
 + (NSDictionary<NSString *, NSString *> *)propertyToJSONKeyMap {
   return @{ @"descriptionProperty" : @"description" };
@@ -44,7 +92,8 @@
 + (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
   NSDictionary<NSString *, Class> *map = @{
     @"entry" : [NSString class],
-    @"entryValue" : [NSString class]
+    @"entryValue" : [NSString class],
+    @"nestedRestriction" : [GTLRAndroidEnterprise_AppRestrictionsSchemaRestriction class]
   };
   return map;
 }
@@ -82,11 +131,31 @@
 
 // ----------------------------------------------------------------------------
 //
+//   GTLRAndroidEnterprise_AppUpdateEvent
+//
+
+@implementation GTLRAndroidEnterprise_AppUpdateEvent
+@dynamic productId;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
 //   GTLRAndroidEnterprise_AppVersion
 //
 
 @implementation GTLRAndroidEnterprise_AppVersion
 @dynamic versionCode, versionString;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRAndroidEnterprise_AuthenticationToken
+//
+
+@implementation GTLRAndroidEnterprise_AuthenticationToken
+@dynamic kind, token;
 @end
 
 
@@ -188,10 +257,17 @@
 //
 
 @implementation GTLRAndroidEnterprise_Enterprise
-@dynamic identifier, kind, name, primaryDomain;
+@dynamic administrator, identifier, kind, name, primaryDomain;
 
 + (NSDictionary<NSString *, NSString *> *)propertyToJSONKeyMap {
   return @{ @"identifier" : @"id" };
+}
+
++ (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
+  NSDictionary<NSString *, Class> *map = @{
+    @"administrator" : [GTLRAndroidEnterprise_Administrator class]
+  };
+  return map;
 }
 
 @end
@@ -322,6 +398,16 @@
 
 // ----------------------------------------------------------------------------
 //
+//   GTLRAndroidEnterprise_InstallFailureEvent
+//
+
+@implementation GTLRAndroidEnterprise_InstallFailureEvent
+@dynamic deviceId, failureDetails, failureReason, productId, userId;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
 //   GTLRAndroidEnterprise_InstallsListResponse
 //
 
@@ -345,6 +431,147 @@
 
 @implementation GTLRAndroidEnterprise_LocalizedText
 @dynamic locale, text;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRAndroidEnterprise_ManagedConfiguration
+//
+
+@implementation GTLRAndroidEnterprise_ManagedConfiguration
+@dynamic kind, managedProperty, productId;
+
++ (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
+  NSDictionary<NSString *, Class> *map = @{
+    @"managedProperty" : [GTLRAndroidEnterprise_ManagedProperty class]
+  };
+  return map;
+}
+
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRAndroidEnterprise_ManagedConfigurationsForDeviceListResponse
+//
+
+@implementation GTLRAndroidEnterprise_ManagedConfigurationsForDeviceListResponse
+@dynamic kind, managedConfigurationForDevice;
+
++ (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
+  NSDictionary<NSString *, Class> *map = @{
+    @"managedConfigurationForDevice" : [GTLRAndroidEnterprise_ManagedConfiguration class]
+  };
+  return map;
+}
+
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRAndroidEnterprise_ManagedConfigurationsForUserListResponse
+//
+
+@implementation GTLRAndroidEnterprise_ManagedConfigurationsForUserListResponse
+@dynamic kind, managedConfigurationForUser;
+
++ (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
+  NSDictionary<NSString *, Class> *map = @{
+    @"managedConfigurationForUser" : [GTLRAndroidEnterprise_ManagedConfiguration class]
+  };
+  return map;
+}
+
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRAndroidEnterprise_ManagedProperty
+//
+
+@implementation GTLRAndroidEnterprise_ManagedProperty
+@dynamic key, valueBool, valueBundle, valueBundleArray, valueInteger,
+         valueString, valueStringArray;
+
++ (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
+  NSDictionary<NSString *, Class> *map = @{
+    @"valueBundleArray" : [GTLRAndroidEnterprise_ManagedPropertyBundle class],
+    @"valueStringArray" : [NSString class]
+  };
+  return map;
+}
+
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRAndroidEnterprise_ManagedPropertyBundle
+//
+
+@implementation GTLRAndroidEnterprise_ManagedPropertyBundle
+@dynamic managedProperty;
+
++ (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
+  NSDictionary<NSString *, Class> *map = @{
+    @"managedProperty" : [GTLRAndroidEnterprise_ManagedProperty class]
+  };
+  return map;
+}
+
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRAndroidEnterprise_NewPermissionsEvent
+//
+
+@implementation GTLRAndroidEnterprise_NewPermissionsEvent
+@dynamic approvedPermissions, productId, requestedPermissions;
+
++ (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
+  NSDictionary<NSString *, Class> *map = @{
+    @"approvedPermissions" : [NSString class],
+    @"requestedPermissions" : [NSString class]
+  };
+  return map;
+}
+
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRAndroidEnterprise_Notification
+//
+
+@implementation GTLRAndroidEnterprise_Notification
+@dynamic appRestrictionsSchemaChangeEvent, appUpdateEvent, enterpriseId,
+         installFailureEvent, newPermissionsEvent, productApprovalEvent,
+         productAvailabilityChangeEvent, timestampMillis;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRAndroidEnterprise_NotificationSet
+//
+
+@implementation GTLRAndroidEnterprise_NotificationSet
+@dynamic kind, notification, notificationSetId;
+
++ (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
+  NSDictionary<NSString *, Class> *map = @{
+    @"notification" : [GTLRAndroidEnterprise_Notification class]
+  };
+  return map;
+}
+
 @end
 
 
@@ -395,6 +622,26 @@
 
 // ----------------------------------------------------------------------------
 //
+//   GTLRAndroidEnterprise_ProductApprovalEvent
+//
+
+@implementation GTLRAndroidEnterprise_ProductApprovalEvent
+@dynamic approved, productId;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRAndroidEnterprise_ProductAvailabilityChangeEvent
+//
+
+@implementation GTLRAndroidEnterprise_ProductAvailabilityChangeEvent
+@dynamic availabilityStatus, productId;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
 //   GTLRAndroidEnterprise_ProductPermission
 //
 
@@ -437,7 +684,7 @@
 //
 
 @implementation GTLRAndroidEnterprise_ProductSet
-@dynamic kind, productId;
+@dynamic kind, productId, productSetBehavior;
 
 + (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
   NSDictionary<NSString *, Class> *map = @{
@@ -479,6 +726,59 @@
 
 // ----------------------------------------------------------------------------
 //
+//   GTLRAndroidEnterprise_ServiceAccount
+//
+
+@implementation GTLRAndroidEnterprise_ServiceAccount
+@dynamic key, kind, name;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRAndroidEnterprise_ServiceAccountKey
+//
+
+@implementation GTLRAndroidEnterprise_ServiceAccountKey
+@dynamic data, identifier, kind, type;
+
++ (NSDictionary<NSString *, NSString *> *)propertyToJSONKeyMap {
+  return @{ @"identifier" : @"id" };
+}
+
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRAndroidEnterprise_ServiceAccountKeysListResponse
+//
+
+@implementation GTLRAndroidEnterprise_ServiceAccountKeysListResponse
+@dynamic serviceAccountKey;
+
++ (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
+  NSDictionary<NSString *, Class> *map = @{
+    @"serviceAccountKey" : [GTLRAndroidEnterprise_ServiceAccountKey class]
+  };
+  return map;
+}
+
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRAndroidEnterprise_SignupInfo
+//
+
+@implementation GTLRAndroidEnterprise_SignupInfo
+@dynamic completionToken, kind, url;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
 //   GTLRAndroidEnterprise_StoreCluster
 //
 
@@ -506,7 +806,7 @@
 //
 
 @implementation GTLRAndroidEnterprise_StoreLayout
-@dynamic homepageId, kind;
+@dynamic homepageId, kind, storeLayoutType;
 @end
 
 
@@ -585,7 +885,8 @@
 //
 
 @implementation GTLRAndroidEnterprise_User
-@dynamic identifier, kind, primaryEmail;
+@dynamic accountIdentifier, accountType, displayName, identifier, kind,
+         managementType, primaryEmail;
 
 + (NSDictionary<NSString *, NSString *> *)propertyToJSONKeyMap {
   return @{ @"identifier" : @"id" };

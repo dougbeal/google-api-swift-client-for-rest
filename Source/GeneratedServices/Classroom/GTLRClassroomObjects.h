@@ -31,6 +31,8 @@
 @class GTLRClassroom_DriveFolder;
 @class GTLRClassroom_Form;
 @class GTLRClassroom_GlobalPermission;
+@class GTLRClassroom_Guardian;
+@class GTLRClassroom_GuardianInvitation;
 @class GTLRClassroom_Invitation;
 @class GTLRClassroom_Link;
 @class GTLRClassroom_Material;
@@ -108,6 +110,16 @@ GTLR_EXTERN NSString * const kGTLRClassroom_GlobalPermission_Permission_CreateCo
 GTLR_EXTERN NSString * const kGTLRClassroom_GlobalPermission_Permission_PermissionUnspecified;
 
 // ----------------------------------------------------------------------------
+// GTLRClassroom_GuardianInvitation.state
+
+/** Value: "COMPLETE" */
+GTLR_EXTERN NSString * const kGTLRClassroom_GuardianInvitation_State_Complete;
+/** Value: "GUARDIAN_INVITATION_STATE_UNSPECIFIED" */
+GTLR_EXTERN NSString * const kGTLRClassroom_GuardianInvitation_State_GuardianInvitationStateUnspecified;
+/** Value: "PENDING" */
+GTLR_EXTERN NSString * const kGTLRClassroom_GuardianInvitation_State_Pending;
+
+// ----------------------------------------------------------------------------
 // GTLRClassroom_Invitation.role
 
 /** Value: "COURSE_ROLE_UNSPECIFIED" */
@@ -166,7 +178,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *  Drive folder where attachments from student submissions are placed. This is
  *  only populated for course teachers.
  */
-@property(strong, nullable) GTLRClassroom_DriveFolder *studentWorkFolder;
+@property(nonatomic, strong, nullable) GTLRClassroom_DriveFolder *studentWorkFolder;
 
 @end
 
@@ -183,7 +195,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *  populated if the requesting user has permission to access it. Identifier and
  *  alternate_link fields are available, but others (e.g. title) may not be.
  */
-@property(strong, nullable) NSArray<GTLRClassroom_Attachment *> *attachments;
+@property(nonatomic, strong, nullable) NSArray<GTLRClassroom_Attachment *> *attachments;
 
 @end
 
@@ -195,16 +207,16 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
 @interface GTLRClassroom_Attachment : GTLRObject
 
 /** Google Drive file attachment. */
-@property(strong, nullable) GTLRClassroom_DriveFile *driveFile;
+@property(nonatomic, strong, nullable) GTLRClassroom_DriveFile *driveFile;
 
 /** Google Forms attachment. */
-@property(strong, nullable) GTLRClassroom_Form *form;
+@property(nonatomic, strong, nullable) GTLRClassroom_Form *form;
 
 /** Link attachment. */
-@property(strong, nullable) GTLRClassroom_Link *link;
+@property(nonatomic, strong, nullable) GTLRClassroom_Link *link;
 
 /** Youtube video attachment. */
-@property(strong, nullable) GTLRClassroom_YouTubeVideo *youTubeVideo;
+@property(nonatomic, strong, nullable) GTLRClassroom_YouTubeVideo *youTubeVideo;
 
 @end
 
@@ -215,19 +227,19 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
 @interface GTLRClassroom_Course : GTLRObject
 
 /** Absolute link to this course in the Classroom web UI. Read-only. */
-@property(copy, nullable) NSString *alternateLink;
+@property(nonatomic, copy, nullable) NSString *alternateLink;
 
 /**
  *  The email address of a Google group containing all members of the course.
  *  This group does not accept email and can only be used for permissions.
  *  Read-only.
  */
-@property(copy, nullable) NSString *courseGroupEmail;
+@property(nonatomic, copy, nullable) NSString *courseGroupEmail;
 
 /**
  *  Sets of materials that appear on the "about" page of this course. Read-only.
  */
-@property(strong, nullable) NSArray<GTLRClassroom_CourseMaterialSet *> *courseMaterialSets;
+@property(nonatomic, strong, nullable) NSArray<GTLRClassroom_CourseMaterialSet *> *courseMaterialSets;
 
 /**
  *  State of the course. If unspecified, the default state is `PROVISIONED`.
@@ -240,13 +252,13 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *    @arg @c kGTLRClassroom_Course_CourseState_Declined Value "DECLINED"
  *    @arg @c kGTLRClassroom_Course_CourseState_Provisioned Value "PROVISIONED"
  */
-@property(copy, nullable) NSString *courseState;
+@property(nonatomic, copy, nullable) NSString *courseState;
 
 /**
  *  Creation time of the course. Specifying this field in a course update mask
  *  results in an error. Read-only.
  */
-@property(copy, nullable) NSString *creationTime;
+@property(nonatomic, copy, nullable) NSString *creationTime;
 
 /**
  *  Optional description. For example, "We'll be learning about the structure of
@@ -256,20 +268,28 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  Optional heading for the description. For example, "Welcome to 10th Grade
  *  Biology." If set, this field must be a valid UTF-8 string and no longer than
  *  3600 characters.
  */
-@property(copy, nullable) NSString *descriptionHeading;
+@property(nonatomic, copy, nullable) NSString *descriptionHeading;
 
 /**
  *  Enrollment code to use when joining this course. Specifying this field in a
  *  course update mask results in an error. Read-only.
  */
-@property(copy, nullable) NSString *enrollmentCode;
+@property(nonatomic, copy, nullable) NSString *enrollmentCode;
+
+/**
+ *  Whether or not guardian notifications are enabled for this course.
+ *  Read-only.
+ *
+ *  Uses NSNumber of boolValue.
+ */
+@property(nonatomic, strong, nullable) NSNumber *guardiansEnabled;
 
 /**
  *  Identifier for this course assigned by Classroom. When creating a course,
@@ -280,13 +300,13 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  Name of the course. For example, "10th Grade Biology". The name is required.
  *  It must be between 1 and 750 characters and a valid UTF-8 string.
  */
-@property(copy, nullable) NSString *name;
+@property(nonatomic, copy, nullable) NSString *name;
 
 /**
  *  The identifier of the owner of a course. When specified as a parameter of a
@@ -296,39 +316,39 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *  must be set in a create request. Specifying this field in a course update
  *  mask results in an `INVALID_ARGUMENT` error.
  */
-@property(copy, nullable) NSString *ownerId;
+@property(nonatomic, copy, nullable) NSString *ownerId;
 
 /**
  *  Optional room location. For example, "301". If set, this field must be a
  *  valid UTF-8 string and no longer than 650 characters.
  */
-@property(copy, nullable) NSString *room;
+@property(nonatomic, copy, nullable) NSString *room;
 
 /**
  *  Section of the course. For example, "Period 2". If set, this field must be a
  *  valid UTF-8 string and no longer than 2800 characters.
  */
-@property(copy, nullable) NSString *section;
+@property(nonatomic, copy, nullable) NSString *section;
 
 /**
  *  Information about a Drive Folder that is shared with all teachers of the
  *  course. This field will only be set for teachers of the course and domain
  *  administrators. Read-only.
  */
-@property(strong, nullable) GTLRClassroom_DriveFolder *teacherFolder;
+@property(nonatomic, strong, nullable) GTLRClassroom_DriveFolder *teacherFolder;
 
 /**
  *  The email address of a Google group containing all teachers of the course.
  *  This group does not accept email and can only be used for permissions.
  *  Read-only.
  */
-@property(copy, nullable) NSString *teacherGroupEmail;
+@property(nonatomic, copy, nullable) NSString *teacherGroupEmail;
 
 /**
  *  Time of the most recent update to this course. Specifying this field in a
  *  course update mask results in an error. Read-only.
  */
-@property(copy, nullable) NSString *updateTime;
+@property(nonatomic, copy, nullable) NSString *updateTime;
 
 @end
 
@@ -354,7 +374,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *  indicates a project-scoped alias. Example: `p:abc123` This field has a
  *  maximum length of 256 characters.
  */
-@property(copy, nullable) NSString *alias;
+@property(nonatomic, copy, nullable) NSString *alias;
 
 @end
 
@@ -365,16 +385,16 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
 @interface GTLRClassroom_CourseMaterial : GTLRObject
 
 /** Google Drive file attachment. */
-@property(strong, nullable) GTLRClassroom_DriveFile *driveFile;
+@property(nonatomic, strong, nullable) GTLRClassroom_DriveFile *driveFile;
 
 /** Google Forms attachment. */
-@property(strong, nullable) GTLRClassroom_Form *form;
+@property(nonatomic, strong, nullable) GTLRClassroom_Form *form;
 
 /** Link atatchment. */
-@property(strong, nullable) GTLRClassroom_Link *link;
+@property(nonatomic, strong, nullable) GTLRClassroom_Link *link;
 
 /** Youtube video attachment. */
-@property(strong, nullable) GTLRClassroom_YouTubeVideo *youTubeVideo;
+@property(nonatomic, strong, nullable) GTLRClassroom_YouTubeVideo *youTubeVideo;
 
 @end
 
@@ -387,10 +407,10 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
 @interface GTLRClassroom_CourseMaterialSet : GTLRObject
 
 /** Materials attached to this set. */
-@property(strong, nullable) NSArray<GTLRClassroom_CourseMaterial *> *materials;
+@property(nonatomic, strong, nullable) NSArray<GTLRClassroom_CourseMaterial *> *materials;
 
 /** Title for this set. */
-@property(copy, nullable) NSString *title;
+@property(nonatomic, copy, nullable) NSString *title;
 
 @end
 
@@ -404,12 +424,12 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *  Absolute link to this course work in the Classroom web UI. This is only
  *  populated if `state` is `PUBLISHED`. Read-only.
  */
-@property(copy, nullable) NSString *alternateLink;
+@property(nonatomic, copy, nullable) NSString *alternateLink;
 
 /**
  *  Assignment details. This is populated only when `work_type` is `ASSIGNMENT`.
  */
-@property(strong, nullable) GTLRClassroom_Assignment *assignment;
+@property(nonatomic, strong, nullable) GTLRClassroom_Assignment *assignment;
 
 /**
  *  Whether this course work item is associated with the Developer Console
@@ -418,13 +438,13 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *associatedWithDeveloper;
+@property(nonatomic, strong, nullable) NSNumber *associatedWithDeveloper;
 
 /** Identifier of the course. Read-only. */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /** Timestamp when this course work was created. Read-only. */
-@property(copy, nullable) NSString *creationTime;
+@property(nonatomic, copy, nullable) NSString *creationTime;
 
 /**
  *  Optional description of this course work. If set, the description must be a
@@ -432,19 +452,19 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *
  *  Remapped to 'descriptionProperty' to avoid NSObject's 'description'.
  */
-@property(copy, nullable) NSString *descriptionProperty;
+@property(nonatomic, copy, nullable) NSString *descriptionProperty;
 
 /**
  *  Optional date, in UTC, that submissions for this this course work are due.
  *  This must be specified if `due_time` is specified.
  */
-@property(strong, nullable) GTLRClassroom_Date *dueDate;
+@property(nonatomic, strong, nullable) GTLRClassroom_Date *dueDate;
 
 /**
  *  Optional time of day, in UTC, that submissions for this this course work are
  *  due. This must be specified if `due_date` is specified.
  */
-@property(strong, nullable) GTLRClassroom_TimeOfDay *dueTime;
+@property(nonatomic, strong, nullable) GTLRClassroom_TimeOfDay *dueTime;
 
 /**
  *  Classroom-assigned identifier of this course work, unique per course.
@@ -452,27 +472,29 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
-/** Additional materials. */
-@property(strong, nullable) NSArray<GTLRClassroom_Material *> *materials;
+/**
+ *  Additional materials. CourseWork must have no more than 20 material items.
+ */
+@property(nonatomic, strong, nullable) NSArray<GTLRClassroom_Material *> *materials;
 
 /**
  *  Maximum grade for this course work. If zero or unspecified, this assignment
- *  is considered ungraded. This must be an integer value.
+ *  is considered ungraded. This must be a non-negative integer value.
  *
  *  Uses NSNumber of doubleValue.
  */
-@property(strong, nullable) NSNumber *maxPoints;
+@property(nonatomic, strong, nullable) NSNumber *maxPoints;
 
 /**
  *  Multiple choice question details. This is populated only when `work_type` is
  *  `MULTIPLE_CHOICE_QUESTION`.
  */
-@property(strong, nullable) GTLRClassroom_MultipleChoiceQuestion *multipleChoiceQuestion;
+@property(nonatomic, strong, nullable) GTLRClassroom_MultipleChoiceQuestion *multipleChoiceQuestion;
 
 /**
- *  Status of this course work.. If unspecified, the default state is `DRAFT`.
+ *  Status of this course work. If unspecified, the default state is `DRAFT`.
  *
  *  Likely values:
  *    @arg @c kGTLRClassroom_CourseWork_State_CourseWorkStateUnspecified Value
@@ -481,7 +503,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *    @arg @c kGTLRClassroom_CourseWork_State_Draft Value "DRAFT"
  *    @arg @c kGTLRClassroom_CourseWork_State_Published Value "PUBLISHED"
  */
-@property(copy, nullable) NSString *state;
+@property(nonatomic, copy, nullable) NSString *state;
 
 /**
  *  Setting to determine when students are allowed to modify submissions. If
@@ -495,16 +517,16 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *    @arg @c kGTLRClassroom_CourseWork_SubmissionModificationMode_SubmissionModificationModeUnspecified
  *        Value "SUBMISSION_MODIFICATION_MODE_UNSPECIFIED"
  */
-@property(copy, nullable) NSString *submissionModificationMode;
+@property(nonatomic, copy, nullable) NSString *submissionModificationMode;
 
 /**
  *  Title of this course work. The title must be a valid UTF-8 string containing
  *  between 1 and 3000 characters.
  */
-@property(copy, nullable) NSString *title;
+@property(nonatomic, copy, nullable) NSString *title;
 
 /** Timestamp of the most recent change to this course work. Read-only. */
-@property(copy, nullable) NSString *updateTime;
+@property(nonatomic, copy, nullable) NSString *updateTime;
 
 /**
  *  Type of this course work. The type is set when the course work is created
@@ -519,7 +541,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *    @arg @c kGTLRClassroom_CourseWork_WorkType_ShortAnswerQuestion Value
  *        "SHORT_ANSWER_QUESTION"
  */
-@property(copy, nullable) NSString *workType;
+@property(nonatomic, copy, nullable) NSString *workType;
 
 @end
 
@@ -541,14 +563,14 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *day;
+@property(nonatomic, strong, nullable) NSNumber *day;
 
 /**
  *  Month of year. Must be from 1 to 12.
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *month;
+@property(nonatomic, strong, nullable) NSNumber *month;
 
 /**
  *  Year of date. Must be from 1 to 9999, or 0 if specifying a date without a
@@ -556,7 +578,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *year;
+@property(nonatomic, strong, nullable) NSNumber *year;
 
 @end
 
@@ -567,20 +589,20 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
 @interface GTLRClassroom_DriveFile : GTLRObject
 
 /** URL that can be used to access the Drive item. Read-only. */
-@property(copy, nullable) NSString *alternateLink;
+@property(nonatomic, copy, nullable) NSString *alternateLink;
 
 /**
  *  Drive API resource ID.
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /** URL of a thumbnail image of the Drive item. Read-only. */
-@property(copy, nullable) NSString *thumbnailUrl;
+@property(nonatomic, copy, nullable) NSString *thumbnailUrl;
 
 /** Title of the Drive item. Read-only. */
-@property(copy, nullable) NSString *title;
+@property(nonatomic, copy, nullable) NSString *title;
 
 @end
 
@@ -591,17 +613,17 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
 @interface GTLRClassroom_DriveFolder : GTLRObject
 
 /** URL that can be used to access the Drive folder. Read-only. */
-@property(copy, nullable) NSString *alternateLink;
+@property(nonatomic, copy, nullable) NSString *alternateLink;
 
 /**
  *  Drive API resource ID.
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /** Title of the Drive folder. Read-only. */
-@property(copy, nullable) NSString *title;
+@property(nonatomic, copy, nullable) NSString *title;
 
 @end
 
@@ -623,20 +645,20 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
 @interface GTLRClassroom_Form : GTLRObject
 
 /** URL of the form. */
-@property(copy, nullable) NSString *formUrl;
+@property(nonatomic, copy, nullable) NSString *formUrl;
 
 /**
  *  URL of the form responses document. Only set if respsonses have been
  *  recorded and only when the requesting user is an editor of the form.
  *  Read-only.
  */
-@property(copy, nullable) NSString *responseUrl;
+@property(nonatomic, copy, nullable) NSString *responseUrl;
 
 /** URL of a thumbnail image of the Form. Read-only. */
-@property(copy, nullable) NSString *thumbnailUrl;
+@property(nonatomic, copy, nullable) NSString *thumbnailUrl;
 
 /** Title of the Form. Read-only. */
-@property(copy, nullable) NSString *title;
+@property(nonatomic, copy, nullable) NSString *title;
 
 @end
 
@@ -655,7 +677,66 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *    @arg @c kGTLRClassroom_GlobalPermission_Permission_PermissionUnspecified
  *        Value "PERMISSION_UNSPECIFIED"
  */
-@property(copy, nullable) NSString *permission;
+@property(nonatomic, copy, nullable) NSString *permission;
+
+@end
+
+
+/**
+ *  Association between a student and a guardian of that student. The guardian
+ *  may receive information about the student's course work.
+ */
+@interface GTLRClassroom_Guardian : GTLRObject
+
+/** Identifier for the guardian. */
+@property(nonatomic, copy, nullable) NSString *guardianId;
+
+/** User profile for the guardian. */
+@property(nonatomic, strong, nullable) GTLRClassroom_UserProfile *guardianProfile;
+
+/**
+ *  The email address to which the initial guardian invitation was sent. This
+ *  field is only visible to domain administrators.
+ */
+@property(nonatomic, copy, nullable) NSString *invitedEmailAddress;
+
+/** Identifier for the student to whom the guardian relationship applies. */
+@property(nonatomic, copy, nullable) NSString *studentId;
+
+@end
+
+
+/**
+ *  An invitation to become the guardian of a specified user, sent to a
+ *  specified email address.
+ */
+@interface GTLRClassroom_GuardianInvitation : GTLRObject
+
+/** The time that this invitation was created. Read-only. */
+@property(nonatomic, copy, nullable) NSString *creationTime;
+
+/** Unique identifier for this invitation. Read-only. */
+@property(nonatomic, copy, nullable) NSString *invitationId;
+
+/**
+ *  Email address that the invitation was sent to. This field is only visible to
+ *  domain administrators.
+ */
+@property(nonatomic, copy, nullable) NSString *invitedEmailAddress;
+
+/**
+ *  The state that this invitation is in.
+ *
+ *  Likely values:
+ *    @arg @c kGTLRClassroom_GuardianInvitation_State_Complete Value "COMPLETE"
+ *    @arg @c kGTLRClassroom_GuardianInvitation_State_GuardianInvitationStateUnspecified
+ *        Value "GUARDIAN_INVITATION_STATE_UNSPECIFIED"
+ *    @arg @c kGTLRClassroom_GuardianInvitation_State_Pending Value "PENDING"
+ */
+@property(nonatomic, copy, nullable) NSString *state;
+
+/** ID of the student (in standard format) */
+@property(nonatomic, copy, nullable) NSString *studentId;
 
 @end
 
@@ -666,14 +747,14 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
 @interface GTLRClassroom_Invitation : GTLRObject
 
 /** Identifier of the course to invite the user to. */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /**
  *  Identifier assigned by Classroom. Read-only.
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  Role to invite the user to have. Must not be `COURSE_ROLE_UNSPECIFIED`.
@@ -684,7 +765,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *    @arg @c kGTLRClassroom_Invitation_Role_Student Value "STUDENT"
  *    @arg @c kGTLRClassroom_Invitation_Role_Teacher Value "TEACHER"
  */
-@property(copy, nullable) NSString *role;
+@property(nonatomic, copy, nullable) NSString *role;
 
 /**
  *  Identifier of the invited user. When specified as a parameter of a request,
@@ -692,7 +773,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *  for the user * the email address of the user * the string literal `"me"`,
  *  indicating the requesting user
  */
-@property(copy, nullable) NSString *userId;
+@property(nonatomic, copy, nullable) NSString *userId;
 
 @end
 
@@ -703,16 +784,16 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
 @interface GTLRClassroom_Link : GTLRObject
 
 /** URL of a thumbnail image of the target URL. Read-only. */
-@property(copy, nullable) NSString *thumbnailUrl;
+@property(nonatomic, copy, nullable) NSString *thumbnailUrl;
 
 /** Title of the target of the URL. Read-only. */
-@property(copy, nullable) NSString *title;
+@property(nonatomic, copy, nullable) NSString *title;
 
 /**
  *  URL to link to. This must be a valid UTF-8 string containing between 1 and
  *  2024 characters.
  */
-@property(copy, nullable) NSString *url;
+@property(nonatomic, copy, nullable) NSString *url;
 
 @end
 
@@ -733,13 +814,13 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRClassroom_CourseAlias *> *aliases;
+@property(nonatomic, strong, nullable) NSArray<GTLRClassroom_CourseAlias *> *aliases;
 
 /**
  *  Token identifying the next page of results to return. If empty, no further
  *  results are available.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 @end
 
@@ -760,13 +841,13 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRClassroom_Course *> *courses;
+@property(nonatomic, strong, nullable) NSArray<GTLRClassroom_Course *> *courses;
 
 /**
  *  Token identifying the next page of results to return. If empty, no further
  *  results are available.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 @end
 
@@ -787,13 +868,68 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRClassroom_CourseWork *> *courseWork;
+@property(nonatomic, strong, nullable) NSArray<GTLRClassroom_CourseWork *> *courseWork;
 
 /**
  *  Token identifying the next page of results to return. If empty, no further
  *  results are available.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
+
+@end
+
+
+/**
+ *  Response when listing guardian invitations.
+ *
+ *  @note This class supports NSFastEnumeration and indexed subscripting over
+ *        its "guardianInvitations" property. If returned as the result of a
+ *        query, it should support automatic pagination (when @c
+ *        shouldFetchNextPages is enabled).
+ */
+@interface GTLRClassroom_ListGuardianInvitationsResponse : GTLRCollectionObject
+
+/**
+ *  Guardian invitations that matched the list request.
+ *
+ *  @note This property is used to support NSFastEnumeration and indexed
+ *        subscripting on this class.
+ */
+@property(nonatomic, strong, nullable) NSArray<GTLRClassroom_GuardianInvitation *> *guardianInvitations;
+
+/**
+ *  Token identifying the next page of results to return. If empty, no further
+ *  results are available.
+ */
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
+
+@end
+
+
+/**
+ *  Response when listing guardians.
+ *
+ *  @note This class supports NSFastEnumeration and indexed subscripting over
+ *        its "guardians" property. If returned as the result of a query, it
+ *        should support automatic pagination (when @c shouldFetchNextPages is
+ *        enabled).
+ */
+@interface GTLRClassroom_ListGuardiansResponse : GTLRCollectionObject
+
+/**
+ *  Guardians on this page of results that met the criteria specified in the
+ *  request.
+ *
+ *  @note This property is used to support NSFastEnumeration and indexed
+ *        subscripting on this class.
+ */
+@property(nonatomic, strong, nullable) NSArray<GTLRClassroom_Guardian *> *guardians;
+
+/**
+ *  Token identifying the next page of results to return. If empty, no further
+ *  results are available.
+ */
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 @end
 
@@ -814,13 +950,13 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRClassroom_Invitation *> *invitations;
+@property(nonatomic, strong, nullable) NSArray<GTLRClassroom_Invitation *> *invitations;
 
 /**
  *  Token identifying the next page of results to return. If empty, no further
  *  results are available.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 @end
 
@@ -839,7 +975,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *  Token identifying the next page of results to return. If empty, no further
  *  results are available.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /**
  *  Students who match the list request.
@@ -847,7 +983,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRClassroom_Student *> *students;
+@property(nonatomic, strong, nullable) NSArray<GTLRClassroom_Student *> *students;
 
 @end
 
@@ -866,7 +1002,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *  Token identifying the next page of results to return. If empty, no further
  *  results are available.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /**
  *  Student work that matches the request.
@@ -874,7 +1010,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRClassroom_StudentSubmission *> *studentSubmissions;
+@property(nonatomic, strong, nullable) NSArray<GTLRClassroom_StudentSubmission *> *studentSubmissions;
 
 @end
 
@@ -893,7 +1029,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *  Token identifying the next page of results to return. If empty, no further
  *  results are available.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /**
  *  Teachers who match the list request.
@@ -901,7 +1037,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRClassroom_Teacher *> *teachers;
+@property(nonatomic, strong, nullable) NSArray<GTLRClassroom_Teacher *> *teachers;
 
 @end
 
@@ -913,16 +1049,16 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
 @interface GTLRClassroom_Material : GTLRObject
 
 /** Google Drive file material. */
-@property(strong, nullable) GTLRClassroom_SharedDriveFile *driveFile;
+@property(nonatomic, strong, nullable) GTLRClassroom_SharedDriveFile *driveFile;
 
 /** Google Forms material. */
-@property(strong, nullable) GTLRClassroom_Form *form;
+@property(nonatomic, strong, nullable) GTLRClassroom_Form *form;
 
 /** Link material. */
-@property(strong, nullable) GTLRClassroom_Link *link;
+@property(nonatomic, strong, nullable) GTLRClassroom_Link *link;
 
 /** YouTube video material. */
-@property(strong, nullable) GTLRClassroom_YouTubeVideo *youtubeVideo;
+@property(nonatomic, strong, nullable) GTLRClassroom_YouTubeVideo *youtubeVideo;
 
 @end
 
@@ -932,8 +1068,11 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  */
 @interface GTLRClassroom_ModifyAttachmentsRequest : GTLRObject
 
-/** Attachments to add. This may only contain link attachments. */
-@property(strong, nullable) NSArray<GTLRClassroom_Attachment *> *addAttachments;
+/**
+ *  Attachments to add. A student submission may not have more than 20
+ *  attachments. This may only contain link attachments.
+ */
+@property(nonatomic, strong, nullable) NSArray<GTLRClassroom_Attachment *> *addAttachments;
 
 @end
 
@@ -944,7 +1083,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
 @interface GTLRClassroom_MultipleChoiceQuestion : GTLRObject
 
 /** Possible choices. */
-@property(strong, nullable) NSArray<NSString *> *choices;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *choices;
 
 @end
 
@@ -955,7 +1094,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
 @interface GTLRClassroom_MultipleChoiceSubmission : GTLRObject
 
 /** Student's select choice. */
-@property(copy, nullable) NSString *answer;
+@property(nonatomic, copy, nullable) NSString *answer;
 
 @end
 
@@ -966,16 +1105,16 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
 @interface GTLRClassroom_Name : GTLRObject
 
 /** The user's last name. Read-only. */
-@property(copy, nullable) NSString *familyName;
+@property(nonatomic, copy, nullable) NSString *familyName;
 
 /**
  *  The user's full name formed by concatenating the first and last name values.
  *  Read-only.
  */
-@property(copy, nullable) NSString *fullName;
+@property(nonatomic, copy, nullable) NSString *fullName;
 
 /** The user's first name. Read-only. */
-@property(copy, nullable) NSString *givenName;
+@property(nonatomic, copy, nullable) NSString *givenName;
 
 @end
 
@@ -1000,7 +1139,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
 @interface GTLRClassroom_SharedDriveFile : GTLRObject
 
 /** Drive file details. */
-@property(strong, nullable) GTLRClassroom_DriveFile *driveFile;
+@property(nonatomic, strong, nullable) GTLRClassroom_DriveFile *driveFile;
 
 /**
  *  Mechanism by which students access the Drive item.
@@ -1013,7 +1152,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *        "UNKNOWN_SHARE_MODE"
  *    @arg @c kGTLRClassroom_SharedDriveFile_ShareMode_View Value "VIEW"
  */
-@property(copy, nullable) NSString *shareMode;
+@property(nonatomic, copy, nullable) NSString *shareMode;
 
 @end
 
@@ -1024,7 +1163,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
 @interface GTLRClassroom_ShortAnswerSubmission : GTLRObject
 
 /** Student response to a short-answer question. */
-@property(copy, nullable) NSString *answer;
+@property(nonatomic, copy, nullable) NSString *answer;
 
 @end
 
@@ -1035,16 +1174,16 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
 @interface GTLRClassroom_Student : GTLRObject
 
 /** Identifier of the course. Read-only. */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /** Global user information for the student. Read-only. */
-@property(strong, nullable) GTLRClassroom_UserProfile *profile;
+@property(nonatomic, strong, nullable) GTLRClassroom_UserProfile *profile;
 
 /**
  *  Information about a Drive Folder for this student's work in this course.
  *  Only visible to the student and domain administrators. Read-only.
  */
-@property(strong, nullable) GTLRClassroom_DriveFolder *studentWorkFolder;
+@property(nonatomic, strong, nullable) GTLRClassroom_DriveFolder *studentWorkFolder;
 
 /**
  *  Identifier of the user. When specified as a parameter of a request, this
@@ -1052,7 +1191,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *  user * the email address of the user * the string literal `"me"`, indicating
  *  the requesting user
  */
-@property(copy, nullable) NSString *userId;
+@property(nonatomic, copy, nullable) NSString *userId;
 
 @end
 
@@ -1066,18 +1205,18 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
 @interface GTLRClassroom_StudentSubmission : GTLRObject
 
 /** Absolute link to the submission in the Classroom web UI. Read-only. */
-@property(copy, nullable) NSString *alternateLink;
+@property(nonatomic, copy, nullable) NSString *alternateLink;
 
 /**
- *  Optional grade. If unset, no grade was set. This must be an integer value.
- *  This may be modified only by course teachers.
+ *  Optional grade. If unset, no grade was set. This must be a non-negative
+ *  integer value. This may be modified only by course teachers.
  *
  *  Uses NSNumber of doubleValue.
  */
-@property(strong, nullable) NSNumber *assignedGrade;
+@property(nonatomic, strong, nullable) NSNumber *assignedGrade;
 
 /** Submission content when course_work_type is ASSIGNMENT . */
-@property(strong, nullable) GTLRClassroom_AssignmentSubmission *assignmentSubmission;
+@property(nonatomic, strong, nullable) GTLRClassroom_AssignmentSubmission *assignmentSubmission;
 
 /**
  *  Whether this student submission is associated with the Developer Console
@@ -1086,13 +1225,13 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *associatedWithDeveloper;
+@property(nonatomic, strong, nullable) NSNumber *associatedWithDeveloper;
 
 /** Identifier of the course. Read-only. */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /** Identifier for the course work this corresponds to. Read-only. */
-@property(copy, nullable) NSString *courseWorkId;
+@property(nonatomic, copy, nullable) NSString *courseWorkId;
 
 /**
  *  Type of course work this submission is for. Read-only.
@@ -1107,21 +1246,22 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *    @arg @c kGTLRClassroom_StudentSubmission_CourseWorkType_ShortAnswerQuestion
  *        Value "SHORT_ANSWER_QUESTION"
  */
-@property(copy, nullable) NSString *courseWorkType;
+@property(nonatomic, copy, nullable) NSString *courseWorkType;
 
 /**
- *  Creation time of this submission.. This may be unset if the student has not
+ *  Creation time of this submission. This may be unset if the student has not
  *  accessed this item. Read-only.
  */
-@property(copy, nullable) NSString *creationTime;
+@property(nonatomic, copy, nullable) NSString *creationTime;
 
 /**
- *  Optional pending grade. If unset, no grade was set. This must be an integer
- *  value. This is only visible to and modifiable by course teachers.
+ *  Optional pending grade. If unset, no grade was set. This must be a
+ *  non-negative integer value. This is only visible to and modifiable by course
+ *  teachers.
  *
  *  Uses NSNumber of doubleValue.
  */
-@property(strong, nullable) NSNumber *draftGrade;
+@property(nonatomic, strong, nullable) NSNumber *draftGrade;
 
 /**
  *  Classroom-assigned Identifier for the student submission. This is unique
@@ -1129,20 +1269,20 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  Whether this submission is late. Read-only.
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *late;
+@property(nonatomic, strong, nullable) NSNumber *late;
 
-/** Submission content when course_work_type is MUTIPLE_CHOICE_QUESTION. */
-@property(strong, nullable) GTLRClassroom_MultipleChoiceSubmission *multipleChoiceSubmission;
+/** Submission content when course_work_type is MULTIPLE_CHOICE_QUESTION. */
+@property(nonatomic, strong, nullable) GTLRClassroom_MultipleChoiceSubmission *multipleChoiceSubmission;
 
 /** Submission content when course_work_type is SHORT_ANSWER_QUESTION. */
-@property(strong, nullable) GTLRClassroom_ShortAnswerSubmission *shortAnswerSubmission;
+@property(nonatomic, strong, nullable) GTLRClassroom_ShortAnswerSubmission *shortAnswerSubmission;
 
 /**
  *  State of this submission. Read-only.
@@ -1157,16 +1297,16 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *        Value "SUBMISSION_STATE_UNSPECIFIED"
  *    @arg @c kGTLRClassroom_StudentSubmission_State_TurnedIn Value "TURNED_IN"
  */
-@property(copy, nullable) NSString *state;
+@property(nonatomic, copy, nullable) NSString *state;
 
 /**
  *  Last update time of this submission. This may be unset if the student has
  *  not accessed this item. Read-only.
  */
-@property(copy, nullable) NSString *updateTime;
+@property(nonatomic, copy, nullable) NSString *updateTime;
 
 /** Identifier for the student that owns this submission. Read-only. */
-@property(copy, nullable) NSString *userId;
+@property(nonatomic, copy, nullable) NSString *userId;
 
 @end
 
@@ -1177,10 +1317,10 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
 @interface GTLRClassroom_Teacher : GTLRObject
 
 /** Identifier of the course. Read-only. */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /** Global user information for the teacher. Read-only. */
-@property(strong, nullable) GTLRClassroom_UserProfile *profile;
+@property(nonatomic, strong, nullable) GTLRClassroom_UserProfile *profile;
 
 /**
  *  Identifier of the user. When specified as a parameter of a request, this
@@ -1188,7 +1328,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *  user * the email address of the user * the string literal `"me"`, indicating
  *  the requesting user
  */
-@property(copy, nullable) NSString *userId;
+@property(nonatomic, copy, nullable) NSString *userId;
 
 @end
 
@@ -1206,21 +1346,21 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *hours;
+@property(nonatomic, strong, nullable) NSNumber *hours;
 
 /**
  *  Minutes of hour of day. Must be from 0 to 59.
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *minutes;
+@property(nonatomic, strong, nullable) NSNumber *minutes;
 
 /**
  *  Fractions of seconds in nanoseconds. Must be from 0 to 999,999,999.
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *nanos;
+@property(nonatomic, strong, nullable) NSNumber *nanos;
 
 /**
  *  Seconds of minutes of the time. Must normally be from 0 to 59. An API may
@@ -1228,7 +1368,7 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *seconds;
+@property(nonatomic, strong, nullable) NSNumber *seconds;
 
 @end
 
@@ -1246,23 +1386,23 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
 @interface GTLRClassroom_UserProfile : GTLRObject
 
 /** Email address of the user. Read-only. */
-@property(copy, nullable) NSString *emailAddress;
+@property(nonatomic, copy, nullable) NSString *emailAddress;
 
 /**
  *  Identifier of the user. Read-only.
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /** Name of the user. Read-only. */
-@property(strong, nullable) GTLRClassroom_Name *name;
+@property(nonatomic, strong, nullable) GTLRClassroom_Name *name;
 
 /** Global permissions of the user. Read-only. */
-@property(strong, nullable) NSArray<GTLRClassroom_GlobalPermission *> *permissions;
+@property(nonatomic, strong, nullable) NSArray<GTLRClassroom_GlobalPermission *> *permissions;
 
 /** URL of user's profile photo. Read-only. */
-@property(copy, nullable) NSString *photoUrl;
+@property(nonatomic, copy, nullable) NSString *photoUrl;
 
 @end
 
@@ -1273,20 +1413,20 @@ GTLR_EXTERN NSString * const kGTLRClassroom_StudentSubmission_State_TurnedIn;
 @interface GTLRClassroom_YouTubeVideo : GTLRObject
 
 /** URL that can be used to view the YouTube video. Read-only. */
-@property(copy, nullable) NSString *alternateLink;
+@property(nonatomic, copy, nullable) NSString *alternateLink;
 
 /**
  *  YouTube API resource ID.
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /** URL of a thumbnail image of the YouTube video. Read-only. */
-@property(copy, nullable) NSString *thumbnailUrl;
+@property(nonatomic, copy, nullable) NSString *thumbnailUrl;
 
 /** Title of the YouTube video. Read-only. */
-@property(copy, nullable) NSString *title;
+@property(nonatomic, copy, nullable) NSString *title;
 
 @end
 

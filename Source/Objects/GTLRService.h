@@ -22,6 +22,7 @@
 #import "GTLRBatchQuery.h"
 #import "GTLRBatchResult.h"
 #import "GTLRDateTime.h"
+#import "GTLRDuration.h"
 #import "GTLRErrorObject.h"
 #import "GTLRObject.h"
 #import "GTLRQuery.h"
@@ -66,11 +67,6 @@ extern NSString *const kGTLRServiceErrorContentIDKey;
  *  were not originally foundation errors.
  */
 extern NSString *const kGTLRErrorObjectDomain;
-
-/**
- *  The userInfo key for the server error string for errors with domain kGTLRErrorObjectDomain.
- */
-extern NSString *const kGTLRServiceErrorStringKey;
 
 /**
  *  The userInfo key for a GTLRErrorObject for errors with domain kGTLRErrorObjectDomain
@@ -149,7 +145,7 @@ typedef void (^GTLRServiceUploadProgressBlock)(GTLRServiceTicket *progressTicket
  *                            kGTMSessionFetcherStatusDomain then the error's code is the server
  *                            response status.  Details on the error from the server are available
  *                            in the userInfo via the keys kGTLRStructuredErrorKey and
- *                            kGTLRServiceErrorStringKey.
+ *                            NSLocalizedDescriptionKey.
  *
  *  @return YES if the request should be retried.
  */
@@ -835,6 +831,14 @@ typedef void (^GTLRServiceTestBlock)(GTLRServiceTicket *testTicket,
  */
 - (nullable GTLRQuery *)queryForRequestID:(NSString *)requestID;
 
+@end
+
+/**
+ *  The library doesn't use GTLRObjectCollectionImpl, but it provides a concrete implementation
+ *  so the methods do not cause private method errors in Xcode/AppStore review.
+ */
+@interface GTLRObjectCollectionImpl : GTLRObject
+@property(nonatomic, copy) NSString *nextPageToken;
 @end
 
 NS_ASSUME_NONNULL_END

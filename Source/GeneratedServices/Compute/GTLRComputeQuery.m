@@ -20,7 +20,7 @@
 
 @implementation GTLRComputeQuery_AddressesAggregatedList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -118,7 +118,7 @@
 
 @implementation GTLRComputeQuery_AddressesList
 
-@dynamic filter, maxResults, pageToken, project, region;
+@dynamic filter, maxResults, orderBy, pageToken, project, region;
 
 + (instancetype)queryWithProject:(NSString *)project
                           region:(NSString *)region {
@@ -141,7 +141,7 @@
 
 @implementation GTLRComputeQuery_AutoscalersAggregatedList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -251,7 +251,7 @@
 
 @implementation GTLRComputeQuery_AutoscalersList
 
-@dynamic filter, maxResults, pageToken, project, zoneProperty;
+@dynamic filter, maxResults, orderBy, pageToken, project, zoneProperty;
 
 + (NSDictionary<NSString *, NSString *> *)parameterNameMap {
   return @{ @"zoneProperty" : @"zone" };
@@ -446,7 +446,7 @@
 
 @implementation GTLRComputeQuery_BackendServicesList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -523,7 +523,7 @@
 
 @implementation GTLRComputeQuery_DisksAggregatedList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -668,7 +668,7 @@
 
 @implementation GTLRComputeQuery_DisksList
 
-@dynamic filter, maxResults, pageToken, project, zoneProperty;
+@dynamic filter, maxResults, orderBy, pageToken, project, zoneProperty;
 
 + (NSDictionary<NSString *, NSString *> *)parameterNameMap {
   return @{ @"zoneProperty" : @"zone" };
@@ -730,7 +730,7 @@
 
 @implementation GTLRComputeQuery_DiskTypesAggregatedList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -778,7 +778,7 @@
 
 @implementation GTLRComputeQuery_DiskTypesList
 
-@dynamic filter, maxResults, pageToken, project, zoneProperty;
+@dynamic filter, maxResults, orderBy, pageToken, project, zoneProperty;
 
 + (NSDictionary<NSString *, NSString *> *)parameterNameMap {
   return @{ @"zoneProperty" : @"zone" };
@@ -876,7 +876,7 @@
 
 @implementation GTLRComputeQuery_FirewallsList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -953,7 +953,7 @@
 
 @implementation GTLRComputeQuery_ForwardingRulesAggregatedList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -1051,7 +1051,7 @@
 
 @implementation GTLRComputeQuery_ForwardingRulesList
 
-@dynamic filter, maxResults, pageToken, project, region;
+@dynamic filter, maxResults, orderBy, pageToken, project, region;
 
 + (instancetype)queryWithProject:(NSString *)project
                           region:(NSString *)region {
@@ -1176,7 +1176,7 @@
 
 @implementation GTLRComputeQuery_GlobalAddressesList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -1266,7 +1266,7 @@
 
 @implementation GTLRComputeQuery_GlobalForwardingRulesList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -1314,7 +1314,7 @@
 
 @implementation GTLRComputeQuery_GlobalOperationsAggregatedList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -1378,7 +1378,7 @@
 
 @implementation GTLRComputeQuery_GlobalOperationsList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -1390,6 +1390,154 @@
   query.project = project;
   query.expectedObjectClass = [GTLRCompute_OperationList class];
   query.loggingName = @"compute.globalOperations.list";
+  return query;
+}
+
+@end
+
+@implementation GTLRComputeQuery_HealthChecksDelete
+
+@dynamic healthCheck, project;
+
++ (instancetype)queryWithProject:(NSString *)project
+                     healthCheck:(NSString *)healthCheck {
+  NSArray *pathParams = @[
+    @"healthCheck", @"project"
+  ];
+  NSString *pathURITemplate = @"{project}/global/healthChecks/{healthCheck}";
+  GTLRComputeQuery_HealthChecksDelete *query =
+    [[self alloc] initWithPathURITemplate:pathURITemplate
+                               HTTPMethod:@"DELETE"
+                       pathParameterNames:pathParams];
+  query.project = project;
+  query.healthCheck = healthCheck;
+  query.expectedObjectClass = [GTLRCompute_Operation class];
+  query.loggingName = @"compute.healthChecks.delete";
+  return query;
+}
+
+@end
+
+@implementation GTLRComputeQuery_HealthChecksGet
+
+@dynamic healthCheck, project;
+
++ (instancetype)queryWithProject:(NSString *)project
+                     healthCheck:(NSString *)healthCheck {
+  NSArray *pathParams = @[
+    @"healthCheck", @"project"
+  ];
+  NSString *pathURITemplate = @"{project}/global/healthChecks/{healthCheck}";
+  GTLRComputeQuery_HealthChecksGet *query =
+    [[self alloc] initWithPathURITemplate:pathURITemplate
+                               HTTPMethod:nil
+                       pathParameterNames:pathParams];
+  query.project = project;
+  query.healthCheck = healthCheck;
+  query.expectedObjectClass = [GTLRCompute_HealthCheck class];
+  query.loggingName = @"compute.healthChecks.get";
+  return query;
+}
+
+@end
+
+@implementation GTLRComputeQuery_HealthChecksInsert
+
+@dynamic project;
+
++ (instancetype)queryWithObject:(GTLRCompute_HealthCheck *)object
+                        project:(NSString *)project {
+  if (object == nil) {
+    GTLR_DEBUG_ASSERT(object != nil, @"Got a nil object");
+    return nil;
+  }
+  NSArray *pathParams = @[ @"project" ];
+  NSString *pathURITemplate = @"{project}/global/healthChecks";
+  GTLRComputeQuery_HealthChecksInsert *query =
+    [[self alloc] initWithPathURITemplate:pathURITemplate
+                               HTTPMethod:@"POST"
+                       pathParameterNames:pathParams];
+  query.bodyObject = object;
+  query.project = project;
+  query.expectedObjectClass = [GTLRCompute_Operation class];
+  query.loggingName = @"compute.healthChecks.insert";
+  return query;
+}
+
+@end
+
+@implementation GTLRComputeQuery_HealthChecksList
+
+@dynamic filter, maxResults, orderBy, pageToken, project;
+
++ (instancetype)queryWithProject:(NSString *)project {
+  NSArray *pathParams = @[ @"project" ];
+  NSString *pathURITemplate = @"{project}/global/healthChecks";
+  GTLRComputeQuery_HealthChecksList *query =
+    [[self alloc] initWithPathURITemplate:pathURITemplate
+                               HTTPMethod:nil
+                       pathParameterNames:pathParams];
+  query.project = project;
+  query.expectedObjectClass = [GTLRCompute_HealthCheckList class];
+  query.loggingName = @"compute.healthChecks.list";
+  return query;
+}
+
+@end
+
+@implementation GTLRComputeQuery_HealthChecksPatch
+
+@dynamic healthCheck, project;
+
++ (instancetype)queryWithObject:(GTLRCompute_HealthCheck *)object
+                        project:(NSString *)project
+                    healthCheck:(NSString *)healthCheck {
+  if (object == nil) {
+    GTLR_DEBUG_ASSERT(object != nil, @"Got a nil object");
+    return nil;
+  }
+  NSArray *pathParams = @[
+    @"healthCheck", @"project"
+  ];
+  NSString *pathURITemplate = @"{project}/global/healthChecks/{healthCheck}";
+  GTLRComputeQuery_HealthChecksPatch *query =
+    [[self alloc] initWithPathURITemplate:pathURITemplate
+                               HTTPMethod:@"PATCH"
+                       pathParameterNames:pathParams];
+  query.bodyObject = object;
+  query.project = project;
+  query.healthCheck = healthCheck;
+  query.expectedObjectClass = [GTLRCompute_Operation class];
+  query.loggingName = @"compute.healthChecks.patch";
+  return query;
+}
+
+@end
+
+@implementation GTLRComputeQuery_HealthChecksUpdate
+
+@dynamic healthCheck, project;
+
++ (instancetype)queryWithObject:(GTLRCompute_HealthCheck *)object
+                        project:(NSString *)project
+                    healthCheck:(NSString *)healthCheck {
+  if (object == nil) {
+    GTLR_DEBUG_ASSERT(object != nil, @"Got a nil object");
+    return nil;
+  }
+  NSArray *pathParams = @[
+    @"healthCheck", @"project"
+  ];
+  NSString *pathURITemplate = @"{project}/global/healthChecks/{healthCheck}";
+  GTLRComputeQuery_HealthChecksUpdate *query =
+    [[self alloc] initWithPathURITemplate:pathURITemplate
+                               HTTPMethod:@"PUT"
+                       pathParameterNames:pathParams];
+  query.bodyObject = object;
+  query.project = project;
+  query.healthCheck = healthCheck;
+  query.expectedObjectClass = [GTLRCompute_Operation class];
+  query.loggingName = @"compute.healthChecks.update";
   return query;
 }
 
@@ -1468,7 +1616,7 @@
 
 @implementation GTLRComputeQuery_HttpHealthChecksList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -1616,7 +1764,7 @@
 
 @implementation GTLRComputeQuery_HttpsHealthChecksList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -1816,7 +1964,7 @@
 
 @implementation GTLRComputeQuery_ImagesList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -1870,7 +2018,7 @@
 
 @implementation GTLRComputeQuery_InstanceGroupManagersAggregatedList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -2015,7 +2163,7 @@
 
 @implementation GTLRComputeQuery_InstanceGroupManagersList
 
-@dynamic filter, maxResults, pageToken, project, zoneProperty;
+@dynamic filter, maxResults, orderBy, pageToken, project, zoneProperty;
 
 + (NSDictionary<NSString *, NSString *> *)parameterNameMap {
   return @{ @"zoneProperty" : @"zone" };
@@ -2242,7 +2390,7 @@
 
 @implementation GTLRComputeQuery_InstanceGroupsAggregatedList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -2352,7 +2500,7 @@
 
 @implementation GTLRComputeQuery_InstanceGroupsList
 
-@dynamic filter, maxResults, pageToken, project, zoneProperty;
+@dynamic filter, maxResults, orderBy, pageToken, project, zoneProperty;
 
 + (NSDictionary<NSString *, NSString *> *)parameterNameMap {
   return @{ @"zoneProperty" : @"zone" };
@@ -2379,7 +2527,8 @@
 
 @implementation GTLRComputeQuery_InstanceGroupsListInstances
 
-@dynamic filter, instanceGroup, maxResults, pageToken, project, zoneProperty;
+@dynamic filter, instanceGroup, maxResults, orderBy, pageToken, project,
+         zoneProperty;
 
 + (NSDictionary<NSString *, NSString *> *)parameterNameMap {
   return @{ @"zoneProperty" : @"zone" };
@@ -2521,7 +2670,7 @@
 
 @implementation GTLRComputeQuery_InstancesAggregatedList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -2759,7 +2908,7 @@
 
 @implementation GTLRComputeQuery_InstancesList
 
-@dynamic filter, maxResults, pageToken, project, zoneProperty;
+@dynamic filter, maxResults, orderBy, pageToken, project, zoneProperty;
 
 + (NSDictionary<NSString *, NSString *> *)parameterNameMap {
   return @{ @"zoneProperty" : @"zone" };
@@ -3152,7 +3301,7 @@
 
 @implementation GTLRComputeQuery_InstanceTemplatesList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -3194,7 +3343,7 @@
 
 @implementation GTLRComputeQuery_MachineTypesAggregatedList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -3242,7 +3391,7 @@
 
 @implementation GTLRComputeQuery_MachineTypesList
 
-@dynamic filter, maxResults, pageToken, project, zoneProperty;
+@dynamic filter, maxResults, orderBy, pageToken, project, zoneProperty;
 
 + (NSDictionary<NSString *, NSString *> *)parameterNameMap {
   return @{ @"zoneProperty" : @"zone" };
@@ -3340,7 +3489,7 @@
 
 @implementation GTLRComputeQuery_NetworksList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -3527,7 +3676,7 @@
 
 @implementation GTLRComputeQuery_RegionOperationsList
 
-@dynamic filter, maxResults, pageToken, project, region;
+@dynamic filter, maxResults, orderBy, pageToken, project, region;
 
 + (instancetype)queryWithProject:(NSString *)project
                           region:(NSString *)region {
@@ -3573,7 +3722,7 @@
 
 @implementation GTLRComputeQuery_RegionsList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -3592,7 +3741,7 @@
 
 @implementation GTLRComputeQuery_RoutersAggregatedList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -3715,7 +3864,7 @@
 
 @implementation GTLRComputeQuery_RoutersList
 
-@dynamic filter, maxResults, pageToken, project, region;
+@dynamic filter, maxResults, orderBy, pageToken, project, region;
 
 + (instancetype)queryWithProject:(NSString *)project
                           region:(NSString *)region {
@@ -3762,6 +3911,37 @@
   query.router = router;
   query.expectedObjectClass = [GTLRCompute_Operation class];
   query.loggingName = @"compute.routers.patch";
+  return query;
+}
+
+@end
+
+@implementation GTLRComputeQuery_RoutersPreview
+
+@dynamic project, region, router;
+
++ (instancetype)queryWithObject:(GTLRCompute_Router *)object
+                        project:(NSString *)project
+                         region:(NSString *)region
+                         router:(NSString *)router {
+  if (object == nil) {
+    GTLR_DEBUG_ASSERT(object != nil, @"Got a nil object");
+    return nil;
+  }
+  NSArray *pathParams = @[
+    @"project", @"region", @"router"
+  ];
+  NSString *pathURITemplate = @"{project}/regions/{region}/routers/{router}/preview";
+  GTLRComputeQuery_RoutersPreview *query =
+    [[self alloc] initWithPathURITemplate:pathURITemplate
+                               HTTPMethod:@"POST"
+                       pathParameterNames:pathParams];
+  query.bodyObject = object;
+  query.project = project;
+  query.region = region;
+  query.router = router;
+  query.expectedObjectClass = [GTLRCompute_RoutersPreviewResponse class];
+  query.loggingName = @"compute.routers.preview";
   return query;
 }
 
@@ -3871,7 +4051,7 @@
 
 @implementation GTLRComputeQuery_RoutesList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -3936,7 +4116,7 @@
 
 @implementation GTLRComputeQuery_SnapshotsList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -4026,7 +4206,7 @@
 
 @implementation GTLRComputeQuery_SslCertificatesList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -4045,7 +4225,7 @@
 
 @implementation GTLRComputeQuery_SubnetworksAggregatedList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -4143,7 +4323,7 @@
 
 @implementation GTLRComputeQuery_SubnetworksList
 
-@dynamic filter, maxResults, pageToken, project, region;
+@dynamic filter, maxResults, orderBy, pageToken, project, region;
 
 + (instancetype)queryWithProject:(NSString *)project
                           region:(NSString *)region {
@@ -4237,7 +4417,7 @@
 
 @implementation GTLRComputeQuery_TargetHttpProxiesList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -4356,7 +4536,7 @@
 
 @implementation GTLRComputeQuery_TargetHttpsProxiesList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -4433,7 +4613,7 @@
 
 @implementation GTLRComputeQuery_TargetInstancesAggregatedList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -4543,7 +4723,7 @@
 
 @implementation GTLRComputeQuery_TargetInstancesList
 
-@dynamic filter, maxResults, pageToken, project, zoneProperty;
+@dynamic filter, maxResults, orderBy, pageToken, project, zoneProperty;
 
 + (NSDictionary<NSString *, NSString *> *)parameterNameMap {
   return @{ @"zoneProperty" : @"zone" };
@@ -4632,7 +4812,7 @@
 
 @implementation GTLRComputeQuery_TargetPoolsAggregatedList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -4761,7 +4941,7 @@
 
 @implementation GTLRComputeQuery_TargetPoolsList
 
-@dynamic filter, maxResults, pageToken, project, region;
+@dynamic filter, maxResults, orderBy, pageToken, project, region;
 
 + (instancetype)queryWithProject:(NSString *)project
                           region:(NSString *)region {
@@ -4875,9 +5055,186 @@
 
 @end
 
+@implementation GTLRComputeQuery_TargetSslProxiesDelete
+
+@dynamic project, targetSslProxy;
+
++ (instancetype)queryWithProject:(NSString *)project
+                  targetSslProxy:(NSString *)targetSslProxy {
+  NSArray *pathParams = @[
+    @"project", @"targetSslProxy"
+  ];
+  NSString *pathURITemplate = @"{project}/global/targetSslProxies/{targetSslProxy}";
+  GTLRComputeQuery_TargetSslProxiesDelete *query =
+    [[self alloc] initWithPathURITemplate:pathURITemplate
+                               HTTPMethod:@"DELETE"
+                       pathParameterNames:pathParams];
+  query.project = project;
+  query.targetSslProxy = targetSslProxy;
+  query.expectedObjectClass = [GTLRCompute_Operation class];
+  query.loggingName = @"compute.targetSslProxies.delete";
+  return query;
+}
+
+@end
+
+@implementation GTLRComputeQuery_TargetSslProxiesGet
+
+@dynamic project, targetSslProxy;
+
++ (instancetype)queryWithProject:(NSString *)project
+                  targetSslProxy:(NSString *)targetSslProxy {
+  NSArray *pathParams = @[
+    @"project", @"targetSslProxy"
+  ];
+  NSString *pathURITemplate = @"{project}/global/targetSslProxies/{targetSslProxy}";
+  GTLRComputeQuery_TargetSslProxiesGet *query =
+    [[self alloc] initWithPathURITemplate:pathURITemplate
+                               HTTPMethod:nil
+                       pathParameterNames:pathParams];
+  query.project = project;
+  query.targetSslProxy = targetSslProxy;
+  query.expectedObjectClass = [GTLRCompute_TargetSslProxy class];
+  query.loggingName = @"compute.targetSslProxies.get";
+  return query;
+}
+
+@end
+
+@implementation GTLRComputeQuery_TargetSslProxiesInsert
+
+@dynamic project;
+
++ (instancetype)queryWithObject:(GTLRCompute_TargetSslProxy *)object
+                        project:(NSString *)project {
+  if (object == nil) {
+    GTLR_DEBUG_ASSERT(object != nil, @"Got a nil object");
+    return nil;
+  }
+  NSArray *pathParams = @[ @"project" ];
+  NSString *pathURITemplate = @"{project}/global/targetSslProxies";
+  GTLRComputeQuery_TargetSslProxiesInsert *query =
+    [[self alloc] initWithPathURITemplate:pathURITemplate
+                               HTTPMethod:@"POST"
+                       pathParameterNames:pathParams];
+  query.bodyObject = object;
+  query.project = project;
+  query.expectedObjectClass = [GTLRCompute_Operation class];
+  query.loggingName = @"compute.targetSslProxies.insert";
+  return query;
+}
+
+@end
+
+@implementation GTLRComputeQuery_TargetSslProxiesList
+
+@dynamic filter, maxResults, orderBy, pageToken, project;
+
++ (instancetype)queryWithProject:(NSString *)project {
+  NSArray *pathParams = @[ @"project" ];
+  NSString *pathURITemplate = @"{project}/global/targetSslProxies";
+  GTLRComputeQuery_TargetSslProxiesList *query =
+    [[self alloc] initWithPathURITemplate:pathURITemplate
+                               HTTPMethod:nil
+                       pathParameterNames:pathParams];
+  query.project = project;
+  query.expectedObjectClass = [GTLRCompute_TargetSslProxyList class];
+  query.loggingName = @"compute.targetSslProxies.list";
+  return query;
+}
+
+@end
+
+@implementation GTLRComputeQuery_TargetSslProxiesSetBackendService
+
+@dynamic project, targetSslProxy;
+
++ (instancetype)queryWithObject:(GTLRCompute_TargetSslProxiesSetBackendServiceRequest *)object
+                        project:(NSString *)project
+                 targetSslProxy:(NSString *)targetSslProxy {
+  if (object == nil) {
+    GTLR_DEBUG_ASSERT(object != nil, @"Got a nil object");
+    return nil;
+  }
+  NSArray *pathParams = @[
+    @"project", @"targetSslProxy"
+  ];
+  NSString *pathURITemplate = @"{project}/global/targetSslProxies/{targetSslProxy}/setBackendService";
+  GTLRComputeQuery_TargetSslProxiesSetBackendService *query =
+    [[self alloc] initWithPathURITemplate:pathURITemplate
+                               HTTPMethod:@"POST"
+                       pathParameterNames:pathParams];
+  query.bodyObject = object;
+  query.project = project;
+  query.targetSslProxy = targetSslProxy;
+  query.expectedObjectClass = [GTLRCompute_Operation class];
+  query.loggingName = @"compute.targetSslProxies.setBackendService";
+  return query;
+}
+
+@end
+
+@implementation GTLRComputeQuery_TargetSslProxiesSetProxyHeader
+
+@dynamic project, targetSslProxy;
+
++ (instancetype)queryWithObject:(GTLRCompute_TargetSslProxiesSetProxyHeaderRequest *)object
+                        project:(NSString *)project
+                 targetSslProxy:(NSString *)targetSslProxy {
+  if (object == nil) {
+    GTLR_DEBUG_ASSERT(object != nil, @"Got a nil object");
+    return nil;
+  }
+  NSArray *pathParams = @[
+    @"project", @"targetSslProxy"
+  ];
+  NSString *pathURITemplate = @"{project}/global/targetSslProxies/{targetSslProxy}/setProxyHeader";
+  GTLRComputeQuery_TargetSslProxiesSetProxyHeader *query =
+    [[self alloc] initWithPathURITemplate:pathURITemplate
+                               HTTPMethod:@"POST"
+                       pathParameterNames:pathParams];
+  query.bodyObject = object;
+  query.project = project;
+  query.targetSslProxy = targetSslProxy;
+  query.expectedObjectClass = [GTLRCompute_Operation class];
+  query.loggingName = @"compute.targetSslProxies.setProxyHeader";
+  return query;
+}
+
+@end
+
+@implementation GTLRComputeQuery_TargetSslProxiesSetSslCertificates
+
+@dynamic project, targetSslProxy;
+
++ (instancetype)queryWithObject:(GTLRCompute_TargetSslProxiesSetSslCertificatesRequest *)object
+                        project:(NSString *)project
+                 targetSslProxy:(NSString *)targetSslProxy {
+  if (object == nil) {
+    GTLR_DEBUG_ASSERT(object != nil, @"Got a nil object");
+    return nil;
+  }
+  NSArray *pathParams = @[
+    @"project", @"targetSslProxy"
+  ];
+  NSString *pathURITemplate = @"{project}/global/targetSslProxies/{targetSslProxy}/setSslCertificates";
+  GTLRComputeQuery_TargetSslProxiesSetSslCertificates *query =
+    [[self alloc] initWithPathURITemplate:pathURITemplate
+                               HTTPMethod:@"POST"
+                       pathParameterNames:pathParams];
+  query.bodyObject = object;
+  query.project = project;
+  query.targetSslProxy = targetSslProxy;
+  query.expectedObjectClass = [GTLRCompute_Operation class];
+  query.loggingName = @"compute.targetSslProxies.setSslCertificates";
+  return query;
+}
+
+@end
+
 @implementation GTLRComputeQuery_TargetVpnGatewaysAggregatedList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -4975,7 +5332,7 @@
 
 @implementation GTLRComputeQuery_TargetVpnGatewaysList
 
-@dynamic filter, maxResults, pageToken, project, region;
+@dynamic filter, maxResults, orderBy, pageToken, project, region;
 
 + (instancetype)queryWithProject:(NSString *)project
                           region:(NSString *)region {
@@ -5098,7 +5455,7 @@
 
 @implementation GTLRComputeQuery_UrlMapsList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -5204,7 +5561,7 @@
 
 @implementation GTLRComputeQuery_VpnTunnelsAggregatedList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];
@@ -5302,7 +5659,7 @@
 
 @implementation GTLRComputeQuery_VpnTunnelsList
 
-@dynamic filter, maxResults, pageToken, project, region;
+@dynamic filter, maxResults, orderBy, pageToken, project, region;
 
 + (instancetype)queryWithProject:(NSString *)project
                           region:(NSString *)region {
@@ -5382,7 +5739,7 @@
 
 @implementation GTLRComputeQuery_ZoneOperationsList
 
-@dynamic filter, maxResults, pageToken, project, zoneProperty;
+@dynamic filter, maxResults, orderBy, pageToken, project, zoneProperty;
 
 + (NSDictionary<NSString *, NSString *> *)parameterNameMap {
   return @{ @"zoneProperty" : @"zone" };
@@ -5436,7 +5793,7 @@
 
 @implementation GTLRComputeQuery_ZonesList
 
-@dynamic filter, maxResults, pageToken, project;
+@dynamic filter, maxResults, orderBy, pageToken, project;
 
 + (instancetype)queryWithProject:(NSString *)project {
   NSArray *pathParams = @[ @"project" ];

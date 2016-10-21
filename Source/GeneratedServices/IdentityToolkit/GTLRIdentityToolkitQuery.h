@@ -41,7 +41,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface GTLRIdentityToolkitQuery : GTLRQuery
 
 /** Selector specifying which fields to include in a partial response. */
-@property(copy, nullable) NSString *fields;
+@property(nonatomic, copy, nullable) NSString *fields;
 
 @end
 
@@ -95,6 +95,9 @@ NS_ASSUME_NONNULL_BEGIN
  *  Batch download user accounts.
  *
  *  Method: identitytoolkit.relyingparty.downloadAccount
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeIdentityToolkitFirebase
  */
 @interface GTLRIdentityToolkitQuery_RelyingpartyDownloadAccount : GTLRIdentityToolkitQuery
 // Previous library name was
@@ -170,10 +173,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryIdentityToolkit queryForRelyingpartyGetProjectConfig]
 
 /** Delegated GCP project number of the request. */
-@property(copy, nullable) NSString *delegatedProjectNumber;
+@property(nonatomic, copy, nullable) NSString *delegatedProjectNumber;
 
 /** GCP project number of the request. */
-@property(copy, nullable) NSString *projectNumber;
+@property(nonatomic, copy, nullable) NSString *projectNumber;
 
 /**
  *  Fetches a @c GTLRIdentityToolkit_RelyingpartyGetProjectConfigResponse.
@@ -345,6 +348,9 @@ NS_ASSUME_NONNULL_BEGIN
  *  Batch upload existing user accounts.
  *
  *  Method: identitytoolkit.relyingparty.uploadAccount
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeIdentityToolkitFirebase
  */
 @interface GTLRIdentityToolkitQuery_RelyingpartyUploadAccount : GTLRIdentityToolkitQuery
 // Previous library name was

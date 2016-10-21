@@ -4,8 +4,9 @@
 // API:
 //   Ad Exchange Buyer API II (adexchangebuyer2/v2beta1)
 // Description:
-//   Accesses the latest features for managing Ad Exchange accounts and
-//   Real-Time Bidding configurations.
+//   Accesses the latest features for managing Ad Exchange accounts, Real-Time
+//   Bidding configurations and auction metrics, and Marketplace programmatic
+//   deals.
 // Documentation:
 //   https://developers.google.com/ad-exchange/buyer-rest/guides/client-access/
 
@@ -160,7 +161,7 @@ GTLR_EXTERN NSString * const kGTLRAdExchangeBuyerII_ClientUser_Status_UserStatus
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *clientAccountId;
+@property(nonatomic, strong, nullable) NSNumber *clientAccountId;
 
 /**
  *  Name used to represent this client to publishers.
@@ -169,7 +170,7 @@ GTLR_EXTERN NSString * const kGTLRAdExchangeBuyerII_ClientUser_Status_UserStatus
  *  must be unique.
  *  You can specify this field as empty.
  */
-@property(copy, nullable) NSString *clientName;
+@property(nonatomic, copy, nullable) NSString *clientName;
 
 /**
  *  Numerical identifier of the client entity.
@@ -187,7 +188,7 @@ GTLR_EXTERN NSString * const kGTLRAdExchangeBuyerII_ClientUser_Status_UserStatus
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *entityId;
+@property(nonatomic, strong, nullable) NSNumber *entityId;
 
 /**
  *  The name of the entity. This field is automatically fetched based on
@@ -196,7 +197,7 @@ GTLR_EXTERN NSString * const kGTLRAdExchangeBuyerII_ClientUser_Status_UserStatus
  *
  *  Remapped to 'entityNameProperty' to avoid NSObject's 'entityName'.
  */
-@property(copy, nullable) NSString *entityNameProperty;
+@property(nonatomic, copy, nullable) NSString *entityNameProperty;
 
 /**
  *  The type of the client entity: `ADVERTISER`, `BRAND`, or `AGENCY`.
@@ -212,12 +213,12 @@ GTLR_EXTERN NSString * const kGTLRAdExchangeBuyerII_ClientUser_Status_UserStatus
  *        placeholder for an undefined client entity type. Should not be used.
  *        (Value: "ENTITY_TYPE_UNSPECIFIED")
  */
-@property(copy, nullable) NSString *entityType;
+@property(nonatomic, copy, nullable) NSString *entityType;
 
 /**
  *  The role which is assigned to the client buyer. Each role implies a set of
  *  permissions granted to the client. Must be one of `CLIENT_DEAL_VIEWER`,
- *  `CLIENT_DEAL_NEGOTIATOR`, or `CLIENT_DEAL_APPROVER`.
+ *  `CLIENT_DEAL_NEGOTIATOR` or `CLIENT_DEAL_APPROVER`.
  *
  *  Likely values:
  *    @arg @c kGTLRAdExchangeBuyerII_Client_Role_ClientDealApprover Users
@@ -240,7 +241,7 @@ GTLR_EXTERN NSString * const kGTLRAdExchangeBuyerII_ClientUser_Status_UserStatus
  *        placeholder for an undefined client role. (Value:
  *        "CLIENT_ROLE_UNSPECIFIED")
  */
-@property(copy, nullable) NSString *role;
+@property(nonatomic, copy, nullable) NSString *role;
 
 /**
  *  The status of the client buyer.
@@ -254,14 +255,14 @@ GTLR_EXTERN NSString * const kGTLRAdExchangeBuyerII_ClientUser_Status_UserStatus
  *    @arg @c kGTLRAdExchangeBuyerII_Client_Status_Disabled A client that is
  *        currently disabled. (Value: "DISABLED")
  */
-@property(copy, nullable) NSString *status;
+@property(nonatomic, copy, nullable) NSString *status;
 
 /**
  *  Whether the client buyer will be visible to sellers.
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *visibleToSeller;
+@property(nonatomic, strong, nullable) NSNumber *visibleToSeller;
 
 @end
 
@@ -288,13 +289,13 @@ GTLR_EXTERN NSString * const kGTLRAdExchangeBuyerII_ClientUser_Status_UserStatus
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *clientAccountId;
+@property(nonatomic, strong, nullable) NSNumber *clientAccountId;
 
 /**
  *  User's email address. The value of this field
  *  is ignored in an update operation.
  */
-@property(copy, nullable) NSString *email;
+@property(nonatomic, copy, nullable) NSString *email;
 
 /**
  *  The status of the client user.
@@ -311,7 +312,7 @@ GTLR_EXTERN NSString * const kGTLRAdExchangeBuyerII_ClientUser_Status_UserStatus
  *        placeholder for an undefined user status. (Value:
  *        "USER_STATUS_UNSPECIFIED")
  */
-@property(copy, nullable) NSString *status;
+@property(nonatomic, copy, nullable) NSString *status;
 
 /**
  *  The unique numerical ID of the client user
@@ -320,14 +321,14 @@ GTLR_EXTERN NSString * const kGTLRAdExchangeBuyerII_ClientUser_Status_UserStatus
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *userId;
+@property(nonatomic, strong, nullable) NSNumber *userId;
 
 @end
 
 
 /**
- *  An invitation for a new client user to get access to the AdExchange Buyer
- *  UI.
+ *  An invitation for a new client user to get access to the Ad Exchange
+ *  Buyer UI.
  *  All fields are required unless otherwise specified.
  */
 @interface GTLRAdExchangeBuyerII_ClientUserInvitation : GTLRObject
@@ -339,14 +340,14 @@ GTLR_EXTERN NSString * const kGTLRAdExchangeBuyerII_ClientUser_Status_UserStatus
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *clientAccountId;
+@property(nonatomic, strong, nullable) NSNumber *clientAccountId;
 
 /**
  *  The email address to which the invitation is sent. Email
  *  addresses should be unique among all client users under each sponsor
  *  buyer.
  */
-@property(copy, nullable) NSString *email;
+@property(nonatomic, copy, nullable) NSString *email;
 
 /**
  *  The unique numerical ID of the invitation that is sent to the user.
@@ -354,7 +355,7 @@ GTLR_EXTERN NSString * const kGTLRAdExchangeBuyerII_ClientUser_Status_UserStatus
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *invitationId;
+@property(nonatomic, strong, nullable) NSNumber *invitationId;
 
 @end
 
@@ -375,7 +376,7 @@ GTLR_EXTERN NSString * const kGTLRAdExchangeBuyerII_ClientUser_Status_UserStatus
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRAdExchangeBuyerII_Client *> *clients;
+@property(nonatomic, strong, nullable) NSArray<GTLRAdExchangeBuyerII_Client *> *clients;
 
 /**
  *  A token to retrieve the next page of results.
@@ -385,7 +386,7 @@ GTLR_EXTERN NSString * const kGTLRAdExchangeBuyerII_ClientUser_Status_UserStatus
  *  accounts.clients.list method
  *  to retrieve the next page of results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 @end
 
@@ -406,7 +407,7 @@ GTLR_EXTERN NSString * const kGTLRAdExchangeBuyerII_ClientUser_Status_UserStatus
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRAdExchangeBuyerII_ClientUserInvitation *> *invitations;
+@property(nonatomic, strong, nullable) NSArray<GTLRAdExchangeBuyerII_ClientUserInvitation *> *invitations;
 
 /**
  *  A token to retrieve the next page of results.
@@ -417,7 +418,7 @@ GTLR_EXTERN NSString * const kGTLRAdExchangeBuyerII_ClientUser_Status_UserStatus
  *  method to retrieve the next
  *  page of results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 @end
 
@@ -441,7 +442,7 @@ GTLR_EXTERN NSString * const kGTLRAdExchangeBuyerII_ClientUser_Status_UserStatus
  *  method to retrieve the next
  *  page of results.
  */
-@property(copy, nullable) NSString *nextPageToken;
+@property(nonatomic, copy, nullable) NSString *nextPageToken;
 
 /**
  *  The returned list of client users.
@@ -449,7 +450,7 @@ GTLR_EXTERN NSString * const kGTLRAdExchangeBuyerII_ClientUser_Status_UserStatus
  *  @note This property is used to support NSFastEnumeration and indexed
  *        subscripting on this class.
  */
-@property(strong, nullable) NSArray<GTLRAdExchangeBuyerII_ClientUser *> *users;
+@property(nonatomic, strong, nullable) NSArray<GTLRAdExchangeBuyerII_ClientUser *> *users;
 
 @end
 

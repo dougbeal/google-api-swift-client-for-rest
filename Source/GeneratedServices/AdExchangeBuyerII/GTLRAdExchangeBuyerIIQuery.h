@@ -4,8 +4,9 @@
 // API:
 //   Ad Exchange Buyer API II (adexchangebuyer2/v2beta1)
 // Description:
-//   Accesses the latest features for managing Ad Exchange accounts and
-//   Real-Time Bidding configurations.
+//   Accesses the latest features for managing Ad Exchange accounts, Real-Time
+//   Bidding configurations and auction metrics, and Marketplace programmatic
+//   deals.
 // Documentation:
 //   https://developers.google.com/ad-exchange/buyer-rest/guides/client-access/
 
@@ -31,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface GTLRAdExchangeBuyerIIQuery : GTLRQuery
 
 /** Selector specifying which fields to include in a partial response. */
-@property(copy, nullable) NSString *fields;
+@property(nonatomic, copy, nullable) NSString *fields;
 
 @end
 
@@ -51,7 +52,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  Unique numerical account ID for the buyer of which the client buyer
  *  is a customer; the sponsor buyer to create a client for. (required)
  */
-@property(assign) long long accountId;
+@property(nonatomic, assign) long long accountId;
 
 /**
  *  Fetches a @c GTLRAdExchangeBuyerII_Client.
@@ -83,10 +84,10 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryAdExchangeBuyerII queryForAccountsClientsGetWithaccountId:clientAccountId:]
 
 /** Numerical account ID of the client's sponsor buyer. (required) */
-@property(assign) long long accountId;
+@property(nonatomic, assign) long long accountId;
 
 /** Numerical account ID of the client buyer to retrieve. (required) */
-@property(assign) long long clientAccountId;
+@property(nonatomic, assign) long long clientAccountId;
 
 /**
  *  Fetches a @c GTLRAdExchangeBuyerII_Client.
@@ -119,13 +120,13 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryAdExchangeBuyerII queryForAccountsClientsInvitationsCreateWithObject:accountId:clientAccountId:]
 
 /** Numerical account ID of the client's sponsor buyer. (required) */
-@property(assign) long long accountId;
+@property(nonatomic, assign) long long accountId;
 
 /**
  *  Numerical account ID of the client buyer that the user
  *  should be associated with. (required)
  */
-@property(assign) long long clientAccountId;
+@property(nonatomic, assign) long long clientAccountId;
 
 /**
  *  Fetches a @c GTLRAdExchangeBuyerII_ClientUserInvitation.
@@ -162,16 +163,16 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryAdExchangeBuyerII queryForAccountsClientsInvitationsGetWithaccountId:clientAccountId:invitationId:]
 
 /** Numerical account ID of the client's sponsor buyer. (required) */
-@property(assign) long long accountId;
+@property(nonatomic, assign) long long accountId;
 
 /**
  *  Numerical account ID of the client buyer that the user invitation
  *  to be retrieved is associated with. (required)
  */
-@property(assign) long long clientAccountId;
+@property(nonatomic, assign) long long clientAccountId;
 
 /** Numerical identifier of the user invitation to retrieve. (required) */
-@property(assign) long long invitationId;
+@property(nonatomic, assign) long long invitationId;
 
 /**
  *  Fetches a @c GTLRAdExchangeBuyerII_ClientUserInvitation.
@@ -208,7 +209,7 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryAdExchangeBuyerII queryForAccountsClientsInvitationsListWithaccountId:clientAccountId:]
 
 /** Numerical account ID of the client's sponsor buyer. (required) */
-@property(assign) long long accountId;
+@property(nonatomic, assign) long long accountId;
 
 /**
  *  Numerical account ID of the client buyer to list invitations for.
@@ -218,13 +219,13 @@ NS_ASSUME_NONNULL_BEGIN
  *  to list all the invitations for all the clients
  *  of a given sponsor buyer.
  */
-@property(copy, nullable) NSString *clientAccountId;
+@property(nonatomic, copy, nullable) NSString *clientAccountId;
 
 /**
  *  Requested page size. Server may return fewer clients than requested.
  *  If unspecified, server will pick an appropriate default.
  */
-@property(assign) NSInteger pageSize;
+@property(nonatomic, assign) NSInteger pageSize;
 
 /**
  *  A token identifying a page of results the server should return.
@@ -234,7 +235,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  clients.invitations.list
  *  method.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /**
  *  Fetches a @c GTLRAdExchangeBuyerII_ListClientUserInvitationsResponse.
@@ -278,13 +279,13 @@ NS_ASSUME_NONNULL_BEGIN
 /**
  *  Unique numerical account ID of the sponsor buyer to list the clients for.
  */
-@property(assign) long long accountId;
+@property(nonatomic, assign) long long accountId;
 
 /**
  *  Requested page size. The server may return fewer clients than requested.
  *  If unspecified, the server will pick an appropriate default.
  */
-@property(assign) NSInteger pageSize;
+@property(nonatomic, assign) NSInteger pageSize;
 
 /**
  *  A token identifying a page of results the server should return.
@@ -293,7 +294,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  returned from the previous call to the
  *  accounts.clients.list method.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /**
  *  Fetches a @c GTLRAdExchangeBuyerII_ListClientsResponse.
@@ -329,10 +330,10 @@ NS_ASSUME_NONNULL_BEGIN
  *  Unique numerical account ID for the buyer of which the client buyer
  *  is a customer; the sponsor buyer to update a client for. (required)
  */
-@property(assign) long long accountId;
+@property(nonatomic, assign) long long accountId;
 
 /** Unique numerical account ID of the client to update. (required) */
-@property(assign) long long clientAccountId;
+@property(nonatomic, assign) long long clientAccountId;
 
 /**
  *  Fetches a @c GTLRAdExchangeBuyerII_Client.
@@ -367,16 +368,16 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryAdExchangeBuyerII queryForAccountsClientsUsersGetWithaccountId:clientAccountId:userId:]
 
 /** Numerical account ID of the client's sponsor buyer. (required) */
-@property(assign) long long accountId;
+@property(nonatomic, assign) long long accountId;
 
 /**
  *  Numerical account ID of the client buyer
  *  that the user to be retrieved is associated with. (required)
  */
-@property(assign) long long clientAccountId;
+@property(nonatomic, assign) long long clientAccountId;
 
 /** Numerical identifier of the user to retrieve. (required) */
-@property(assign) long long userId;
+@property(nonatomic, assign) long long userId;
 
 /**
  *  Fetches a @c GTLRAdExchangeBuyerII_ClientUser.
@@ -414,7 +415,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  Numerical account ID of the sponsor buyer of the client to list users for.
  *  (required)
  */
-@property(assign) long long accountId;
+@property(nonatomic, assign) long long accountId;
 
 /**
  *  The account ID of the client buyer to list users for. (required)
@@ -423,13 +424,13 @@ NS_ASSUME_NONNULL_BEGIN
  *  to list all the client users for all the clients
  *  of a given sponsor buyer.
  */
-@property(copy, nullable) NSString *clientAccountId;
+@property(nonatomic, copy, nullable) NSString *clientAccountId;
 
 /**
  *  Requested page size. The server may return fewer clients than requested.
  *  If unspecified, the server will pick an appropriate default.
  */
-@property(assign) NSInteger pageSize;
+@property(nonatomic, assign) NSInteger pageSize;
 
 /**
  *  A token identifying a page of results the server should return.
@@ -438,7 +439,7 @@ NS_ASSUME_NONNULL_BEGIN
  *  returned from the previous call to the
  *  accounts.clients.users.list method.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /**
  *  Fetches a @c GTLRAdExchangeBuyerII_ListClientUsersResponse.
@@ -481,16 +482,16 @@ NS_ASSUME_NONNULL_BEGIN
 //   +[GTLQueryAdExchangeBuyerII queryForAccountsClientsUsersUpdateWithObject:accountId:clientAccountId:userId:]
 
 /** Numerical account ID of the client's sponsor buyer. (required) */
-@property(assign) long long accountId;
+@property(nonatomic, assign) long long accountId;
 
 /**
  *  Numerical account ID of the client buyer that the user to be retrieved
  *  is associated with. (required)
  */
-@property(assign) long long clientAccountId;
+@property(nonatomic, assign) long long clientAccountId;
 
 /** Numerical identifier of the user to retrieve. (required) */
-@property(assign) long long userId;
+@property(nonatomic, assign) long long userId;
 
 /**
  *  Fetches a @c GTLRAdExchangeBuyerII_ClientUser.

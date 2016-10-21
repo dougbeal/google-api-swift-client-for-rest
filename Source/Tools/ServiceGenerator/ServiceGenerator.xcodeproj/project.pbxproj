@@ -32,6 +32,7 @@
 		F4469EC11C57ADC600BCFAA1 /* GTLRDiscoveryObjects.m in Sources */ = {isa = PBXBuildFile; fileRef = F4469EC01C57ADC600BCFAA1 /* GTLRDiscoveryObjects.m */; };
 		F4809571178A310E007D65F4 /* GTLRURITemplate.m in Sources */ = {isa = PBXBuildFile; fileRef = F4809570178A310E007D65F4 /* GTLRURITemplate.m */; };
 		F4CC66DF1237D33800522D45 /* SGGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = F4CC66DE1237D33800522D45 /* SGGenerator.m */; };
+		F4D9D5241D832EE7000EBBED /* GTLRDuration.m in Sources */ = {isa = PBXBuildFile; fileRef = F4D9D5231D832EE7000EBBED /* GTLRDuration.m */; };
 		F4F407641C21B3B9001B1A59 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F407631C21B3B9001B1A59 /* Security.framework */; };
 		F4F9D45F1313E9C0002E77E6 /* SGUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = F4F9D45E1313E9C0002E77E6 /* SGUtils.m */; };
 		F4F9D80F13146402002E77E6 /* CoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F4F9D80E13146402002E77E6 /* CoreServices.framework */; };
@@ -99,7 +100,13 @@
 		F483B88B13A7ACEB001F030B /* GTLRDiscovery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLRDiscovery.h; sourceTree = "<group>"; };
 		F4BB4A7F12B7BF4F008B2FB4 /* GTLRDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTLRDefines.h; path = ../../GTLRDefines.h; sourceTree = SOURCE_ROOT; };
 		F4CC66DD1237D33800522D45 /* SGGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGGenerator.h; sourceTree = "<group>"; };
+<<<<<<< HEAD
 		F4CC66DE1237D33800522D45 /* SGGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = SGGenerator.m; sourceTree = "<group>"; tabWidth = 2; };
+=======
+		F4CC66DE1237D33800522D45 /* SGGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGGenerator.m; sourceTree = "<group>"; };
+		F4D9D5221D832EE7000EBBED /* GTLRDuration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTLRDuration.h; path = ../../Objects/GTLRDuration.h; sourceTree = "<group>"; };
+		F4D9D5231D832EE7000EBBED /* GTLRDuration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTLRDuration.m; path = ../../Objects/GTLRDuration.m; sourceTree = "<group>"; };
+>>>>>>> google/master
 		F4F407631C21B3B9001B1A59 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F4F9D45D1313E9C0002E77E6 /* SGUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGUtils.h; sourceTree = "<group>"; };
 		F4F9D45E1313E9C0002E77E6 /* SGUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGUtils.m; sourceTree = "<group>"; };
@@ -174,6 +181,8 @@
 				F40E71341384B41200EE3F02 /* GTLRBatchResult.m */,
 				F40E71351384B41200EE3F02 /* GTLRDateTime.h */,
 				F40E71361384B41200EE3F02 /* GTLRDateTime.m */,
+				F4D9D5221D832EE7000EBBED /* GTLRDuration.h */,
+				F4D9D5231D832EE7000EBBED /* GTLRDuration.m */,
 				F40E71371384B41200EE3F02 /* GTLRErrorObject.h */,
 				F40E71381384B41200EE3F02 /* GTLRErrorObject.m */,
 				F40E712B1384B41200EE3F02 /* GTLRObject.h */,
@@ -291,8 +300,12 @@
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+<<<<<<< HEAD
 				LastSwiftUpdateCheck = 0730;
 				LastUpgradeCheck = 0720;
+=======
+				LastUpgradeCheck = 0800;
+>>>>>>> google/master
 			};
 			buildConfigurationList = 1DEB927808733DD40010E9CD /* Build configuration list for PBXProject "ServiceGenerator" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -335,6 +348,7 @@
 				F4469DF11C45709C00BCFAA1 /* GTMSessionFetcherService.m in Sources */,
 				F40E714A1384B41200EE3F02 /* GTLRRuntimeCommon.m in Sources */,
 				F4469EB91C4E734500BCFAA1 /* GTMGatherInputStream.m in Sources */,
+				F4D9D5241D832EE7000EBBED /* GTLRDuration.m in Sources */,
 				F4469E251C45B02400BCFAA1 /* GTLRDiscoveryQuery.m in Sources */,
 				F40E714B1384B41200EE3F02 /* GTLRFramework.m in Sources */,
 				F40E714D1384B41200EE3F02 /* GTLRUtilities.m in Sources */,
@@ -377,14 +391,30 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_MISSING_PROPERTY_SYNTHESIS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
-				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					DEBUG,
+					"STRIP_GTM_FETCH_LOGGING=0",
+				);
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;
@@ -413,12 +443,26 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_MISSING_PROPERTY_SYNTHESIS = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_PREPROCESSOR_DEFINITIONS = "STRIP_GTM_FETCH_LOGGING=0";
 				GCC_TREAT_IMPLICIT_FUNCTION_DECLARATIONS_AS_ERRORS = YES;
 				GCC_TREAT_WARNINGS_AS_ERRORS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_MISSING_FIELD_INITIALIZERS = YES;
 				GCC_WARN_ABOUT_MISSING_NEWLINE = YES;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = YES;

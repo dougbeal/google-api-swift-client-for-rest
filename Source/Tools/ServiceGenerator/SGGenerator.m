@@ -77,6 +77,41 @@ static NSString *kEnumMapKey                      = @"enumMap";
 
 
 
+<<<<<<< HEAD
+=======
+- (void)sg_getQueryParamObjCType:(NSString **)objcType
+                       asPointer:(BOOL *)asPointer
+           objcPropertySemantics:(NSString **)objcPropertySemantics
+                         comment:(NSString **)comment
+                  itemsClassName:(NSString **)itemsClassName;
+@end
+
+@interface GTLRDiscovery_RestResource (SGGeneratorAdditions)
+@property(readonly) NSString *sg_name;
+@end
+
+@interface GTLRDiscovery_RestMethod (SGGeneratorAdditions)
+@property(readonly) NSString *sg_name;
+@property(readonly) NSArray *sg_sortedParameters;
+@property(readonly) NSArray *sg_sortedParametersWithRequest;
+@property(readonly) NSString *sg_resumableUploadPathOverride;
+@property(readonly) NSString *sg_simpleUploadPathOverride;
+@end
+
+@interface GTLRDiscovery_RestMethodRequest (SGGeneratorAdditions)
+@property(readonly) GTLRDiscovery_JsonSchema *sg_resolvedSchema;
+@end
+
+@interface GTLRDiscovery_RestMethodResponse (SGGeneratorAdditions)
+@property(readonly) GTLRDiscovery_JsonSchema *sg_resolvedSchema;
+@end
+
+@interface SGGenerator ()
+@property(strong) NSMutableArray *warnings;
+@property(strong) NSMutableArray *infos;
+@property(readonly) BOOL useLegacyObjectNaming;
+@end
+>>>>>>> google/master
 
 // Helper to get the objects of a dictionary out in a sorted order.
   static NSArray *DictionaryObjectsSortedByKeys(NSDictionary *dict) {
@@ -317,6 +352,11 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
   return result;
 }
 
+- (BOOL)useLegacyObjectNaming {
+  BOOL result = (_options & kSGGeneratorOptionLegacyObjectNaming) != 0;
+  return result;
+}
+
 - (NSString *)formattedAPIName {
   if (_formattedName == nil) {
     NSString *canonicalName = self.api.canonicalName;
@@ -358,6 +398,8 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
         }
         if ([[[parts lastObject] lowercaseString] isEqual:@"api"]) {
           parts = [parts subarrayWithRange:NSMakeRange(0, parts.count - 1)];
+        } else if ([[[parts lastObject] lowercaseString] isEqual:@"apis"]) {
+          parts = [parts subarrayWithRange:NSMakeRange(0, parts.count - 1)];
         }
         // If there was >1 part left, and glueing them all together as lowercase
         // matches the api name, then use them as the guessed name.
@@ -368,7 +410,7 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
                               shouldCapitalize:YES
                             allowLeadingDigits:YES];
             NSString *msg =
-              [NSString stringWithFormat:@"Guessed formatted name \"%@\" from API title \"%@\"",
+              [NSString stringWithFormat:@"Guessed formatted name '%@' from API title '%@'",
                                          _formattedName, title];
             [self addInfo:msg];
           }
@@ -617,6 +659,32 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
     messageHandler(kSGGeneratorHandlerMessageWarning, warning);
   }
 
+  // https://developers.google.com/discovery/v1/reference/apis#resource (as of
+  // July 8, 2016) documents the labels with:
+  //   Labels for the status of this API. Valid values include
+  //   limited_availability or deprecated.
+  // So the label could just be included in the -generatedInfo block, but it
+  // isn't clear how useful they really are. A lot of apis currently seem to
+  // include "limited_availability"; but their docs don't say anything about
+  // them really being limited. So to avoid general "noise" from useless labels
+  // we filter out the ones that seem useless, and generate warnings for
+  // anything that isn't expected to call it out to the person generating the
+  // api.
+  NSMutableArray *apiLabels = [self.api.labels mutableCopy];
+  [apiLabels removeObject:@"limited_availability"];
+  // "labs" isn't documented, but also seems useless when looking at the docs
+  // for apis with them.
+  [apiLabels removeObject:@"labs"];
+  if (apiLabels.count > 0) {
+    // TODO(tvl): If some api does include "deprecated", it likely makes sense
+    // to drop it from here and instead generally report it and tag the source
+    // in some way (#warning and/or mark it on the objects from the api).
+    NSString *warning =
+        [NSString stringWithFormat:@"Discovery includes unknown label(s): '%@'",
+            [apiLabels componentsJoinedByString:@"', '"]];
+    messageHandler(kSGGeneratorHandlerMessageWarning, warning);
+  }
+
   // Check for class name collisions.
   NSMutableArray *worker = [self.api.sg_topLevelObjectSchemas mutableCopy];
   for (GTLRDiscovery_JsonSchema *schema in self.api.sg_topLevelObjectSchemas) {
@@ -636,6 +704,10 @@ static void CheckForUnknownJSON(GTLRObject *obj, NSArray *keyPath,
         [NSString stringWithFormat:@"Collision over the class name '%@' (schemas '%@' and '%@')",
          objcClassName,
          previousSchema.sg_fullSchemaName, schema.sg_fullSchemaName];
+      if (self.useLegacyObjectNaming) {
+        errStr =
+            [errStr stringByAppendingString:@", not using --useLegacyObjectClassNames will likely avoid this."];
+      }
       messageHandler(kSGGeneratorHandlerMessageError, errStr);
       allGood = NO;
     } else {
@@ -1512,7 +1584,7 @@ static NSString *MappedParamName(NSString *name) {
           && [_notRetainedPredicate evaluateWithObject:paramObjCName]) {
         clangDirective = @" NS_RETURNS_NOT_RETAINED";
       }
-      NSString *propertyLine = [NSString stringWithFormat:@"@property(%@%@) %@%@%@%@;\n",
+      NSString *propertyLine = [NSString stringWithFormat:@"@property(nonatomic, %@%@) %@%@%@%@;\n",
                                   objcPropertySemantics, extraAttributes, objcType,
                                 (asPtr ? @" *" : @" "),
                                 paramObjCName,
@@ -2474,11 +2546,18 @@ static NSString *MappedParamName(NSString *name) {
       } else {
         comment = [@"    // " stringByAppendingString:comment];
       }
+<<<<<<< HEAD
 
       NSString *propertyLine = [NSString stringWithFormat:@"    public let %@:%@ %@\n",
                                          @"items",
                                          objcType,
                                          comment];
+=======
+      NSString *propertyLine = [NSString stringWithFormat:@"@property(nonatomic, %@, readonly) %@%@%@;%@\n",
+                                objcPropertySemantics, objcType,
+                                (asPtr ? @" *" : @" "),
+                                @"items", comment];
+>>>>>>> google/master
       [parts addObject:propertyLine];
 
       
@@ -2600,11 +2679,22 @@ static NSString *MappedParamName(NSString *name) {
           extraAttributes =
             [extraAttributes stringByAppendingFormat:@", getter=valueOf_%@", propertyObjCName];
         }
+<<<<<<< HEAD
         // NSString *clangDirective = @"";
         // if ([_notRetainedPredicate evaluateWithObject:propertyObjCName]) {
         //   clangDirective = @" NS_RETURNS_NOT_RETAINED";
         // }
 
+=======
+        NSString *clangDirective = @"";
+        if ([_notRetainedPredicate evaluateWithObject:propertyObjCName]) {
+          clangDirective = @" NS_RETURNS_NOT_RETAINED";
+        }
+        NSString *propertyLine = [NSString stringWithFormat:@"@property(nonatomic, %@%@) %@%@%@%@;\n",
+                                  objcPropertySemantics, extraAttributes, objcType,
+                                  (asPtr ? @" *" : @" "),
+                                  propertyObjCName, clangDirective];
+>>>>>>> google/master
 
         if (hd.hasText) {
           if (!lastLineWasBlank) {
@@ -4013,7 +4103,9 @@ static NSString *OverrideName(NSString *name, EQueryOrObject queryOrObject,
   NSString *result = [resolvedSchema sg_propertyForKey:kSchemaObjCClassNameKey];
   if (result == nil) {
     NSArray *parts = [resolvedSchema sg_fullSchemaPath:YES foldArrayItems:YES];
-    NSString *fullName = [parts componentsJoinedByString:@""];
+    SGGenerator *generator = self.sg_generator;
+    NSString *joiner = (generator.useLegacyObjectNaming ? @"" : @"_");
+    NSString *fullName = [parts componentsJoinedByString:joiner];
 
     result = [NSString stringWithFormat:@"%@",
                        /*kProjectPrefix, self.sg_generator.formattedAPIName,*/ fullName];
@@ -4324,9 +4416,11 @@ static SGTypeFormatMapping kObjectParameterMappings[] = {
   { @"string", @"google-datetime", { @"GTLRDateTime", YES, @"strong", nil },
                                    { @"GTLRDateTime", YES, @"strong", nil }},
   // Bridging https://github.com/google/protobuf/blob/master/src/google/protobuf/duration.proto
-  // Make it a plain string with a comment about format.
-  { @"string", @"google-duration", { @"NSString", YES, @"copy", @"String format is #.###s (seconds)." },
-                                   { @"NSString", YES, @"copy", @"String format is #.###s (seconds)." } },
+  // Uses a custom wrapper so folks don't have to worry about the "s" on the end
+  // and because it is easy to end up with floating point issues if one isn't
+  // careful.
+  { @"string", @"google-duration", { @"GTLRDuration", YES, @"strong", nil },
+                                   { @"GTLRDuration", YES, @"strong", nil } },
   // Bridging https://github.com/google/protobuf/blob/master/src/google/protobuf/field_mask.proto
   // Make it a plain string with a comment about format.
   { @"string", @"google-fieldmask", { @"NSString", YES, @"copy", @"String format is a comma-separated list of fields." },

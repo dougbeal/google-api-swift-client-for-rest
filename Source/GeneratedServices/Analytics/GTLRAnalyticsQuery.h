@@ -29,6 +29,7 @@
 @class GTLRAnalytics_Goal;
 @class GTLRAnalytics_Profile;
 @class GTLRAnalytics_ProfileFilterLink;
+@class GTLRAnalytics_RemarketingAudience;
 @class GTLRAnalytics_UnsampledReport;
 @class GTLRAnalytics_Webproperty;
 
@@ -87,7 +88,7 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 @interface GTLRAnalyticsQuery : GTLRQuery
 
 /** Selector specifying which fields to include in a partial response. */
-@property(copy, nullable) NSString *fields;
+@property(nonatomic, copy, nullable) NSString *fields;
 
 @end
 
@@ -107,41 +108,41 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 /**
  *  A comma-separated list of Analytics dimensions. E.g., 'ga:browser,ga:city'.
  */
-@property(copy, nullable) NSString *dimensions;
+@property(nonatomic, copy, nullable) NSString *dimensions;
 
 /**
  *  End date for fetching Analytics data. Request can should specify an end date
  *  formatted as YYYY-MM-DD, or as a relative date (e.g., today, yesterday, or
  *  7daysAgo). The default value is yesterday.
  */
-@property(copy, nullable) NSString *endDate;
+@property(nonatomic, copy, nullable) NSString *endDate;
 
 /**
  *  A comma-separated list of dimension or metric filters to be applied to
  *  Analytics data.
  */
-@property(copy, nullable) NSString *filters;
+@property(nonatomic, copy, nullable) NSString *filters;
 
 /**
  *  Unique table ID for retrieving Analytics data. Table ID is of the form
  *  ga:XXXX, where XXXX is the Analytics view (profile) ID.
  */
-@property(copy, nullable) NSString *ids;
+@property(nonatomic, copy, nullable) NSString *ids;
 
 /**
  *  The response will include empty rows if this parameter is set to true, the
  *  default is true
  */
-@property(assign) BOOL includeEmptyRows;
+@property(nonatomic, assign) BOOL includeEmptyRows;
 
 /** The maximum number of entries to include in this feed. */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /**
  *  A comma-separated list of Analytics metrics. E.g.,
  *  'ga:sessions,ga:pageviews'. At least one metric must be specified.
  */
-@property(copy, nullable) NSString *metrics;
+@property(nonatomic, copy, nullable) NSString *metrics;
 
 /**
  *  The selected format for the response. Default format is JSON.
@@ -153,7 +154,7 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
  *    @arg @c kGTLRAnalyticsOutputJson Returns the response in standard JSON
  *        format. (Value: "json")
  */
-@property(copy, nullable) NSString *output;
+@property(nonatomic, copy, nullable) NSString *output;
 
 /**
  *  The desired sampling level.
@@ -167,29 +168,29 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
  *        response using a large sample size, but this may result in the
  *        response being slower. (Value: "HIGHER_PRECISION")
  */
-@property(copy, nullable) NSString *samplingLevel;
+@property(nonatomic, copy, nullable) NSString *samplingLevel;
 
 /** An Analytics segment to be applied to data. */
-@property(copy, nullable) NSString *segment;
+@property(nonatomic, copy, nullable) NSString *segment;
 
 /**
  *  A comma-separated list of dimensions or metrics that determine the sort
  *  order for Analytics data.
  */
-@property(copy, nullable) NSString *sort;
+@property(nonatomic, copy, nullable) NSString *sort;
 
 /**
  *  Start date for fetching Analytics data. Requests can specify a start date
  *  formatted as YYYY-MM-DD, or as a relative date (e.g., today, yesterday, or
  *  7daysAgo). The default value is 7daysAgo.
  */
-@property(copy, nullable) NSString *startDate;
+@property(nonatomic, copy, nullable) NSString *startDate;
 
 /**
  *  An index of the first entity to retrieve. Use this parameter as a pagination
  *  mechanism along with the max-results parameter.
  */
-@property(assign) NSInteger startIndex;
+@property(nonatomic, assign) NSInteger startIndex;
 
 /**
  *  Fetches a @c GTLRAnalytics_GaData.
@@ -233,36 +234,36 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
  *  A comma-separated list of Multi-Channel Funnels dimensions. E.g.,
  *  'mcf:source,mcf:medium'.
  */
-@property(copy, nullable) NSString *dimensions;
+@property(nonatomic, copy, nullable) NSString *dimensions;
 
 /**
  *  End date for fetching Analytics data. Requests can specify a start date
  *  formatted as YYYY-MM-DD, or as a relative date (e.g., today, yesterday, or
  *  7daysAgo). The default value is 7daysAgo.
  */
-@property(copy, nullable) NSString *endDate;
+@property(nonatomic, copy, nullable) NSString *endDate;
 
 /**
  *  A comma-separated list of dimension or metric filters to be applied to the
  *  Analytics data.
  */
-@property(copy, nullable) NSString *filters;
+@property(nonatomic, copy, nullable) NSString *filters;
 
 /**
  *  Unique table ID for retrieving Analytics data. Table ID is of the form
  *  ga:XXXX, where XXXX is the Analytics view (profile) ID.
  */
-@property(copy, nullable) NSString *ids;
+@property(nonatomic, copy, nullable) NSString *ids;
 
 /** The maximum number of entries to include in this feed. */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /**
  *  A comma-separated list of Multi-Channel Funnels metrics. E.g.,
  *  'mcf:totalConversions,mcf:totalConversionValue'. At least one metric must be
  *  specified.
  */
-@property(copy, nullable) NSString *metrics;
+@property(nonatomic, copy, nullable) NSString *metrics;
 
 /**
  *  The desired sampling level.
@@ -276,26 +277,26 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
  *        response using a large sample size, but this may result in the
  *        response being slower. (Value: "HIGHER_PRECISION")
  */
-@property(copy, nullable) NSString *samplingLevel;
+@property(nonatomic, copy, nullable) NSString *samplingLevel;
 
 /**
  *  A comma-separated list of dimensions or metrics that determine the sort
  *  order for the Analytics data.
  */
-@property(copy, nullable) NSString *sort;
+@property(nonatomic, copy, nullable) NSString *sort;
 
 /**
  *  Start date for fetching Analytics data. Requests can specify a start date
  *  formatted as YYYY-MM-DD, or as a relative date (e.g., today, yesterday, or
  *  7daysAgo). The default value is 7daysAgo.
  */
-@property(copy, nullable) NSString *startDate;
+@property(nonatomic, copy, nullable) NSString *startDate;
 
 /**
  *  An index of the first entity to retrieve. Use this parameter as a pagination
  *  mechanism along with the max-results parameter.
  */
-@property(assign) NSInteger startIndex;
+@property(nonatomic, assign) NSInteger startIndex;
 
 /**
  *  Fetches a @c GTLRAnalytics_McfData.
@@ -339,34 +340,34 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 /**
  *  A comma-separated list of real time dimensions. E.g., 'rt:medium,rt:city'.
  */
-@property(copy, nullable) NSString *dimensions;
+@property(nonatomic, copy, nullable) NSString *dimensions;
 
 /**
  *  A comma-separated list of dimension or metric filters to be applied to real
  *  time data.
  */
-@property(copy, nullable) NSString *filters;
+@property(nonatomic, copy, nullable) NSString *filters;
 
 /**
  *  Unique table ID for retrieving real time data. Table ID is of the form
  *  ga:XXXX, where XXXX is the Analytics view (profile) ID.
  */
-@property(copy, nullable) NSString *ids;
+@property(nonatomic, copy, nullable) NSString *ids;
 
 /** The maximum number of entries to include in this feed. */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /**
  *  A comma-separated list of real time metrics. E.g., 'rt:activeUsers'. At
  *  least one metric must be specified.
  */
-@property(copy, nullable) NSString *metrics;
+@property(nonatomic, copy, nullable) NSString *metrics;
 
 /**
  *  A comma-separated list of dimensions or metrics that determine the sort
  *  order for real time data.
  */
-@property(copy, nullable) NSString *sort;
+@property(nonatomic, copy, nullable) NSString *sort;
 
 /**
  *  Fetches a @c GTLRAnalytics_RealtimeData.
@@ -400,13 +401,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementAccountsList]
 
 /** The maximum number of accounts to include in this response. */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /**
  *  An index of the first account to retrieve. Use this parameter as a
  *  pagination mechanism along with the max-results parameter.
  */
-@property(assign) NSInteger startIndex;
+@property(nonatomic, assign) NSInteger startIndex;
 
 /**
  *  Fetches a @c GTLRAnalytics_Accounts.
@@ -437,13 +438,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
  *  The maximum number of account summaries to include in this response, where
  *  the largest acceptable value is 1000.
  */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /**
  *  An index of the first entity to retrieve. Use this parameter as a pagination
  *  mechanism along with the max-results parameter.
  */
-@property(assign) NSInteger startIndex;
+@property(nonatomic, assign) NSInteger startIndex;
 
 /**
  *  Fetches a @c GTLRAnalytics_AccountSummaries.
@@ -470,10 +471,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementAccountUserLinksDeleteWithaccountId:linkId:]
 
 /** Account ID to delete the user link for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Link ID to delete the user link for. */
-@property(copy, nullable) NSString *linkId;
+@property(nonatomic, copy, nullable) NSString *linkId;
 
 /**
  *  Upon successful completion, the callback's object and error parameters will
@@ -504,7 +505,7 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementAccountUserLinksInsertWithObject:accountId:]
 
 /** Account ID to create the user link for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /**
  *  Fetches a @c GTLRAnalytics_EntityUserLink.
@@ -535,16 +536,16 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementAccountUserLinksListWithaccountId:]
 
 /** Account ID to retrieve the user links for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** The maximum number of account-user links to include in this response. */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /**
  *  An index of the first account-user link to retrieve. Use this parameter as a
  *  pagination mechanism along with the max-results parameter.
  */
-@property(assign) NSInteger startIndex;
+@property(nonatomic, assign) NSInteger startIndex;
 
 /**
  *  Fetches a @c GTLRAnalytics_EntityUserLinks.
@@ -572,10 +573,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementAccountUserLinksUpdateWithObject:accountId:linkId:]
 
 /** Account ID to update the account-user link for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Link ID to update the account-user link for. */
-@property(copy, nullable) NSString *linkId;
+@property(nonatomic, copy, nullable) NSString *linkId;
 
 /**
  *  Fetches a @c GTLRAnalytics_EntityUserLink.
@@ -609,19 +610,19 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementCustomDataSourcesListWithaccountId:webPropertyId:]
 
 /** Account Id for the custom data sources to retrieve. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** The maximum number of custom data sources to include in this response. */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /**
  *  A 1-based index of the first custom data source to retrieve. Use this
  *  parameter as a pagination mechanism along with the max-results parameter.
  */
-@property(assign) NSInteger startIndex;
+@property(nonatomic, assign) NSInteger startIndex;
 
 /** Web property Id for the custom data sources to retrieve. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_CustomDataSources.
@@ -653,13 +654,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementCustomDimensionsGetWithaccountId:webPropertyId:customDimensionId:]
 
 /** Account ID for the custom dimension to retrieve. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** The ID of the custom dimension to retrieve. */
-@property(copy, nullable) NSString *customDimensionId;
+@property(nonatomic, copy, nullable) NSString *customDimensionId;
 
 /** Web property ID for the custom dimension to retrieve. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_CustomDimension.
@@ -691,10 +692,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementCustomDimensionsInsertWithObject:accountId:webPropertyId:]
 
 /** Account ID for the custom dimension to create. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Web property ID for the custom dimension to create. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_CustomDimension.
@@ -727,19 +728,19 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementCustomDimensionsListWithaccountId:webPropertyId:]
 
 /** Account ID for the custom dimensions to retrieve. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** The maximum number of custom dimensions to include in this response. */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /**
  *  An index of the first entity to retrieve. Use this parameter as a pagination
  *  mechanism along with the max-results parameter.
  */
-@property(assign) NSInteger startIndex;
+@property(nonatomic, assign) NSInteger startIndex;
 
 /** Web property ID for the custom dimensions to retrieve. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_CustomDimensions.
@@ -769,10 +770,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementCustomDimensionsPatchWithObject:accountId:webPropertyId:customDimensionId:]
 
 /** Account ID for the custom dimension to update. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Custom dimension ID for the custom dimension to update. */
-@property(copy, nullable) NSString *customDimensionId;
+@property(nonatomic, copy, nullable) NSString *customDimensionId;
 
 /**
  *  Force the update and ignore any warnings related to the custom dimension
@@ -780,10 +781,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
  *
  *  @note If not set, the documented server-side default will be false.
  */
-@property(assign) BOOL ignoreCustomDataSourceLinks;
+@property(nonatomic, assign) BOOL ignoreCustomDataSourceLinks;
 
 /** Web property ID for the custom dimension to update. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_CustomDimension.
@@ -818,10 +819,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementCustomDimensionsUpdateWithObject:accountId:webPropertyId:customDimensionId:]
 
 /** Account ID for the custom dimension to update. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Custom dimension ID for the custom dimension to update. */
-@property(copy, nullable) NSString *customDimensionId;
+@property(nonatomic, copy, nullable) NSString *customDimensionId;
 
 /**
  *  Force the update and ignore any warnings related to the custom dimension
@@ -829,10 +830,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
  *
  *  @note If not set, the documented server-side default will be false.
  */
-@property(assign) BOOL ignoreCustomDataSourceLinks;
+@property(nonatomic, assign) BOOL ignoreCustomDataSourceLinks;
 
 /** Web property ID for the custom dimension to update. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_CustomDimension.
@@ -868,13 +869,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementCustomMetricsGetWithaccountId:webPropertyId:customMetricId:]
 
 /** Account ID for the custom metric to retrieve. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** The ID of the custom metric to retrieve. */
-@property(copy, nullable) NSString *customMetricId;
+@property(nonatomic, copy, nullable) NSString *customMetricId;
 
 /** Web property ID for the custom metric to retrieve. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_CustomMetric.
@@ -906,10 +907,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementCustomMetricsInsertWithObject:accountId:webPropertyId:]
 
 /** Account ID for the custom metric to create. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Web property ID for the custom dimension to create. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_CustomMetric.
@@ -942,19 +943,19 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementCustomMetricsListWithaccountId:webPropertyId:]
 
 /** Account ID for the custom metrics to retrieve. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** The maximum number of custom metrics to include in this response. */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /**
  *  An index of the first entity to retrieve. Use this parameter as a pagination
  *  mechanism along with the max-results parameter.
  */
-@property(assign) NSInteger startIndex;
+@property(nonatomic, assign) NSInteger startIndex;
 
 /** Web property ID for the custom metrics to retrieve. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_CustomMetrics.
@@ -984,10 +985,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementCustomMetricsPatchWithObject:accountId:webPropertyId:customMetricId:]
 
 /** Account ID for the custom metric to update. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Custom metric ID for the custom metric to update. */
-@property(copy, nullable) NSString *customMetricId;
+@property(nonatomic, copy, nullable) NSString *customMetricId;
 
 /**
  *  Force the update and ignore any warnings related to the custom metric being
@@ -995,10 +996,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
  *
  *  @note If not set, the documented server-side default will be false.
  */
-@property(assign) BOOL ignoreCustomDataSourceLinks;
+@property(nonatomic, assign) BOOL ignoreCustomDataSourceLinks;
 
 /** Web property ID for the custom metric to update. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_CustomMetric.
@@ -1032,10 +1033,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementCustomMetricsUpdateWithObject:accountId:webPropertyId:customMetricId:]
 
 /** Account ID for the custom metric to update. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Custom metric ID for the custom metric to update. */
-@property(copy, nullable) NSString *customMetricId;
+@property(nonatomic, copy, nullable) NSString *customMetricId;
 
 /**
  *  Force the update and ignore any warnings related to the custom metric being
@@ -1043,10 +1044,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
  *
  *  @note If not set, the documented server-side default will be false.
  */
-@property(assign) BOOL ignoreCustomDataSourceLinks;
+@property(nonatomic, assign) BOOL ignoreCustomDataSourceLinks;
 
 /** Web property ID for the custom metric to update. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_CustomMetric.
@@ -1081,16 +1082,16 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementExperimentsDeleteWithaccountId:webPropertyId:profileId:experimentId:]
 
 /** Account ID to which the experiment belongs */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** ID of the experiment to delete */
-@property(copy, nullable) NSString *experimentId;
+@property(nonatomic, copy, nullable) NSString *experimentId;
 
 /** View (Profile) ID to which the experiment belongs */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web property ID to which the experiment belongs */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Upon successful completion, the callback's object and error parameters will
@@ -1127,16 +1128,16 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementExperimentsGetWithaccountId:webPropertyId:profileId:experimentId:]
 
 /** Account ID to retrieve the experiment for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Experiment ID to retrieve the experiment for. */
-@property(copy, nullable) NSString *experimentId;
+@property(nonatomic, copy, nullable) NSString *experimentId;
 
 /** View (Profile) ID to retrieve the experiment for. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web property ID to retrieve the experiment for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Experiment.
@@ -1171,13 +1172,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementExperimentsInsertWithObject:accountId:webPropertyId:profileId:]
 
 /** Account ID to create the experiment for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** View (Profile) ID to create the experiment for. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web property ID to create the experiment for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Experiment.
@@ -1213,22 +1214,22 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementExperimentsListWithaccountId:webPropertyId:profileId:]
 
 /** Account ID to retrieve experiments for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** The maximum number of experiments to include in this response. */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /** View (Profile) ID to retrieve experiments for. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /**
  *  An index of the first experiment to retrieve. Use this parameter as a
  *  pagination mechanism along with the max-results parameter.
  */
-@property(assign) NSInteger startIndex;
+@property(nonatomic, assign) NSInteger startIndex;
 
 /** Web property ID to retrieve experiments for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Experiments.
@@ -1261,16 +1262,16 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementExperimentsPatchWithObject:accountId:webPropertyId:profileId:experimentId:]
 
 /** Account ID of the experiment to update. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Experiment ID of the experiment to update. */
-@property(copy, nullable) NSString *experimentId;
+@property(nonatomic, copy, nullable) NSString *experimentId;
 
 /** View (Profile) ID of the experiment to update. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web property ID of the experiment to update. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Experiment.
@@ -1307,16 +1308,16 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementExperimentsUpdateWithObject:accountId:webPropertyId:profileId:experimentId:]
 
 /** Account ID of the experiment to update. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Experiment ID of the experiment to update. */
-@property(copy, nullable) NSString *experimentId;
+@property(nonatomic, copy, nullable) NSString *experimentId;
 
 /** View (Profile) ID of the experiment to update. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web property ID of the experiment to update. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Experiment.
@@ -1352,10 +1353,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementFiltersDeleteWithaccountId:filterId:]
 
 /** Account ID to delete the filter for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** ID of the filter to be deleted. */
-@property(copy, nullable) NSString *filterId;
+@property(nonatomic, copy, nullable) NSString *filterId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Filter.
@@ -1386,10 +1387,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementFiltersGetWithaccountId:filterId:]
 
 /** Account ID to retrieve filters for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Filter ID to retrieve filters for. */
-@property(copy, nullable) NSString *filterId;
+@property(nonatomic, copy, nullable) NSString *filterId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Filter.
@@ -1419,7 +1420,7 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementFiltersInsertWithObject:accountId:]
 
 /** Account ID to create filter for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Filter.
@@ -1450,16 +1451,16 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementFiltersListWithaccountId:]
 
 /** Account ID to retrieve filters for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** The maximum number of filters to include in this response. */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /**
  *  An index of the first entity to retrieve. Use this parameter as a pagination
  *  mechanism along with the max-results parameter.
  */
-@property(assign) NSInteger startIndex;
+@property(nonatomic, assign) NSInteger startIndex;
 
 /**
  *  Fetches a @c GTLRAnalytics_Filters.
@@ -1487,10 +1488,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementFiltersPatchWithObject:accountId:filterId:]
 
 /** Account ID to which the filter belongs. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** ID of the filter to be updated. */
-@property(copy, nullable) NSString *filterId;
+@property(nonatomic, copy, nullable) NSString *filterId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Filter.
@@ -1522,10 +1523,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementFiltersUpdateWithObject:accountId:filterId:]
 
 /** Account ID to which the filter belongs. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** ID of the filter to be updated. */
-@property(copy, nullable) NSString *filterId;
+@property(nonatomic, copy, nullable) NSString *filterId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Filter.
@@ -1558,16 +1559,16 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementGoalsGetWithaccountId:webPropertyId:profileId:goalId:]
 
 /** Account ID to retrieve the goal for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Goal ID to retrieve the goal for. */
-@property(copy, nullable) NSString *goalId;
+@property(nonatomic, copy, nullable) NSString *goalId;
 
 /** View (Profile) ID to retrieve the goal for. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web property ID to retrieve the goal for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Goal.
@@ -1601,13 +1602,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementGoalsInsertWithObject:accountId:webPropertyId:profileId:]
 
 /** Account ID to create the goal for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** View (Profile) ID to create the goal for. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web property ID to create the goal for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Goal.
@@ -1646,30 +1647,30 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
  *  Account ID to retrieve goals for. Can either be a specific account ID or
  *  '~all', which refers to all the accounts that user has access to.
  */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** The maximum number of goals to include in this response. */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /**
  *  View (Profile) ID to retrieve goals for. Can either be a specific view
  *  (profile) ID or '~all', which refers to all the views (profiles) that user
  *  has access to.
  */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /**
  *  An index of the first goal to retrieve. Use this parameter as a pagination
  *  mechanism along with the max-results parameter.
  */
-@property(assign) NSInteger startIndex;
+@property(nonatomic, assign) NSInteger startIndex;
 
 /**
  *  Web property ID to retrieve goals for. Can either be a specific web property
  *  ID or '~all', which refers to all the web properties that user has access
  *  to.
  */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Goals.
@@ -1707,16 +1708,16 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementGoalsPatchWithObject:accountId:webPropertyId:profileId:goalId:]
 
 /** Account ID to update the goal. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Index of the goal to be updated. */
-@property(copy, nullable) NSString *goalId;
+@property(nonatomic, copy, nullable) NSString *goalId;
 
 /** View (Profile) ID to update the goal. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web property ID to update the goal. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Goal.
@@ -1752,16 +1753,16 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementGoalsUpdateWithObject:accountId:webPropertyId:profileId:goalId:]
 
 /** Account ID to update the goal. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Index of the goal to be updated. */
-@property(copy, nullable) NSString *goalId;
+@property(nonatomic, copy, nullable) NSString *goalId;
 
 /** View (Profile) ID to update the goal. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web property ID to update the goal. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Goal.
@@ -1797,16 +1798,16 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementProfileFilterLinksDeleteWithaccountId:webPropertyId:profileId:linkId:]
 
 /** Account ID to which the profile filter link belongs. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** ID of the profile filter link to delete. */
-@property(copy, nullable) NSString *linkId;
+@property(nonatomic, copy, nullable) NSString *linkId;
 
 /** Profile ID to which the filter link belongs. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web property Id to which the profile filter link belongs. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Upon successful completion, the callback's object and error parameters will
@@ -1843,16 +1844,16 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementProfileFilterLinksGetWithaccountId:webPropertyId:profileId:linkId:]
 
 /** Account ID to retrieve profile filter link for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** ID of the profile filter link. */
-@property(copy, nullable) NSString *linkId;
+@property(nonatomic, copy, nullable) NSString *linkId;
 
 /** Profile ID to retrieve filter link for. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web property Id to retrieve profile filter link for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_ProfileFilterLink.
@@ -1886,13 +1887,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementProfileFilterLinksInsertWithObject:accountId:webPropertyId:profileId:]
 
 /** Account ID to create profile filter link for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Profile ID to create filter link for. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web property Id to create profile filter link for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_ProfileFilterLink.
@@ -1928,29 +1929,29 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementProfileFilterLinksListWithaccountId:webPropertyId:profileId:]
 
 /** Account ID to retrieve profile filter links for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** The maximum number of profile filter links to include in this response. */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /**
  *  Profile ID to retrieve filter links for. Can either be a specific profile ID
  *  or '~all', which refers to all the profiles that user has access to.
  */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /**
  *  An index of the first entity to retrieve. Use this parameter as a pagination
  *  mechanism along with the max-results parameter.
  */
-@property(assign) NSInteger startIndex;
+@property(nonatomic, assign) NSInteger startIndex;
 
 /**
  *  Web property Id for profile filter links for. Can either be a specific web
  *  property ID or '~all', which refers to all the web properties that user has
  *  access to.
  */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_ProfileFilterLinks.
@@ -1987,16 +1988,16 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementProfileFilterLinksPatchWithObject:accountId:webPropertyId:profileId:linkId:]
 
 /** Account ID to which profile filter link belongs. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** ID of the profile filter link to be updated. */
-@property(copy, nullable) NSString *linkId;
+@property(nonatomic, copy, nullable) NSString *linkId;
 
 /** Profile ID to which filter link belongs */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web property Id to which profile filter link belongs */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_ProfileFilterLink.
@@ -2034,16 +2035,16 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementProfileFilterLinksUpdateWithObject:accountId:webPropertyId:profileId:linkId:]
 
 /** Account ID to which profile filter link belongs. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** ID of the profile filter link to be updated. */
-@property(copy, nullable) NSString *linkId;
+@property(nonatomic, copy, nullable) NSString *linkId;
 
 /** Profile ID to which filter link belongs */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web property Id to which profile filter link belongs */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_ProfileFilterLink.
@@ -2080,13 +2081,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementProfilesDeleteWithaccountId:webPropertyId:profileId:]
 
 /** Account ID to delete the view (profile) for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** ID of the view (profile) to be deleted. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web property ID to delete the view (profile) for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Upon successful completion, the callback's object and error parameters will
@@ -2120,13 +2121,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementProfilesGetWithaccountId:webPropertyId:profileId:]
 
 /** Account ID to retrieve the view (profile) for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** View (Profile) ID to retrieve the view (profile) for. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web property ID to retrieve the view (profile) for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Profile.
@@ -2158,10 +2159,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementProfilesInsertWithObject:accountId:webPropertyId:]
 
 /** Account ID to create the view (profile) for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Web property ID to create the view (profile) for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Profile.
@@ -2199,23 +2200,23 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
  *  account ID or '~all', which refers to all the accounts to which the user has
  *  access.
  */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** The maximum number of views (profiles) to include in this response. */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /**
  *  An index of the first entity to retrieve. Use this parameter as a pagination
  *  mechanism along with the max-results parameter.
  */
-@property(assign) NSInteger startIndex;
+@property(nonatomic, assign) NSInteger startIndex;
 
 /**
  *  Web property ID for the views (profiles) to retrieve. Can either be a
  *  specific web property ID or '~all', which refers to all the web properties
  *  to which the user has access.
  */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Profiles.
@@ -2249,13 +2250,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementProfilesPatchWithObject:accountId:webPropertyId:profileId:]
 
 /** Account ID to which the view (profile) belongs */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** ID of the view (profile) to be updated. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web property ID to which the view (profile) belongs */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Profile.
@@ -2289,13 +2290,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementProfilesUpdateWithObject:accountId:webPropertyId:profileId:]
 
 /** Account ID to which the view (profile) belongs */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** ID of the view (profile) to be updated. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web property ID to which the view (profile) belongs */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Profile.
@@ -2329,16 +2330,16 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementProfileUserLinksDeleteWithaccountId:webPropertyId:profileId:linkId:]
 
 /** Account ID to delete the user link for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Link ID to delete the user link for. */
-@property(copy, nullable) NSString *linkId;
+@property(nonatomic, copy, nullable) NSString *linkId;
 
 /** View (Profile) ID to delete the user link for. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web Property ID to delete the user link for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Upon successful completion, the callback's object and error parameters will
@@ -2373,13 +2374,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementProfileUserLinksInsertWithObject:accountId:webPropertyId:profileId:]
 
 /** Account ID to create the user link for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** View (Profile) ID to create the user link for. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web Property ID to create the user link for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_EntityUserLink.
@@ -2414,30 +2415,30 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementProfileUserLinksListWithaccountId:webPropertyId:profileId:]
 
 /** Account ID which the given view (profile) belongs to. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** The maximum number of profile-user links to include in this response. */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /**
  *  View (Profile) ID to retrieve the profile-user links for. Can either be a
  *  specific profile ID or '~all', which refers to all the profiles that user
  *  has access to.
  */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /**
  *  An index of the first profile-user link to retrieve. Use this parameter as a
  *  pagination mechanism along with the max-results parameter.
  */
-@property(assign) NSInteger startIndex;
+@property(nonatomic, assign) NSInteger startIndex;
 
 /**
  *  Web Property ID which the given view (profile) belongs to. Can either be a
  *  specific web property ID or '~all', which refers to all the web properties
  *  that user has access to.
  */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_EntityUserLinks.
@@ -2473,16 +2474,16 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementProfileUserLinksUpdateWithObject:accountId:webPropertyId:profileId:linkId:]
 
 /** Account ID to update the user link for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Link ID to update the user link for. */
-@property(copy, nullable) NSString *linkId;
+@property(nonatomic, copy, nullable) NSString *linkId;
 
 /** View (Profile ID) to update the user link for. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web Property ID to update the user link for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_EntityUserLink.
@@ -2506,6 +2507,223 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 @end
 
 /**
+ *  Gets a remarketing audience to which the user has access.
+ *
+ *  Method: analytics.management.remarketingAudience.get
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeAnalyticsEdit
+ *    @c kGTLRAuthScopeAnalyticsReadonly
+ */
+@interface GTLRAnalyticsQuery_ManagementRemarketingAudienceGet : GTLRAnalyticsQuery
+// Previous library name was
+//   +[GTLQueryAnalytics queryForManagementRemarketingAudienceGetWithaccountId:webPropertyId:remarketingAudienceId:]
+
+/** The account ID of the remarketing audience to retrieve. */
+@property(nonatomic, copy, nullable) NSString *accountId;
+
+/** The ID of the remarketing audience to retrieve. */
+@property(nonatomic, copy, nullable) NSString *remarketingAudienceId;
+
+/** The web property ID of the remarketing audience to retrieve. */
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
+
+/**
+ *  Fetches a @c GTLRAnalytics_RemarketingAudience.
+ *
+ *  Gets a remarketing audience to which the user has access.
+ *
+ *  @param accountId The account ID of the remarketing audience to retrieve.
+ *  @param webPropertyId The web property ID of the remarketing audience to
+ *    retrieve.
+ *  @param remarketingAudienceId The ID of the remarketing audience to retrieve.
+ *
+ *  @returns GTLRAnalyticsQuery_ManagementRemarketingAudienceGet
+ */
++ (instancetype)queryWithAccountId:(NSString *)accountId
+                     webPropertyId:(NSString *)webPropertyId
+             remarketingAudienceId:(NSString *)remarketingAudienceId;
+
+@end
+
+/**
+ *  Creates a new remarketing audience.
+ *
+ *  Method: analytics.management.remarketingAudience.insert
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeAnalyticsEdit
+ */
+@interface GTLRAnalyticsQuery_ManagementRemarketingAudienceInsert : GTLRAnalyticsQuery
+// Previous library name was
+//   +[GTLQueryAnalytics queryForManagementRemarketingAudienceInsertWithObject:accountId:webPropertyId:]
+
+/** The account ID for which to create the remarketing audience. */
+@property(nonatomic, copy, nullable) NSString *accountId;
+
+/** Web property ID for which to create the remarketing audience. */
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
+
+/**
+ *  Fetches a @c GTLRAnalytics_RemarketingAudience.
+ *
+ *  Creates a new remarketing audience.
+ *
+ *  @param object The @c GTLRAnalytics_RemarketingAudience to include in the
+ *    query.
+ *  @param accountId The account ID for which to create the remarketing
+ *    audience.
+ *  @param webPropertyId Web property ID for which to create the remarketing
+ *    audience.
+ *
+ *  @returns GTLRAnalyticsQuery_ManagementRemarketingAudienceInsert
+ */
++ (instancetype)queryWithObject:(GTLRAnalytics_RemarketingAudience *)object
+                      accountId:(NSString *)accountId
+                  webPropertyId:(NSString *)webPropertyId;
+
+@end
+
+/**
+ *  Lists remarketing audiences to which the user has access.
+ *
+ *  Method: analytics.management.remarketingAudience.list
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeAnalyticsEdit
+ *    @c kGTLRAuthScopeAnalyticsReadonly
+ */
+@interface GTLRAnalyticsQuery_ManagementRemarketingAudienceList : GTLRAnalyticsQuery
+// Previous library name was
+//   +[GTLQueryAnalytics queryForManagementRemarketingAudienceListWithaccountId:webPropertyId:]
+
+/** The account ID of the remarketing audiences to retrieve. */
+@property(nonatomic, copy, nullable) NSString *accountId;
+
+/**
+ *  The maximum number of remarketing audiences to include in this response.
+ */
+@property(nonatomic, assign) NSInteger maxResults;
+
+/**
+ *  An index of the first entity to retrieve. Use this parameter as a pagination
+ *  mechanism along with the max-results parameter.
+ */
+@property(nonatomic, assign) NSInteger startIndex;
+
+/**
+ *  type
+ *
+ *  @note If not set, the documented server-side default will be all.
+ */
+@property(nonatomic, copy, nullable) NSString *type;
+
+/** The web property ID of the remarketing audiences to retrieve. */
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
+
+/**
+ *  Fetches a @c GTLRAnalytics_RemarketingAudiences.
+ *
+ *  Lists remarketing audiences to which the user has access.
+ *
+ *  @param accountId The account ID of the remarketing audiences to retrieve.
+ *  @param webPropertyId The web property ID of the remarketing audiences to
+ *    retrieve.
+ *
+ *  @returns GTLRAnalyticsQuery_ManagementRemarketingAudienceList
+ */
++ (instancetype)queryWithAccountId:(NSString *)accountId
+                     webPropertyId:(NSString *)webPropertyId;
+
+@end
+
+/**
+ *  Updates an existing remarketing audience. This method supports patch
+ *  semantics.
+ *
+ *  Method: analytics.management.remarketingAudience.patch
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeAnalyticsEdit
+ */
+@interface GTLRAnalyticsQuery_ManagementRemarketingAudiencePatch : GTLRAnalyticsQuery
+// Previous library name was
+//   +[GTLQueryAnalytics queryForManagementRemarketingAudiencePatchWithObject:accountId:webPropertyId:remarketingAudienceId:]
+
+/** The account ID of the remarketing audience to update. */
+@property(nonatomic, copy, nullable) NSString *accountId;
+
+/** The ID of the remarketing audience to update. */
+@property(nonatomic, copy, nullable) NSString *remarketingAudienceId;
+
+/** The web property ID of the remarketing audience to update. */
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
+
+/**
+ *  Fetches a @c GTLRAnalytics_RemarketingAudience.
+ *
+ *  Updates an existing remarketing audience. This method supports patch
+ *  semantics.
+ *
+ *  @param object The @c GTLRAnalytics_RemarketingAudience to include in the
+ *    query.
+ *  @param accountId The account ID of the remarketing audience to update.
+ *  @param webPropertyId The web property ID of the remarketing audience to
+ *    update.
+ *  @param remarketingAudienceId The ID of the remarketing audience to update.
+ *
+ *  @returns GTLRAnalyticsQuery_ManagementRemarketingAudiencePatch
+ */
++ (instancetype)queryWithObject:(GTLRAnalytics_RemarketingAudience *)object
+                      accountId:(NSString *)accountId
+                  webPropertyId:(NSString *)webPropertyId
+          remarketingAudienceId:(NSString *)remarketingAudienceId;
+
+@end
+
+/**
+ *  Updates an existing remarketing audience.
+ *
+ *  Method: analytics.management.remarketingAudience.update
+ *
+ *  Authorization scope(s):
+ *    @c kGTLRAuthScopeAnalyticsEdit
+ */
+@interface GTLRAnalyticsQuery_ManagementRemarketingAudienceUpdate : GTLRAnalyticsQuery
+// Previous library name was
+//   +[GTLQueryAnalytics queryForManagementRemarketingAudienceUpdateWithObject:accountId:webPropertyId:remarketingAudienceId:]
+
+/** The account ID of the remarketing audience to update. */
+@property(nonatomic, copy, nullable) NSString *accountId;
+
+/** The ID of the remarketing audience to update. */
+@property(nonatomic, copy, nullable) NSString *remarketingAudienceId;
+
+/** The web property ID of the remarketing audience to update. */
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
+
+/**
+ *  Fetches a @c GTLRAnalytics_RemarketingAudience.
+ *
+ *  Updates an existing remarketing audience.
+ *
+ *  @param object The @c GTLRAnalytics_RemarketingAudience to include in the
+ *    query.
+ *  @param accountId The account ID of the remarketing audience to update.
+ *  @param webPropertyId The web property ID of the remarketing audience to
+ *    update.
+ *  @param remarketingAudienceId The ID of the remarketing audience to update.
+ *
+ *  @returns GTLRAnalyticsQuery_ManagementRemarketingAudienceUpdate
+ */
++ (instancetype)queryWithObject:(GTLRAnalytics_RemarketingAudience *)object
+                      accountId:(NSString *)accountId
+                  webPropertyId:(NSString *)webPropertyId
+          remarketingAudienceId:(NSString *)remarketingAudienceId;
+
+@end
+
+/**
  *  Lists segments to which the user has access.
  *
  *  Method: analytics.management.segments.list
@@ -2520,13 +2738,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementSegmentsList]
 
 /** The maximum number of segments to include in this response. */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /**
  *  An index of the first segment to retrieve. Use this parameter as a
  *  pagination mechanism along with the max-results parameter.
  */
-@property(assign) NSInteger startIndex;
+@property(nonatomic, assign) NSInteger startIndex;
 
 /**
  *  Fetches a @c GTLRAnalytics_Segments.
@@ -2552,16 +2770,16 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementUnsampledReportsDeleteWithaccountId:webPropertyId:profileId:unsampledReportId:]
 
 /** Account ID to delete the unsampled report for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** View (Profile) ID to delete the unsampled report for. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** ID of the unsampled report to be deleted. */
-@property(copy, nullable) NSString *unsampledReportId;
+@property(nonatomic, copy, nullable) NSString *unsampledReportId;
 
 /** Web property ID to delete the unsampled reports for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Upon successful completion, the callback's object and error parameters will
@@ -2598,16 +2816,16 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementUnsampledReportsGetWithaccountId:webPropertyId:profileId:unsampledReportId:]
 
 /** Account ID to retrieve unsampled report for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** View (Profile) ID to retrieve unsampled report for. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** ID of the unsampled report to retrieve. */
-@property(copy, nullable) NSString *unsampledReportId;
+@property(nonatomic, copy, nullable) NSString *unsampledReportId;
 
 /** Web property ID to retrieve unsampled reports for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_UnsampledReport.
@@ -2642,13 +2860,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementUnsampledReportsInsertWithObject:accountId:webPropertyId:profileId:]
 
 /** Account ID to create the unsampled report for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** View (Profile) ID to create the unsampled report for. */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /** Web property ID to create the unsampled report for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_UnsampledReport.
@@ -2687,28 +2905,28 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
  *  Account ID to retrieve unsampled reports for. Must be a specific account ID,
  *  ~all is not supported.
  */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** The maximum number of unsampled reports to include in this response. */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /**
  *  View (Profile) ID to retrieve unsampled reports for. Must be a specific view
  *  (profile) ID, ~all is not supported.
  */
-@property(copy, nullable) NSString *profileId;
+@property(nonatomic, copy, nullable) NSString *profileId;
 
 /**
  *  An index of the first unsampled report to retrieve. Use this parameter as a
  *  pagination mechanism along with the max-results parameter.
  */
-@property(assign) NSInteger startIndex;
+@property(nonatomic, assign) NSInteger startIndex;
 
 /**
  *  Web property ID to retrieve unsampled reports for. Must be a specific web
  *  property ID, ~all is not supported.
  */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_UnsampledReports.
@@ -2744,13 +2962,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementUploadsDeleteUploadDataWithObject:accountId:webPropertyId:customDataSourceId:]
 
 /** Account Id for the uploads to be deleted. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Custom data source Id for the uploads to be deleted. */
-@property(copy, nullable) NSString *customDataSourceId;
+@property(nonatomic, copy, nullable) NSString *customDataSourceId;
 
 /** Web property Id for the uploads to be deleted. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Upon successful completion, the callback's object and error parameters will
@@ -2789,16 +3007,16 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementUploadsGetWithaccountId:webPropertyId:customDataSourceId:uploadId:]
 
 /** Account Id for the upload to retrieve. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Custom data source Id for upload to retrieve. */
-@property(copy, nullable) NSString *customDataSourceId;
+@property(nonatomic, copy, nullable) NSString *customDataSourceId;
 
 /** Upload Id to retrieve. */
-@property(copy, nullable) NSString *uploadId;
+@property(nonatomic, copy, nullable) NSString *uploadId;
 
 /** Web property Id for the upload to retrieve. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Upload.
@@ -2834,22 +3052,22 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementUploadsListWithaccountId:webPropertyId:customDataSourceId:]
 
 /** Account Id for the uploads to retrieve. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Custom data source Id for uploads to retrieve. */
-@property(copy, nullable) NSString *customDataSourceId;
+@property(nonatomic, copy, nullable) NSString *customDataSourceId;
 
 /** The maximum number of uploads to include in this response. */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /**
  *  A 1-based index of the first upload to retrieve. Use this parameter as a
  *  pagination mechanism along with the max-results parameter.
  */
-@property(assign) NSInteger startIndex;
+@property(nonatomic, assign) NSInteger startIndex;
 
 /** Web property Id for the uploads to retrieve. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Uploads.
@@ -2882,13 +3100,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementUploadsUploadDataWithaccountId:webPropertyId:customDataSourceId:]
 
 /** Account Id associated with the upload. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Custom data source Id to which the data being uploaded belongs. */
-@property(copy, nullable) NSString *customDataSourceId;
+@property(nonatomic, copy, nullable) NSString *customDataSourceId;
 
 /** Web property UA-string associated with the upload. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Upload.
@@ -2925,10 +3143,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementWebpropertiesGetWithaccountId:webPropertyId:]
 
 /** Account ID to retrieve the web property for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** ID to retrieve the web property for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Webproperty.
@@ -2960,7 +3178,7 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementWebpropertiesInsertWithObject:accountId:]
 
 /** Account ID to create the web property for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Webproperty.
@@ -2997,16 +3215,16 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
  *  Account ID to retrieve web properties for. Can either be a specific account
  *  ID or '~all', which refers to all the accounts that user has access to.
  */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** The maximum number of web properties to include in this response. */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /**
  *  An index of the first entity to retrieve. Use this parameter as a pagination
  *  mechanism along with the max-results parameter.
  */
-@property(assign) NSInteger startIndex;
+@property(nonatomic, assign) NSInteger startIndex;
 
 /**
  *  Fetches a @c GTLRAnalytics_Webproperties.
@@ -3036,10 +3254,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementWebpropertiesPatchWithObject:accountId:webPropertyId:]
 
 /** Account ID to which the web property belongs */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Web property ID */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Webproperty.
@@ -3071,10 +3289,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementWebpropertiesUpdateWithObject:accountId:webPropertyId:]
 
 /** Account ID to which the web property belongs */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Web property ID */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_Webproperty.
@@ -3106,13 +3324,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementWebPropertyAdWordsLinksDeleteWithaccountId:webPropertyId:webPropertyAdWordsLinkId:]
 
 /** ID of the account which the given web property belongs to. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Web property AdWords link ID. */
-@property(copy, nullable) NSString *webPropertyAdWordsLinkId;
+@property(nonatomic, copy, nullable) NSString *webPropertyAdWordsLinkId;
 
 /** Web property ID to delete the AdWords link for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Upon successful completion, the callback's object and error parameters will
@@ -3146,13 +3364,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementWebPropertyAdWordsLinksGetWithaccountId:webPropertyId:webPropertyAdWordsLinkId:]
 
 /** ID of the account which the given web property belongs to. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Web property-AdWords link ID. */
-@property(copy, nullable) NSString *webPropertyAdWordsLinkId;
+@property(nonatomic, copy, nullable) NSString *webPropertyAdWordsLinkId;
 
 /** Web property ID to retrieve the AdWords link for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_EntityAdWordsLink.
@@ -3184,10 +3402,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementWebPropertyAdWordsLinksInsertWithObject:accountId:webPropertyId:]
 
 /** ID of the Google Analytics account to create the link for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Web property ID to create the link for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_EntityAdWordsLink.
@@ -3221,21 +3439,21 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementWebPropertyAdWordsLinksListWithaccountId:webPropertyId:]
 
 /** ID of the account which the given web property belongs to. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /**
  *  The maximum number of webProperty-AdWords links to include in this response.
  */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /**
  *  An index of the first webProperty-AdWords link to retrieve. Use this
  *  parameter as a pagination mechanism along with the max-results parameter.
  */
-@property(assign) NSInteger startIndex;
+@property(nonatomic, assign) NSInteger startIndex;
 
 /** Web property ID to retrieve the AdWords links for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_EntityAdWordsLinks.
@@ -3266,13 +3484,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementWebPropertyAdWordsLinksPatchWithObject:accountId:webPropertyId:webPropertyAdWordsLinkId:]
 
 /** ID of the account which the given web property belongs to. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Web property-AdWords link ID. */
-@property(copy, nullable) NSString *webPropertyAdWordsLinkId;
+@property(nonatomic, copy, nullable) NSString *webPropertyAdWordsLinkId;
 
 /** Web property ID to retrieve the AdWords link for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_EntityAdWordsLink.
@@ -3308,13 +3526,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementWebPropertyAdWordsLinksUpdateWithObject:accountId:webPropertyId:webPropertyAdWordsLinkId:]
 
 /** ID of the account which the given web property belongs to. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Web property-AdWords link ID. */
-@property(copy, nullable) NSString *webPropertyAdWordsLinkId;
+@property(nonatomic, copy, nullable) NSString *webPropertyAdWordsLinkId;
 
 /** Web property ID to retrieve the AdWords link for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_EntityAdWordsLink.
@@ -3349,13 +3567,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementWebpropertyUserLinksDeleteWithaccountId:webPropertyId:linkId:]
 
 /** Account ID to delete the user link for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Link ID to delete the user link for. */
-@property(copy, nullable) NSString *linkId;
+@property(nonatomic, copy, nullable) NSString *linkId;
 
 /** Web Property ID to delete the user link for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Upon successful completion, the callback's object and error parameters will
@@ -3388,10 +3606,10 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementWebpropertyUserLinksInsertWithObject:accountId:webPropertyId:]
 
 /** Account ID to create the user link for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Web Property ID to create the user link for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_EntityUserLink.
@@ -3424,25 +3642,25 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementWebpropertyUserLinksListWithaccountId:webPropertyId:]
 
 /** Account ID which the given web property belongs to. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /**
  *  The maximum number of webProperty-user Links to include in this response.
  */
-@property(assign) NSInteger maxResults;
+@property(nonatomic, assign) NSInteger maxResults;
 
 /**
  *  An index of the first webProperty-user link to retrieve. Use this parameter
  *  as a pagination mechanism along with the max-results parameter.
  */
-@property(assign) NSInteger startIndex;
+@property(nonatomic, assign) NSInteger startIndex;
 
 /**
  *  Web Property ID for the webProperty-user links to retrieve. Can either be a
  *  specific web property ID or '~all', which refers to all the web properties
  *  that user has access to.
  */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_EntityUserLinks.
@@ -3474,13 +3692,13 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
 //   +[GTLQueryAnalytics queryForManagementWebpropertyUserLinksUpdateWithObject:accountId:webPropertyId:linkId:]
 
 /** Account ID to update the account-user link for. */
-@property(copy, nullable) NSString *accountId;
+@property(nonatomic, copy, nullable) NSString *accountId;
 
 /** Link ID to update the account-user link for. */
-@property(copy, nullable) NSString *linkId;
+@property(nonatomic, copy, nullable) NSString *linkId;
 
 /** Web property ID to update the account-user link for. */
-@property(copy, nullable) NSString *webPropertyId;
+@property(nonatomic, copy, nullable) NSString *webPropertyId;
 
 /**
  *  Fetches a @c GTLRAnalytics_EntityUserLink.
@@ -3519,7 +3737,7 @@ GTLR_EXTERN NSString * const kGTLRAnalyticsSamplingLevelHigherPrecision;
  *  Report type. Allowed Values: 'ga'. Where 'ga' corresponds to the Core
  *  Reporting API
  */
-@property(copy, nullable) NSString *reportType;
+@property(nonatomic, copy, nullable) NSString *reportType;
 
 /**
  *  Fetches a @c GTLRAnalytics_Columns.

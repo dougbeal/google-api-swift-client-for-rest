@@ -98,6 +98,8 @@ NSString * const kGTLRSheets_Border_Style_Dotted           = @"DOTTED";
 NSString * const kGTLRSheets_Border_Style_Double           = @"DOUBLE";
 NSString * const kGTLRSheets_Border_Style_None             = @"NONE";
 NSString * const kGTLRSheets_Border_Style_Solid            = @"SOLID";
+NSString * const kGTLRSheets_Border_Style_SolidMedium      = @"SOLID_MEDIUM";
+NSString * const kGTLRSheets_Border_Style_SolidThick       = @"SOLID_THICK";
 NSString * const kGTLRSheets_Border_Style_StyleUnspecified = @"STYLE_UNSPECIFIED";
 
 // GTLRSheets_CellFormat.horizontalAlignment
@@ -426,6 +428,16 @@ NSString * const kGTLRSheets_ValueRange_MajorDimension_Rows    = @"ROWS";
 
 // ----------------------------------------------------------------------------
 //
+//   GTLRSheets_AppendValuesResponse
+//
+
+@implementation GTLRSheets_AppendValuesResponse
+@dynamic spreadsheetId, tableRange, updates;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
 //   GTLRSheets_AutoFillRequest
 //
 
@@ -521,6 +533,42 @@ NSString * const kGTLRSheets_ValueRange_MajorDimension_Rows    = @"ROWS";
 
 + (Class)classForAdditionalProperties {
   return [GTLRSheets_FilterCriteria class];
+}
+
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRSheets_BatchClearValuesRequest
+//
+
+@implementation GTLRSheets_BatchClearValuesRequest
+@dynamic ranges;
+
++ (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
+  NSDictionary<NSString *, Class> *map = @{
+    @"ranges" : [NSString class]
+  };
+  return map;
+}
+
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRSheets_BatchClearValuesResponse
+//
+
+@implementation GTLRSheets_BatchClearValuesResponse
+@dynamic clearedRanges, spreadsheetId;
+
++ (NSDictionary<NSString *, Class> *)arrayPropertyToClassMap {
+  NSDictionary<NSString *, Class> *map = @{
+    @"clearedRanges" : [NSString class]
+  };
+  return map;
 }
 
 @end
@@ -742,6 +790,25 @@ NSString * const kGTLRSheets_ValueRange_MajorDimension_Rows    = @"ROWS";
 
 @implementation GTLRSheets_ClearBasicFilterRequest
 @dynamic sheetId;
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRSheets_ClearValuesRequest
+//
+
+@implementation GTLRSheets_ClearValuesRequest
+@end
+
+
+// ----------------------------------------------------------------------------
+//
+//   GTLRSheets_ClearValuesResponse
+//
+
+@implementation GTLRSheets_ClearValuesResponse
+@dynamic clearedRange, spreadsheetId;
 @end
 
 

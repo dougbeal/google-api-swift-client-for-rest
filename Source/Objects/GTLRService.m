@@ -34,9 +34,12 @@
 
 #import "GTMMIMEDocument.h"
 
+#ifndef STRIP_GTM_FETCH_LOGGING
+  #error GTMSessionFetcher headers should have defaulted this if it wasn't already defined.
+#endif
+
 NSString *const kGTLRServiceErrorDomain = @"com.google.GTLRServiceDomain";
 NSString *const kGTLRErrorObjectDomain = @"com.google.GTLRErrorObjectDomain";
-NSString *const kGTLRServiceErrorStringKey = @"error";
 NSString *const kGTLRServiceErrorBodyDataKey = @"body";
 NSString *const kGTLRServiceErrorContentIDKey = @"contentID";
 NSString *const kGTLRStructuredErrorKey = @"GTLRStructuredError";
@@ -50,6 +53,8 @@ NSString *const kGTLRServiceTicketParsingStoppedNotification = @"kGTLRServiceTic
 static NSString *const kDeveloperAPIQueryParamKey = @"key";
 
 static const NSUInteger kMaxNumberOfNextPagesFetched = 25;
+
+static const NSUInteger kMaxGETURLLength = 2048;
 
 // we'll enforce 50K chunks minimum just to avoid the server getting hit
 // with too many small upload chunks
@@ -179,7 +184,7 @@ static NSDictionary *MergeDictionaries(NSDictionary *recessiveDict, NSDictionary
 
 @interface GTLRObject (StandardProperties)
 // Common properties on GTLRObject that are invoked below.
-@property(retain) NSString *nextPageToken;
+@property(nonatomic, copy) NSString *nextPageToken;
 @end
 
 // This class encapsulates the pieces of a single batch response, including
@@ -485,7 +490,7 @@ static NSDictionary *MergeDictionaries(NSDictionary *recessiveDict, NSDictionary
   // and we want consistent behavior.  Service properties should be copied to the ticket.
 
   GTLR_DEBUG_ASSERT(executingQuery != nil,
-                    @"no query? service additionalURLQueryParameters need to be added to targetURL");
+                    @"no query? service additionalURLQueryParameters needs to be added to targetURL");
 
   GTLR_DEBUG_ASSERT(targetURL != nil, @"no url?");
   if (targetURL == nil) return nil;
@@ -565,7 +570,6 @@ static NSDictionary *MergeDictionaries(NSDictionary *recessiveDict, NSDictionary
                                          httpMethod:httpMethod
                                   additionalHeaders:additionalHeaders
                                              ticket:ticket];
-  ticket.fetchRequest = request;
   ticket.postedObject = bodyObject;
   ticket.executingQuery = executingQuery;
 
@@ -574,6 +578,39 @@ static NSDictionary *MergeDictionaries(NSDictionary *recessiveDict, NSDictionary
     originalQuery = (GTLRQuery *)executingQuery;
     ticket.originalQuery = originalQuery;
   }
+
+  // Some proxy servers (and some web servers) have issues with GET URLs being
+  // too long, trap that and move the query parameters into the body. The
+  // uploadParams and dataToPost should be nil for a GET, but playing it safe
+  // and confirming.
+  NSString *requestHTTPMethod = request.HTTPMethod;
+  BOOL isDoingHTTPGet =
+      (requestHTTPMethod == nil
+       || [requestHTTPMethod caseInsensitiveCompare:@"GET"] == NSOrderedSame);
+  if (isDoingHTTPGet &&
+      (request.URL.absoluteString.length >= kMaxGETURLLength) &&
+      (uploadParams == nil) &&
+      (dataToPost == nil)) {
+    NSString *urlString = request.URL.absoluteString;
+    NSRange range = [urlString rangeOfString:@"?"];
+    if (range.location != NSNotFound) {
+      NSURL *trimmedURL = [NSURL URLWithString:[urlString substringToIndex:range.location]];
+      NSString *urlArgsString = [urlString substringFromIndex:(range.location + 1)];
+      if (trimmedURL && (urlArgsString.length > 0)) {
+        dataToPost = [urlArgsString dataUsingEncoding:NSUTF8StringEncoding];
+        NSMutableURLRequest *mutableRequest = [request mutableCopy];
+        mutableRequest.URL = trimmedURL;
+        mutableRequest.HTTPMethod = @"POST";
+        [mutableRequest setValue:@"GET" forHTTPHeaderField:@"X-HTTP-Method-Override"];
+        [mutableRequest setValue:@"application/x-www-form-urlencoded"
+              forHTTPHeaderField:@"Content-Type"];
+        [mutableRequest setValue:@(dataToPost.length).stringValue
+              forHTTPHeaderField:@"Content-Length"];
+        request = mutableRequest;
+      }
+    }
+  }
+  ticket.fetchRequest = request;
 
   GTLRServiceTestBlock testBlock = ticket.testBlock;
   if (testBlock) {
@@ -735,7 +772,7 @@ static NSDictionary *MergeDictionaries(NSDictionary *recessiveDict, NSDictionary
             // error response visible in the error object.
             NSString *reasonStr = [[NSString alloc] initWithData:(NSData * _Nonnull)data
                                                         encoding:NSUTF8StringEncoding];
-            NSDictionary *userInfo = @{ NSLocalizedFailureReasonErrorKey : reasonStr };
+            NSDictionary *userInfo = @{ NSLocalizedDescriptionKey : reasonStr };
             error = [NSError errorWithDomain:kGTMSessionFetcherStatusDomain
                                         code:status
                                     userInfo:userInfo];
@@ -1525,12 +1562,14 @@ static NSDictionary *MergeDictionaries(NSDictionary *recessiveDict, NSDictionary
 
   NSMutableDictionary *successes = [NSMutableDictionary dictionary];
   NSMutableDictionary *failures = [NSMutableDictionary dictionary];
+  NSMutableDictionary *responseHeaders = [NSMutableDictionary dictionary];
 
   for (GTLRBatchResponsePart *responsePart in parts) {
     NSString *contentID = responsePart.contentID;
     NSDictionary *json = responsePart.JSON;
     NSError *parseError = responsePart.parseError;
     NSInteger statusCode = responsePart.statusCode;
+    [responseHeaders setValue:responsePart.headers forKey:contentID];
 
     if (parseError) {
       GTLRErrorObject *parseErrorObject = [GTLRErrorObject objectWithFoundationError:parseError];
@@ -1546,7 +1585,7 @@ static NSDictionary *MergeDictionaries(NSDictionary *recessiveDict, NSDictionary
         // Report a fetch failure for this part that lacks a JSON error.
         NSString *errorStr = responsePart.statusString;
         NSDictionary *userInfo = @{
-          kGTLRServiceErrorStringKey : (errorStr ?: @"<unknown>"),
+          NSLocalizedDescriptionKey : (errorStr ?: @"<unknown>"),
         };
         NSError *httpError = [NSError errorWithDomain:kGTLRServiceErrorDomain
                                                  code:GTLRServiceErrorBatchResponseStatusCode
@@ -1569,6 +1608,7 @@ static NSDictionary *MergeDictionaries(NSDictionary *recessiveDict, NSDictionary
   }  // for
   batchResult.successes = successes;
   batchResult.failures = failures;
+  batchResult.responseHeaders = responseHeaders;
   return batchResult;
 }
 
@@ -2740,3 +2780,6 @@ static NSDictionary *MergeDictionaries(NSDictionary *recessiveDict, NSDictionary
 
 @end
 
+@implementation GTLRObjectCollectionImpl
+@dynamic nextPageToken;
+@end

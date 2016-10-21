@@ -19,7 +19,6 @@
 #endif
 
 @class GTLRDoubleClickBidManager_FilterPair;
-@class GTLRDoubleClickBidManager_Note;
 @class GTLRDoubleClickBidManager_Parameters;
 @class GTLRDoubleClickBidManager_Query;
 @class GTLRDoubleClickBidManager_QueryMetadata;
@@ -60,6 +59,28 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_DownloadLineItemsRequest
 
 /** Value: "CSV" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_DownloadLineItemsRequest_Format_Csv;
+
+// ----------------------------------------------------------------------------
+// GTLRDoubleClickBidManager_DownloadRequest.fileTypes
+
+/** Value: "AD" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_DownloadRequest_FileTypes_Ad;
+/** Value: "AD_GROUP" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_DownloadRequest_FileTypes_AdGroup;
+/** Value: "INSERTION_ORDER" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_DownloadRequest_FileTypes_InsertionOrder;
+/** Value: "LINE_ITEM" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_DownloadRequest_FileTypes_LineItem;
+
+// ----------------------------------------------------------------------------
+// GTLRDoubleClickBidManager_DownloadRequest.filterType
+
+/** Value: "ADVERTISER_ID" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_DownloadRequest_FilterType_AdvertiserId;
+/** Value: "INSERTION_ORDER_ID" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_DownloadRequest_FilterType_InsertionOrderId;
+/** Value: "LINE_ITEM_ID" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_DownloadRequest_FilterType_LineItemId;
 
 // ----------------------------------------------------------------------------
 // GTLRDoubleClickBidManager_FilterPair.type
@@ -138,6 +159,8 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterLi
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterLineItemLifetimeFrequency;
 /** Value: "FILTER_LINE_ITEM_TYPE" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterLineItemType;
+/** Value: "FILTER_MEDIA_PLAN" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterMediaPlan;
 /** Value: "FILTER_MOBILE_DEVICE_MAKE" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterMobileDeviceMake;
 /** Value: "FILTER_MOBILE_DEVICE_MAKE_MODEL" */
@@ -158,6 +181,8 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterNi
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterNielsenDeviceId;
 /** Value: "FILTER_NIELSEN_GENDER" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterNielsenGender;
+/** Value: "FILTER_NOT_SUPPORTED" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterNotSupported;
 /** Value: "FILTER_ORDER_ID" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterOrderId;
 /** Value: "FILTER_OS" */
@@ -194,10 +219,16 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTr
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewAge;
 /** Value: "FILTER_TRUEVIEW_CATEGORY" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewCategory;
+/** Value: "FILTER_TRUEVIEW_CITY" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewCity;
 /** Value: "FILTER_TRUEVIEW_CONVERSION_TYPE" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewConversionType;
+/** Value: "FILTER_TRUEVIEW_COUNTRY" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewCountry;
 /** Value: "FILTER_TRUEVIEW_CUSTOM_AFFINITY" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewCustomAffinity;
+/** Value: "FILTER_TRUEVIEW_DMA" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewDma;
 /** Value: "FILTER_TRUEVIEW_GENDER" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewGender;
 /** Value: "FILTER_TRUEVIEW_IAR_AGE" */
@@ -222,6 +253,10 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTr
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewIarRemarketingList;
 /** Value: "FILTER_TRUEVIEW_IAR_TIME_OF_DAY" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewIarTimeOfDay;
+/** Value: "FILTER_TRUEVIEW_IAR_YOUTUBE_CHANNEL" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewIarYoutubeChannel;
+/** Value: "FILTER_TRUEVIEW_IAR_YOUTUBE_VIDEO" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewIarYoutubeVideo;
 /** Value: "FILTER_TRUEVIEW_IAR_ZIPCODE" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewIarZipcode;
 /** Value: "FILTER_TRUEVIEW_INTEREST" */
@@ -232,8 +267,14 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTr
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewParentalStatus;
 /** Value: "FILTER_TRUEVIEW_PLACEMENT" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewPlacement;
+/** Value: "FILTER_TRUEVIEW_REGION" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewRegion;
 /** Value: "FILTER_TRUEVIEW_REMARKETING_LIST" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewRemarketingList;
+/** Value: "FILTER_TRUEVIEW_URL" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewUrl;
+/** Value: "FILTER_TRUEVIEW_ZIPCODE" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewZipcode;
 /** Value: "FILTER_UNKNOWN" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_FilterPair_Type_FilterUnknown;
 /** Value: "FILTER_USER_LIST" */
@@ -352,6 +393,8 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_Filt
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterLineItemLifetimeFrequency;
 /** Value: "FILTER_LINE_ITEM_TYPE" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterLineItemType;
+/** Value: "FILTER_MEDIA_PLAN" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterMediaPlan;
 /** Value: "FILTER_MOBILE_DEVICE_MAKE" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterMobileDeviceMake;
 /** Value: "FILTER_MOBILE_DEVICE_MAKE_MODEL" */
@@ -372,6 +415,8 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_Filt
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterNielsenDeviceId;
 /** Value: "FILTER_NIELSEN_GENDER" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterNielsenGender;
+/** Value: "FILTER_NOT_SUPPORTED" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterNotSupported;
 /** Value: "FILTER_ORDER_ID" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterOrderId;
 /** Value: "FILTER_OS" */
@@ -408,10 +453,16 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_Filt
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterTrueviewAge;
 /** Value: "FILTER_TRUEVIEW_CATEGORY" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterTrueviewCategory;
+/** Value: "FILTER_TRUEVIEW_CITY" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterTrueviewCity;
 /** Value: "FILTER_TRUEVIEW_CONVERSION_TYPE" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterTrueviewConversionType;
+/** Value: "FILTER_TRUEVIEW_COUNTRY" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterTrueviewCountry;
 /** Value: "FILTER_TRUEVIEW_CUSTOM_AFFINITY" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterTrueviewCustomAffinity;
+/** Value: "FILTER_TRUEVIEW_DMA" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterTrueviewDma;
 /** Value: "FILTER_TRUEVIEW_GENDER" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterTrueviewGender;
 /** Value: "FILTER_TRUEVIEW_IAR_AGE" */
@@ -436,6 +487,10 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_Filt
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterTrueviewIarRemarketingList;
 /** Value: "FILTER_TRUEVIEW_IAR_TIME_OF_DAY" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterTrueviewIarTimeOfDay;
+/** Value: "FILTER_TRUEVIEW_IAR_YOUTUBE_CHANNEL" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterTrueviewIarYoutubeChannel;
+/** Value: "FILTER_TRUEVIEW_IAR_YOUTUBE_VIDEO" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterTrueviewIarYoutubeVideo;
 /** Value: "FILTER_TRUEVIEW_IAR_ZIPCODE" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterTrueviewIarZipcode;
 /** Value: "FILTER_TRUEVIEW_INTEREST" */
@@ -446,8 +501,14 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_Filt
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterTrueviewParentalStatus;
 /** Value: "FILTER_TRUEVIEW_PLACEMENT" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterTrueviewPlacement;
+/** Value: "FILTER_TRUEVIEW_REGION" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterTrueviewRegion;
 /** Value: "FILTER_TRUEVIEW_REMARKETING_LIST" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterTrueviewRemarketingList;
+/** Value: "FILTER_TRUEVIEW_URL" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterTrueviewUrl;
+/** Value: "FILTER_TRUEVIEW_ZIPCODE" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterTrueviewZipcode;
 /** Value: "FILTER_UNKNOWN" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_FilterUnknown;
 /** Value: "FILTER_USER_LIST" */
@@ -492,6 +553,28 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_GroupBys_Filt
 // ----------------------------------------------------------------------------
 // GTLRDoubleClickBidManager_Parameters.metrics
 
+/** Value: "METRIC_ACTIVE_VIEW_AVERAGE_VIEWABLE_TIME" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricActiveViewAverageViewableTime;
+/** Value: "METRIC_ACTIVE_VIEW_DISTRIBUTION_UNMEASURABLE" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricActiveViewDistributionUnmeasurable;
+/** Value: "METRIC_ACTIVE_VIEW_DISTRIBUTION_UNVIEWABLE" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricActiveViewDistributionUnviewable;
+/** Value: "METRIC_ACTIVE_VIEW_DISTRIBUTION_VIEWABLE" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricActiveViewDistributionViewable;
+/** Value: "METRIC_ACTIVE_VIEW_ELIGIBLE_IMPRESSIONS" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricActiveViewEligibleImpressions;
+/** Value: "METRIC_ACTIVE_VIEW_MEASURABLE_IMPRESSIONS" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricActiveViewMeasurableImpressions;
+/** Value: "METRIC_ACTIVE_VIEW_PCT_MEASURABLE_IMPRESSIONS" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricActiveViewPctMeasurableImpressions;
+/** Value: "METRIC_ACTIVE_VIEW_PCT_VIEWABLE_IMPRESSIONS" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricActiveViewPctViewableImpressions;
+/** Value: "METRIC_ACTIVE_VIEW_UNMEASURABLE_IMPRESSIONS" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricActiveViewUnmeasurableImpressions;
+/** Value: "METRIC_ACTIVE_VIEW_UNVIEWABLE_IMPRESSIONS" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricActiveViewUnviewableImpressions;
+/** Value: "METRIC_ACTIVE_VIEW_VIEWABLE_IMPRESSIONS" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricActiveViewViewableImpressions;
 /** Value: "METRIC_BID_REQUESTS" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricBidRequests;
 /** Value: "METRIC_BILLABLE_COST_ADVERTISER" */
@@ -828,6 +911,8 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_Metri
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricProfitViewableEcpmPartner;
 /** Value: "METRIC_PROFIT_VIEWABLE_ECPM_USD" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricProfitViewableEcpmUsd;
+/** Value: "METRIC_REACH_COOKIE_REACH" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricReachCookieReach;
 /** Value: "METRIC_REVENUE_ADVERTISER" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricRevenueAdvertiser;
 /** Value: "METRIC_REVENUE_ECPA_ADVERTISER" */
@@ -950,6 +1035,12 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_Metri
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricTotalMediaCostViewableEcpmPartner;
 /** Value: "METRIC_TOTAL_MEDIA_COST_VIEWABLE_ECPM_USD" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricTotalMediaCostViewableEcpmUsd;
+/** Value: "METRIC_TRUEVIEW_AVERAGE_CPE_ADVERTISER" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricTrueviewAverageCpeAdvertiser;
+/** Value: "METRIC_TRUEVIEW_AVERAGE_CPE_PARTNER" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricTrueviewAverageCpePartner;
+/** Value: "METRIC_TRUEVIEW_AVERAGE_CPE_USD" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricTrueviewAverageCpeUsd;
 /** Value: "METRIC_TRUEVIEW_CONVERSION_COST_MANY_PER_VIEW_ADVERTISER" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricTrueviewConversionCostManyPerViewAdvertiser;
 /** Value: "METRIC_TRUEVIEW_CONVERSION_COST_MANY_PER_VIEW_PARTNER" */
@@ -1000,6 +1091,10 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_Metri
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricTrueviewEarnedSubscribers;
 /** Value: "METRIC_TRUEVIEW_EARNED_VIEWS" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricTrueviewEarnedViews;
+/** Value: "METRIC_TRUEVIEW_ENGAGEMENT_RATE" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricTrueviewEngagementRate;
+/** Value: "METRIC_TRUEVIEW_ENGAGEMENTS" */
+GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricTrueviewEngagements;
 /** Value: "METRIC_TRUEVIEW_IMPRESSION_SHARE" */
 GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_Parameters_Metrics_MetricTrueviewImpressionShare;
 /** Value: "METRIC_TRUEVIEW_LOST_IS_BUDGET" */
@@ -1292,7 +1387,7 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *    @arg @c kGTLRDoubleClickBidManager_DownloadLineItemsRequest_FileSpec_Sdf
  *        Value "SDF"
  */
-@property(copy, nullable) NSString *fileSpec;
+@property(nonatomic, copy, nullable) NSString *fileSpec;
 
 /**
  *  Ids of the specified filter type used to filter line items to fetch. If
@@ -1300,7 +1395,7 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSArray<NSNumber *> *filterIds;
+@property(nonatomic, strong, nullable) NSArray<NSNumber *> *filterIds;
 
 /**
  *  Filter type used to filter line items to fetch.
@@ -1313,7 +1408,7 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *    @arg @c kGTLRDoubleClickBidManager_DownloadLineItemsRequest_FilterType_LineItemId
  *        Value "LINE_ITEM_ID"
  */
-@property(copy, nullable) NSString *filterType;
+@property(nonatomic, copy, nullable) NSString *filterType;
 
 /**
  *  Format in which the line items will be returned. Default to CSV.
@@ -1322,7 +1417,7 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *    @arg @c kGTLRDoubleClickBidManager_DownloadLineItemsRequest_Format_Csv
  *        Value "CSV"
  */
-@property(copy, nullable) NSString *format;
+@property(nonatomic, copy, nullable) NSString *format;
 
 @end
 
@@ -1336,7 +1431,68 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *  Retrieved line items in CSV format. Refer to Entity Write File Format or
  *  Structured Data File Format for more information on file formats.
  */
-@property(copy, nullable) NSString *lineItems;
+@property(nonatomic, copy, nullable) NSString *lineItems;
+
+@end
+
+
+/**
+ *  Request to fetch stored insertion orders, line items, TrueView ad groups and
+ *  ads.
+ */
+@interface GTLRDoubleClickBidManager_DownloadRequest : GTLRObject
+
+/** File types that will be returned. */
+@property(nonatomic, strong, nullable) NSArray<NSString *> *fileTypes;
+
+/**
+ *  The IDs of the specified filter type. This is used to filter entities to
+ *  fetch. At least one ID must be specified. Only one ID is allowed for the
+ *  ADVERTISER_ID filter type. For INSERTION_ORDER_ID or LINE_ITEM_ID filter
+ *  types all IDs must be from the same Advertiser.
+ *
+ *  Uses NSNumber of longLongValue.
+ */
+@property(nonatomic, strong, nullable) NSArray<NSNumber *> *filterIds;
+
+/**
+ *  Filter type used to filter line items to fetch.
+ *
+ *  Likely values:
+ *    @arg @c kGTLRDoubleClickBidManager_DownloadRequest_FilterType_AdvertiserId
+ *        Value "ADVERTISER_ID"
+ *    @arg @c kGTLRDoubleClickBidManager_DownloadRequest_FilterType_InsertionOrderId
+ *        Value "INSERTION_ORDER_ID"
+ *    @arg @c kGTLRDoubleClickBidManager_DownloadRequest_FilterType_LineItemId
+ *        Value "LINE_ITEM_ID"
+ */
+@property(nonatomic, copy, nullable) NSString *filterType;
+
+/**
+ *  SDF Version (column names, types, order) in which the entities will be
+ *  returned. Default to 3.
+ */
+@property(nonatomic, copy, nullable) NSString *version;
+
+@end
+
+
+/**
+ *  Download response.
+ */
+@interface GTLRDoubleClickBidManager_DownloadResponse : GTLRObject
+
+/** Retrieved ad groups in SDF format. */
+@property(nonatomic, copy, nullable) NSString *adGroups;
+
+/** Retrieved ads in SDF format. */
+@property(nonatomic, copy, nullable) NSString *ads;
+
+/** Retrieved insertion orders in SDF format. */
+@property(nonatomic, copy, nullable) NSString *insertionOrders;
+
+/** Retrieved line items in SDF format. */
+@property(nonatomic, copy, nullable) NSString *lineItems;
 
 @end
 
@@ -1424,6 +1580,8 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *        Value "FILTER_LINE_ITEM_LIFETIME_FREQUENCY"
  *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterLineItemType
  *        Value "FILTER_LINE_ITEM_TYPE"
+ *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterMediaPlan Value
+ *        "FILTER_MEDIA_PLAN"
  *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterMobileDeviceMake
  *        Value "FILTER_MOBILE_DEVICE_MAKE"
  *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterMobileDeviceMakeModel
@@ -1444,6 +1602,8 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *        Value "FILTER_NIELSEN_DEVICE_ID"
  *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterNielsenGender
  *        Value "FILTER_NIELSEN_GENDER"
+ *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterNotSupported
+ *        Value "FILTER_NOT_SUPPORTED"
  *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterOrderId Value
  *        "FILTER_ORDER_ID"
  *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterOs Value
@@ -1480,10 +1640,16 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *        "FILTER_TRUEVIEW_AGE"
  *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewCategory
  *        Value "FILTER_TRUEVIEW_CATEGORY"
+ *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewCity
+ *        Value "FILTER_TRUEVIEW_CITY"
  *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewConversionType
  *        Value "FILTER_TRUEVIEW_CONVERSION_TYPE"
+ *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewCountry
+ *        Value "FILTER_TRUEVIEW_COUNTRY"
  *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewCustomAffinity
  *        Value "FILTER_TRUEVIEW_CUSTOM_AFFINITY"
+ *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewDma Value
+ *        "FILTER_TRUEVIEW_DMA"
  *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewGender
  *        Value "FILTER_TRUEVIEW_GENDER"
  *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewIarAge
@@ -1508,6 +1674,10 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *        Value "FILTER_TRUEVIEW_IAR_REMARKETING_LIST"
  *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewIarTimeOfDay
  *        Value "FILTER_TRUEVIEW_IAR_TIME_OF_DAY"
+ *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewIarYoutubeChannel
+ *        Value "FILTER_TRUEVIEW_IAR_YOUTUBE_CHANNEL"
+ *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewIarYoutubeVideo
+ *        Value "FILTER_TRUEVIEW_IAR_YOUTUBE_VIDEO"
  *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewIarZipcode
  *        Value "FILTER_TRUEVIEW_IAR_ZIPCODE"
  *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewInterest
@@ -1518,8 +1688,14 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *        Value "FILTER_TRUEVIEW_PARENTAL_STATUS"
  *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewPlacement
  *        Value "FILTER_TRUEVIEW_PLACEMENT"
+ *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewRegion
+ *        Value "FILTER_TRUEVIEW_REGION"
  *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewRemarketingList
  *        Value "FILTER_TRUEVIEW_REMARKETING_LIST"
+ *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewUrl Value
+ *        "FILTER_TRUEVIEW_URL"
+ *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterTrueviewZipcode
+ *        Value "FILTER_TRUEVIEW_ZIPCODE"
  *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterUnknown Value
  *        "FILTER_UNKNOWN"
  *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterUserList Value
@@ -1561,10 +1737,10 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *    @arg @c kGTLRDoubleClickBidManager_FilterPair_Type_FilterZipCode Value
  *        "FILTER_ZIP_CODE"
  */
-@property(copy, nullable) NSString *type;
+@property(nonatomic, copy, nullable) NSString *type;
 
 /** Filter value. */
-@property(copy, nullable) NSString *value;
+@property(nonatomic, copy, nullable) NSString *value;
 
 @end
 
@@ -1578,10 +1754,10 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *  Identifies what kind of resource this is. Value: the fixed string
  *  "doubleclickbidmanager#listQueriesResponse".
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /** Retrieved queries. */
-@property(strong, nullable) NSArray<GTLRDoubleClickBidManager_Query *> *queries;
+@property(nonatomic, strong, nullable) NSArray<GTLRDoubleClickBidManager_Query *> *queries;
 
 @end
 
@@ -1595,68 +1771,10 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *  Identifies what kind of resource this is. Value: the fixed string
  *  "doubleclickbidmanager#listReportsResponse".
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /** Retrieved reports. */
-@property(strong, nullable) NSArray<GTLRDoubleClickBidManager_Report *> *reports;
-
-@end
-
-
-/**
- *  Publisher comment from Rubicon.
- */
-@interface GTLRDoubleClickBidManager_Note : GTLRObject
-
-/**
- *  Note id.
- *
- *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
- *
- *  Uses NSNumber of longLongValue.
- */
-@property(strong, nullable) NSNumber *identifier;
-
-/** Message from publisher. */
-@property(copy, nullable) NSString *message;
-
-/** Equals "publisher" for notification from Rubicon. */
-@property(copy, nullable) NSString *source;
-
-/** Time when the note was added, e.g. "2015-12-16T17:25:35.000-08:00". */
-@property(copy, nullable) NSString *timestamp;
-
-/** Publisher user name. */
-@property(copy, nullable) NSString *username;
-
-@end
-
-
-/**
- *  NotifyProposalChange request.
- */
-@interface GTLRDoubleClickBidManager_NotifyProposalChangeRequest : GTLRObject
-
-/** Action taken by publisher. One of: Accept, Decline, Append */
-@property(copy, nullable) NSString *action;
-
-/** URL to access proposal detail. */
-@property(copy, nullable) NSString *href;
-
-/**
- *  Below are contents of notification from Rubicon. Proposal id.
- *
- *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
- *
- *  Uses NSNumber of longLongValue.
- */
-@property(strong, nullable) NSNumber *identifier;
-
-/** Notes from publisher */
-@property(strong, nullable) NSArray<GTLRDoubleClickBidManager_Note *> *notes;
-
-/** Deal token, available when proposal is accepted by publisher. */
-@property(copy, nullable) NSString *token;
+@property(nonatomic, strong, nullable) NSArray<GTLRDoubleClickBidManager_Report *> *reports;
 
 @end
 
@@ -1667,20 +1785,20 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
 @interface GTLRDoubleClickBidManager_Parameters : GTLRObject
 
 /** Filters used to match traffic data in your report. */
-@property(strong, nullable) NSArray<GTLRDoubleClickBidManager_FilterPair *> *filters;
+@property(nonatomic, strong, nullable) NSArray<GTLRDoubleClickBidManager_FilterPair *> *filters;
 
 /** Data is grouped by the filters listed in this field. */
-@property(strong, nullable) NSArray<NSString *> *groupBys;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *groupBys;
 
 /**
  *  Whether to include data from Invite Media.
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *includeInviteData;
+@property(nonatomic, strong, nullable) NSNumber *includeInviteData;
 
 /** Metrics to include as columns in your report. */
-@property(strong, nullable) NSArray<NSString *> *metrics;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *metrics;
 
 /**
  *  Report type.
@@ -1747,7 +1865,7 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *    @arg @c kGTLRDoubleClickBidManager_Parameters_Type_TypeYoutubeVertical
  *        Value "TYPE_YOUTUBE_VERTICAL"
  */
-@property(copy, nullable) NSString *type;
+@property(nonatomic, copy, nullable) NSString *type;
 
 @end
 
@@ -1761,20 +1879,20 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *  Identifies what kind of resource this is. Value: the fixed string
  *  "doubleclickbidmanager#query".
  */
-@property(copy, nullable) NSString *kind;
+@property(nonatomic, copy, nullable) NSString *kind;
 
 /** Query metadata. */
-@property(strong, nullable) GTLRDoubleClickBidManager_QueryMetadata *metadata;
+@property(nonatomic, strong, nullable) GTLRDoubleClickBidManager_QueryMetadata *metadata;
 
 /** Query parameters. */
-@property(strong, nullable) GTLRDoubleClickBidManager_Parameters *params;
+@property(nonatomic, strong, nullable) GTLRDoubleClickBidManager_Parameters *params;
 
 /**
  *  Query ID.
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *queryId;
+@property(nonatomic, strong, nullable) NSNumber *queryId;
 
 /**
  *  The ending time for the data that is shown in the report. Note,
@@ -1783,7 +1901,7 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *reportDataEndTimeMs;
+@property(nonatomic, strong, nullable) NSNumber *reportDataEndTimeMs;
 
 /**
  *  The starting time for the data that is shown in the report. Note,
@@ -1792,15 +1910,15 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *reportDataStartTimeMs;
+@property(nonatomic, strong, nullable) NSNumber *reportDataStartTimeMs;
 
 /** Information on how often and when to run a query. */
-@property(strong, nullable) GTLRDoubleClickBidManager_QuerySchedule *schedule;
+@property(nonatomic, strong, nullable) GTLRDoubleClickBidManager_QuerySchedule *schedule;
 
 /**
  *  Canonical timezone code for report data time. Defaults to America/New_York.
  */
-@property(copy, nullable) NSString *timezoneCode;
+@property(nonatomic, copy, nullable) NSString *timezoneCode;
 
 @end
 
@@ -1853,7 +1971,7 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *    @arg @c kGTLRDoubleClickBidManager_QueryMetadata_DataRange_YearToDate
  *        Value "YEAR_TO_DATE"
  */
-@property(copy, nullable) NSString *dataRange;
+@property(nonatomic, copy, nullable) NSString *dataRange;
 
 /**
  *  Format of the generated report.
@@ -1864,23 +1982,23 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *        "EXCEL_CSV"
  *    @arg @c kGTLRDoubleClickBidManager_QueryMetadata_Format_Xlsx Value "XLSX"
  */
-@property(copy, nullable) NSString *format;
+@property(nonatomic, copy, nullable) NSString *format;
 
 /**
  *  The path to the location in Google Cloud Storage where the latest report is
  *  stored.
  */
-@property(copy, nullable) NSString *googleCloudStoragePathForLatestReport;
+@property(nonatomic, copy, nullable) NSString *googleCloudStoragePathForLatestReport;
 
 /** The path in Google Drive for the latest report. */
-@property(copy, nullable) NSString *googleDrivePathForLatestReport;
+@property(nonatomic, copy, nullable) NSString *googleDrivePathForLatestReport;
 
 /**
  *  The time when the latest report started to run.
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *latestReportRunTimeMs;
+@property(nonatomic, strong, nullable) NSNumber *latestReportRunTimeMs;
 
 /**
  *  Locale of the generated reports. Valid values are cs CZECH de GERMAN en
@@ -1889,21 +2007,21 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *  CHINA_CHINESE zh-TW TAIWAN_CHINESE
  *  An locale string not in the list above will generate reports in English.
  */
-@property(copy, nullable) NSString *locale;
+@property(nonatomic, copy, nullable) NSString *locale;
 
 /**
  *  Number of reports that have been generated for the query.
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *reportCount;
+@property(nonatomic, strong, nullable) NSNumber *reportCount;
 
 /**
  *  Whether the latest report is currently running.
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *running;
+@property(nonatomic, strong, nullable) NSNumber *running;
 
 /**
  *  Whether to send an email notification when a report is ready. Default to
@@ -1911,16 +2029,16 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *sendNotification;
+@property(nonatomic, strong, nullable) NSNumber *sendNotification;
 
 /**
  *  List of email addresses which are sent email notifications when the report
  *  is finished. Separate from sendNotification.
  */
-@property(strong, nullable) NSArray<NSString *> *shareEmailAddress;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *shareEmailAddress;
 
 /** Query title. It is used to name the reports generated from this query. */
-@property(copy, nullable) NSString *title;
+@property(nonatomic, copy, nullable) NSString *title;
 
 @end
 
@@ -1935,7 +2053,7 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *endTimeMs;
+@property(nonatomic, strong, nullable) NSNumber *endTimeMs;
 
 /**
  *  How often the query is run.
@@ -1954,7 +2072,7 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *    @arg @c kGTLRDoubleClickBidManager_QuerySchedule_Frequency_Weekly Value
  *        "WEEKLY"
  */
-@property(copy, nullable) NSString *frequency;
+@property(nonatomic, copy, nullable) NSString *frequency;
 
 /**
  *  Time of day at which a new report will be generated, represented as minutes
@@ -1962,13 +2080,13 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *nextRunMinuteOfDay;
+@property(nonatomic, strong, nullable) NSNumber *nextRunMinuteOfDay;
 
 /**
  *  Canonical timezone code for report generation time. Defaults to
  *  America/New_York.
  */
-@property(copy, nullable) NSString *nextRunTimezoneCode;
+@property(nonatomic, copy, nullable) NSString *nextRunTimezoneCode;
 
 @end
 
@@ -1979,13 +2097,13 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
 @interface GTLRDoubleClickBidManager_Report : GTLRObject
 
 /** Key used to identify a report. */
-@property(strong, nullable) GTLRDoubleClickBidManager_ReportKey *key;
+@property(nonatomic, strong, nullable) GTLRDoubleClickBidManager_ReportKey *key;
 
 /** Report metadata. */
-@property(strong, nullable) GTLRDoubleClickBidManager_ReportMetadata *metadata;
+@property(nonatomic, strong, nullable) GTLRDoubleClickBidManager_ReportMetadata *metadata;
 
 /** Report parameters. */
-@property(strong, nullable) GTLRDoubleClickBidManager_Parameters *params;
+@property(nonatomic, strong, nullable) GTLRDoubleClickBidManager_Parameters *params;
 
 @end
 
@@ -2036,7 +2154,7 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *    @arg @c kGTLRDoubleClickBidManager_ReportFailure_ErrorCode_ValidationError
  *        Value "VALIDATION_ERROR"
  */
-@property(copy, nullable) NSString *errorCode;
+@property(nonatomic, copy, nullable) NSString *errorCode;
 
 @end
 
@@ -2051,14 +2169,14 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *queryId;
+@property(nonatomic, strong, nullable) NSNumber *queryId;
 
 /**
  *  Report ID.
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *reportId;
+@property(nonatomic, strong, nullable) NSNumber *reportId;
 
 @end
 
@@ -2071,24 +2189,24 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
 /**
  *  The path to the location in Google Cloud Storage where the report is stored.
  */
-@property(copy, nullable) NSString *googleCloudStoragePath;
+@property(nonatomic, copy, nullable) NSString *googleCloudStoragePath;
 
 /**
  *  The ending time for the data that is shown in the report.
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *reportDataEndTimeMs;
+@property(nonatomic, strong, nullable) NSNumber *reportDataEndTimeMs;
 
 /**
  *  The starting time for the data that is shown in the report.
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *reportDataStartTimeMs;
+@property(nonatomic, strong, nullable) NSNumber *reportDataStartTimeMs;
 
 /** Report status. */
-@property(strong, nullable) GTLRDoubleClickBidManager_ReportStatus *status;
+@property(nonatomic, strong, nullable) GTLRDoubleClickBidManager_ReportStatus *status;
 
 @end
 
@@ -2099,14 +2217,14 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
 @interface GTLRDoubleClickBidManager_ReportStatus : GTLRObject
 
 /** If the report failed, this records the cause. */
-@property(strong, nullable) GTLRDoubleClickBidManager_ReportFailure *failure;
+@property(nonatomic, strong, nullable) GTLRDoubleClickBidManager_ReportFailure *failure;
 
 /**
  *  The time when this report either completed successfully or failed.
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *finishTimeMs;
+@property(nonatomic, strong, nullable) NSNumber *finishTimeMs;
 
 /**
  *  The file type of the report.
@@ -2117,7 +2235,7 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *        "EXCEL_CSV"
  *    @arg @c kGTLRDoubleClickBidManager_ReportStatus_Format_Xlsx Value "XLSX"
  */
-@property(copy, nullable) NSString *format;
+@property(nonatomic, copy, nullable) NSString *format;
 
 /**
  *  The state of the report.
@@ -2129,7 +2247,7 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *    @arg @c kGTLRDoubleClickBidManager_ReportStatus_State_Running Value
  *        "RUNNING"
  */
-@property(copy, nullable) NSString *state;
+@property(nonatomic, copy, nullable) NSString *state;
 
 @end
 
@@ -2144,38 +2262,38 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *changed;
+@property(nonatomic, strong, nullable) NSNumber *changed;
 
 /**
  *  Entity Id.
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *entityId;
+@property(nonatomic, strong, nullable) NSNumber *entityId;
 
 /**
  *  Entity name.
  *
  *  Remapped to 'entityNameProperty' to avoid NSObject's 'entityName'.
  */
-@property(copy, nullable) NSString *entityNameProperty;
+@property(nonatomic, copy, nullable) NSString *entityNameProperty;
 
 /** Reasons why the entity can't be uploaded. */
-@property(strong, nullable) NSArray<NSString *> *errors;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *errors;
 
 /**
  *  Whether the entity is persisted.
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *persisted;
+@property(nonatomic, strong, nullable) NSNumber *persisted;
 
 /**
  *  Row number.
  *
  *  Uses NSNumber of intValue.
  */
-@property(strong, nullable) NSNumber *rowNumber;
+@property(nonatomic, strong, nullable) NSNumber *rowNumber;
 
 @end
 
@@ -2228,7 +2346,7 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *    @arg @c kGTLRDoubleClickBidManager_RunQueryRequest_DataRange_YearToDate
  *        Value "YEAR_TO_DATE"
  */
-@property(copy, nullable) NSString *dataRange;
+@property(nonatomic, copy, nullable) NSString *dataRange;
 
 /**
  *  The ending time for the data that is shown in the report. Note,
@@ -2237,7 +2355,7 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *reportDataEndTimeMs;
+@property(nonatomic, strong, nullable) NSNumber *reportDataEndTimeMs;
 
 /**
  *  The starting time for the data that is shown in the report. Note,
@@ -2246,12 +2364,12 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *
  *  Uses NSNumber of longLongValue.
  */
-@property(strong, nullable) NSNumber *reportDataStartTimeMs;
+@property(nonatomic, strong, nullable) NSNumber *reportDataStartTimeMs;
 
 /**
  *  Canonical timezone code for report data time. Defaults to America/New_York.
  */
-@property(copy, nullable) NSString *timezoneCode;
+@property(nonatomic, copy, nullable) NSString *timezoneCode;
 
 @end
 
@@ -2266,7 +2384,7 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *
  *  Uses NSNumber of boolValue.
  */
-@property(strong, nullable) NSNumber *dryRun;
+@property(nonatomic, strong, nullable) NSNumber *dryRun;
 
 /**
  *  Format the line items are in. Default to CSV.
@@ -2275,13 +2393,13 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
  *    @arg @c kGTLRDoubleClickBidManager_UploadLineItemsRequest_Format_Csv Value
  *        "CSV"
  */
-@property(copy, nullable) NSString *format;
+@property(nonatomic, copy, nullable) NSString *format;
 
 /**
  *  Line items in CSV to upload. Refer to Entity Write File Format for more
  *  information on file format.
  */
-@property(copy, nullable) NSString *lineItems;
+@property(nonatomic, copy, nullable) NSString *lineItems;
 
 @end
 
@@ -2292,7 +2410,7 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
 @interface GTLRDoubleClickBidManager_UploadLineItemsResponse : GTLRObject
 
 /** Status of upload. */
-@property(strong, nullable) GTLRDoubleClickBidManager_UploadStatus *uploadStatus;
+@property(nonatomic, strong, nullable) GTLRDoubleClickBidManager_UploadStatus *uploadStatus;
 
 @end
 
@@ -2303,10 +2421,10 @@ GTLR_EXTERN NSString * const kGTLRDoubleClickBidManager_UploadLineItemsRequest_F
 @interface GTLRDoubleClickBidManager_UploadStatus : GTLRObject
 
 /** Reasons why upload can't be completed. */
-@property(strong, nullable) NSArray<NSString *> *errors;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *errors;
 
 /** Per-row upload status. */
-@property(strong, nullable) NSArray<GTLRDoubleClickBidManager_RowStatus *> *rowStatus;
+@property(nonatomic, strong, nullable) NSArray<GTLRDoubleClickBidManager_RowStatus *> *rowStatus;
 
 @end
 

@@ -37,11 +37,15 @@
 //
 
 @implementation GTLRSQLAdmin_BackupRun
-@dynamic endTime, enqueuedTime, error, identifier, instance, kind, selfLink,
-         startTime, status, windowStartTime;
+@dynamic descriptionProperty, endTime, enqueuedTime, error, identifier,
+         instance, kind, selfLink, startTime, status, type, windowStartTime;
 
 + (NSDictionary<NSString *, NSString *> *)propertyToJSONKeyMap {
-  return @{ @"identifier" : @"id" };
+  NSDictionary<NSString *, NSString *> *map = @{
+    @"descriptionProperty" : @"description",
+    @"identifier" : @"id"
+  };
+  return map;
 }
 
 @end
@@ -116,11 +120,12 @@
 //
 
 @implementation GTLRSQLAdmin_DatabaseInstance
-@dynamic backendType, currentDiskSize, databaseVersion, ETag, failoverReplica,
-         instanceType, ipAddresses, ipv6Address, kind, masterInstanceName,
-         maxDiskSize, name, onPremisesConfiguration, project, region,
-         replicaConfiguration, replicaNames, selfLink, serverCaCert,
-         serviceAccountEmailAddress, settings, state, suspensionReason;
+@dynamic backendType, connectionName, currentDiskSize, databaseVersion, ETag,
+         failoverReplica, instanceType, ipAddresses, ipv6Address, kind,
+         masterInstanceName, maxDiskSize, name, onPremisesConfiguration,
+         project, region, replicaConfiguration, replicaNames, selfLink,
+         serverCaCert, serviceAccountEmailAddress, settings, state,
+         suspensionReason;
 
 + (NSDictionary<NSString *, NSString *> *)propertyToJSONKeyMap {
   return @{ @"ETag" : @"etag" };

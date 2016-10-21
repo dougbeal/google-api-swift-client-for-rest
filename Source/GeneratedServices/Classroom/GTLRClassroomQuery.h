@@ -21,6 +21,7 @@
 @class GTLRClassroom_Course;
 @class GTLRClassroom_CourseAlias;
 @class GTLRClassroom_CourseWork;
+@class GTLRClassroom_GuardianInvitation;
 @class GTLRClassroom_Invitation;
 @class GTLRClassroom_ModifyAttachmentsRequest;
 @class GTLRClassroom_ReclaimStudentSubmissionRequest;
@@ -34,6 +35,20 @@ NS_ASSUME_NONNULL_BEGIN
 
 // ----------------------------------------------------------------------------
 // Constants - For some of the query classes' properties below.
+
+// ----------------------------------------------------------------------------
+// courseStates
+
+/** Value: "ACTIVE" */
+GTLR_EXTERN NSString * const kGTLRClassroomCourseStatesActive;
+/** Value: "ARCHIVED" */
+GTLR_EXTERN NSString * const kGTLRClassroomCourseStatesArchived;
+/** Value: "COURSE_STATE_UNSPECIFIED" */
+GTLR_EXTERN NSString * const kGTLRClassroomCourseStatesCourseStateUnspecified;
+/** Value: "DECLINED" */
+GTLR_EXTERN NSString * const kGTLRClassroomCourseStatesDeclined;
+/** Value: "PROVISIONED" */
+GTLR_EXTERN NSString * const kGTLRClassroomCourseStatesProvisioned;
 
 // ----------------------------------------------------------------------------
 // courseWorkStates
@@ -60,10 +75,16 @@ GTLR_EXTERN NSString * const kGTLRClassroomLateNotLateOnly;
 // ----------------------------------------------------------------------------
 // states
 
+/** Value: "COMPLETE" */
+GTLR_EXTERN NSString * const kGTLRClassroomStatesComplete;
 /** Value: "CREATED" */
 GTLR_EXTERN NSString * const kGTLRClassroomStatesCreated;
+/** Value: "GUARDIAN_INVITATION_STATE_UNSPECIFIED" */
+GTLR_EXTERN NSString * const kGTLRClassroomStatesGuardianInvitationStateUnspecified;
 /** Value: "NEW" */
 GTLR_EXTERN NSString * const kGTLRClassroomStatesNew;
+/** Value: "PENDING" */
+GTLR_EXTERN NSString * const kGTLRClassroomStatesPending;
 /** Value: "RECLAIMED_BY_STUDENT" */
 GTLR_EXTERN NSString * const kGTLRClassroomStatesReclaimedByStudent;
 /** Value: "RETURNED" */
@@ -83,7 +104,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
 @interface GTLRClassroomQuery : GTLRQuery
 
 /** Selector specifying which fields to include in a partial response. */
-@property(copy, nullable) NSString *fields;
+@property(nonatomic, copy, nullable) NSString *fields;
 
 @end
 
@@ -106,7 +127,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  Identifier of the course to alias. This identifier can be either the
  *  Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /**
  *  Fetches a @c GTLRClassroom_CourseAlias.
@@ -142,13 +163,13 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
 //   +[GTLQueryClassroom queryForCoursesAliasesDeleteWithcourseId:alias:]
 
 /** Alias to delete. This may not be the Classroom-assigned identifier. */
-@property(copy, nullable) NSString *alias;
+@property(nonatomic, copy, nullable) NSString *alias;
 
 /**
  *  Identifier of the course whose alias should be deleted. This identifier can
  *  be either the Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /**
  *  Fetches a @c GTLRClassroom_Empty.
@@ -189,21 +210,21 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  The identifier of the course. This identifier can be either the
  *  Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /**
  *  Maximum number of items to return. Zero or unspecified indicates that the
  *  server may assign a maximum. The server may return fewer than the specified
  *  number of results.
  */
-@property(assign) NSInteger pageSize;
+@property(nonatomic, assign) NSInteger pageSize;
 
 /**
  *  nextPageToken value returned from a previous list call, indicating that the
  *  subsequent page of results should be returned. The list request must be
  *  otherwise identical to the one that resulted in this token.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /**
  *  Fetches a @c GTLRClassroom_ListCourseAliasesResponse.
@@ -251,7 +272,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  Identifier of the course. This identifier can be either the
  *  Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /**
  *  Fetches a @c GTLRClassroom_CourseWork.
@@ -302,14 +323,14 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  Identifier of the course. This identifier can be either the
  *  Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /**
  *  Identifier of the course work.
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  Fetches a @c GTLRClassroom_CourseWork.
@@ -357,7 +378,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  Identifier of the course. This identifier can be either the
  *  Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /**
  *  Restriction on the work status to return. Only courseWork that matches is
@@ -371,7 +392,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *    @arg @c kGTLRClassroomCourseWorkStatesDraft Value "DRAFT"
  *    @arg @c kGTLRClassroomCourseWorkStatesDeleted Value "DELETED"
  */
-@property(strong, nullable) NSArray<NSString *> *courseWorkStates;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *courseWorkStates;
 
 /**
  *  Optional sort ordering for results. A comma-separated list of fields with an
@@ -380,21 +401,21 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  specified, `updateTime desc` is the default behavior. Examples: `dueDate
  *  asc,updateTime desc`, `updateTime,dueDate desc`
  */
-@property(copy, nullable) NSString *orderBy;
+@property(nonatomic, copy, nullable) NSString *orderBy;
 
 /**
  *  Maximum number of items to return. Zero or unspecified indicates that the
  *  server may assign a maximum. The server may return fewer than the specified
  *  number of results.
  */
-@property(assign) NSInteger pageSize;
+@property(nonatomic, assign) NSInteger pageSize;
 
 /**
  *  nextPageToken value returned from a previous list call, indicating that the
  *  subsequent page of results should be returned. The list request must be
  *  otherwise identical to the one that resulted in this token.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /**
  *  Fetches a @c GTLRClassroom_ListCourseWorkResponse.
@@ -445,17 +466,17 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  Identifier of the course. This identifier can be either the
  *  Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /** Identifier of the course work. */
-@property(copy, nullable) NSString *courseWorkId;
+@property(nonatomic, copy, nullable) NSString *courseWorkId;
 
 /**
  *  Identifier of the student submission.
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  Fetches a @c GTLRClassroom_StudentSubmission.
@@ -508,14 +529,14 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  Identifier of the course. This identifier can be either the
  *  Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /**
- *  Identifer of the student work to request. If `user_id` is specified, this
- *  may be set to the string literal `"-"` to request student work for all
- *  course work in the specified course.
+ *  Identifer of the student work to request. This may be set to the string
+ *  literal `"-"` to request student work for all course work in the specified
+ *  course.
  */
-@property(copy, nullable) NSString *courseWorkId;
+@property(nonatomic, copy, nullable) NSString *courseWorkId;
 
 /**
  *  Requested lateness value. If specified, returned student submissions are
@@ -528,21 +549,21 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *    @arg @c kGTLRClassroomLateLateOnly Value "LATE_ONLY"
  *    @arg @c kGTLRClassroomLateNotLateOnly Value "NOT_LATE_ONLY"
  */
-@property(copy, nullable) NSString *late;
+@property(nonatomic, copy, nullable) NSString *late;
 
 /**
  *  Maximum number of items to return. Zero or unspecified indicates that the
  *  server may assign a maximum. The server may return fewer than the specified
  *  number of results.
  */
-@property(assign) NSInteger pageSize;
+@property(nonatomic, assign) NSInteger pageSize;
 
 /**
  *  nextPageToken value returned from a previous list call, indicating that the
  *  subsequent page of results should be returned. The list request must be
  *  otherwise identical to the one that resulted in this token.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /**
  *  Requested submission states. If specified, returned student submissions
@@ -558,7 +579,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *    @arg @c kGTLRClassroomStatesReclaimedByStudent Value
  *        "RECLAIMED_BY_STUDENT"
  */
-@property(strong, nullable) NSArray<NSString *> *states;
+@property(nonatomic, strong, nullable) NSArray<NSString *> *states;
 
 /**
  *  Optional argument to restrict returned student work to those owned by the
@@ -566,7 +587,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  following: * the numeric identifier for the user * the email address of the
  *  user * the string literal `"me"`, indicating the requesting user
  */
-@property(copy, nullable) NSString *userId;
+@property(nonatomic, copy, nullable) NSString *userId;
 
 /**
  *  Fetches a @c GTLRClassroom_ListStudentSubmissionsResponse.
@@ -583,9 +604,9 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *
  *  @param courseId Identifier of the course. This identifier can be either the
  *    Classroom-assigned identifier or an alias.
- *  @param courseWorkId Identifer of the student work to request. If `user_id`
- *    is specified, this may be set to the string literal `"-"` to request
- *    student work for all course work in the specified course.
+ *  @param courseWorkId Identifer of the student work to request. This may be
+ *    set to the string literal `"-"` to request student work for all course
+ *    work in the specified course.
  *
  *  @returns GTLRClassroomQuery_CoursesCourseWorkStudentSubmissionsList
  *
@@ -624,17 +645,17 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  Identifier of the course. This identifier can be either the
  *  Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /** Identifier of the course work. */
-@property(copy, nullable) NSString *courseWorkId;
+@property(nonatomic, copy, nullable) NSString *courseWorkId;
 
 /**
  *  Identifier of the student submission.
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  Fetches a @c GTLRClassroom_StudentSubmission.
@@ -693,17 +714,17 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  Identifier of the course. This identifier can be either the
  *  Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /** Identifier of the course work. */
-@property(copy, nullable) NSString *courseWorkId;
+@property(nonatomic, copy, nullable) NSString *courseWorkId;
 
 /**
  *  Identifier of the student submission.
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  Mask that identifies which fields on the student submission to update. This
@@ -711,7 +732,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  specified. The following fields may be specified by teachers: *
  *  `draft_grade` * `assigned_grade`
  */
-@property(copy, nullable) NSString *updateMask;
+@property(nonatomic, copy, nullable) NSString *updateMask;
 
 /**
  *  Fetches a @c GTLRClassroom_StudentSubmission.
@@ -773,17 +794,17 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  Identifier of the course. This identifier can be either the
  *  Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /** Identifier of the course work. */
-@property(copy, nullable) NSString *courseWorkId;
+@property(nonatomic, copy, nullable) NSString *courseWorkId;
 
 /**
  *  Identifier of the student submission.
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  Fetches a @c GTLRClassroom_Empty.
@@ -847,17 +868,17 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  Identifier of the course. This identifier can be either the
  *  Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /** Identifier of the course work. */
-@property(copy, nullable) NSString *courseWorkId;
+@property(nonatomic, copy, nullable) NSString *courseWorkId;
 
 /**
  *  Identifier of the student submission.
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  Fetches a @c GTLRClassroom_Empty.
@@ -919,17 +940,17 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  Identifier of the course. This identifier can be either the
  *  Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /** Identifier of the course work. */
-@property(copy, nullable) NSString *courseWorkId;
+@property(nonatomic, copy, nullable) NSString *courseWorkId;
 
 /**
  *  Identifier of the student submission.
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  Fetches a @c GTLRClassroom_Empty.
@@ -1023,7 +1044,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  Fetches a @c GTLRClassroom_Empty.
@@ -1064,7 +1085,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  Fetches a @c GTLRClassroom_Course.
@@ -1101,18 +1122,31 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
 //   +[GTLQueryClassroom queryForCoursesList]
 
 /**
+ *  Restricts returned courses to those in one of the specified states
+ *
+ *  Likely values:
+ *    @arg @c kGTLRClassroomCourseStatesCourseStateUnspecified Value
+ *        "COURSE_STATE_UNSPECIFIED"
+ *    @arg @c kGTLRClassroomCourseStatesActive Value "ACTIVE"
+ *    @arg @c kGTLRClassroomCourseStatesArchived Value "ARCHIVED"
+ *    @arg @c kGTLRClassroomCourseStatesProvisioned Value "PROVISIONED"
+ *    @arg @c kGTLRClassroomCourseStatesDeclined Value "DECLINED"
+ */
+@property(nonatomic, strong, nullable) NSArray<NSString *> *courseStates;
+
+/**
  *  Maximum number of items to return. Zero or unspecified indicates that the
  *  server may assign a maximum. The server may return fewer than the specified
  *  number of results.
  */
-@property(assign) NSInteger pageSize;
+@property(nonatomic, assign) NSInteger pageSize;
 
 /**
  *  nextPageToken value returned from a previous list call, indicating that the
  *  subsequent page of results should be returned. The list request must be
  *  otherwise identical to the one that resulted in this token.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /**
  *  Restricts returned courses to those having a student with the specified
@@ -1120,7 +1154,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  identifier for the user * the email address of the user * the string literal
  *  `"me"`, indicating the requesting user
  */
-@property(copy, nullable) NSString *studentId;
+@property(nonatomic, copy, nullable) NSString *studentId;
 
 /**
  *  Restricts returned courses to those having a teacher with the specified
@@ -1128,7 +1162,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  identifier for the user * the email address of the user * the string literal
  *  `"me"`, indicating the requesting user
  */
-@property(copy, nullable) NSString *teacherId;
+@property(nonatomic, copy, nullable) NSString *teacherId;
 
 /**
  *  Fetches a @c GTLRClassroom_ListCoursesResponse.
@@ -1173,7 +1207,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  Mask that identifies which fields on the course to update. This field is
@@ -1182,7 +1216,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  `descriptionHeading` * `description` * `room` * `courseState` When set in a
  *  query parameter, this field should be specified as `updateMask=,,...`
  */
-@property(copy, nullable) NSString *updateMask;
+@property(nonatomic, copy, nullable) NSString *updateMask;
 
 /**
  *  Fetches a @c GTLRClassroom_Course.
@@ -1231,7 +1265,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  Identifier of the course to create the student in. This identifier can be
  *  either the Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /**
  *  Enrollment code of the course to create the student in. This code is
@@ -1239,7 +1273,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  the requesting user has administrative permissions to create students for
  *  any user.
  */
-@property(copy, nullable) NSString *enrollmentCode;
+@property(nonatomic, copy, nullable) NSString *enrollmentCode;
 
 /**
  *  Fetches a @c GTLRClassroom_Student.
@@ -1283,14 +1317,14 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  Identifier of the course. This identifier can be either the
  *  Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /**
  *  Identifier of the student to delete. The identifier can be one of the
  *  following: * the numeric identifier for the user * the email address of the
  *  user * the string literal `"me"`, indicating the requesting user
  */
-@property(copy, nullable) NSString *userId;
+@property(nonatomic, copy, nullable) NSString *userId;
 
 /**
  *  Fetches a @c GTLRClassroom_Empty.
@@ -1336,14 +1370,14 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  Identifier of the course. This identifier can be either the
  *  Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /**
  *  Identifier of the student to return. The identifier can be one of the
  *  following: * the numeric identifier for the user * the email address of the
  *  user * the string literal `"me"`, indicating the requesting user
  */
-@property(copy, nullable) NSString *userId;
+@property(nonatomic, copy, nullable) NSString *userId;
 
 /**
  *  Fetches a @c GTLRClassroom_Student.
@@ -1388,20 +1422,20 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  Identifier of the course. This identifier can be either the
  *  Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /**
  *  Maximum number of items to return. Zero means no maximum. The server may
  *  return fewer than the specified number of results.
  */
-@property(assign) NSInteger pageSize;
+@property(nonatomic, assign) NSInteger pageSize;
 
 /**
  *  nextPageToken value returned from a previous list call, indicating that the
  *  subsequent page of results should be returned. The list request must be
  *  otherwise identical to the one that resulted in this token.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /**
  *  Fetches a @c GTLRClassroom_ListStudentsResponse.
@@ -1448,7 +1482,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  Identifier of the course. This identifier can be either the
  *  Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /**
  *  Fetches a @c GTLRClassroom_Teacher.
@@ -1494,14 +1528,14 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  Identifier of the course. This identifier can be either the
  *  Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /**
  *  Identifier of the teacher to delete. The identifier can be one of the
  *  following: * the numeric identifier for the user * the email address of the
  *  user * the string literal `"me"`, indicating the requesting user
  */
-@property(copy, nullable) NSString *userId;
+@property(nonatomic, copy, nullable) NSString *userId;
 
 /**
  *  Fetches a @c GTLRClassroom_Empty.
@@ -1549,14 +1583,14 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  Identifier of the course. This identifier can be either the
  *  Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /**
  *  Identifier of the teacher to return. The identifier can be one of the
  *  following: * the numeric identifier for the user * the email address of the
  *  user * the string literal `"me"`, indicating the requesting user
  */
-@property(copy, nullable) NSString *userId;
+@property(nonatomic, copy, nullable) NSString *userId;
 
 /**
  *  Fetches a @c GTLRClassroom_Teacher.
@@ -1601,20 +1635,20 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  Identifier of the course. This identifier can be either the
  *  Classroom-assigned identifier or an alias.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /**
  *  Maximum number of items to return. Zero means no maximum. The server may
  *  return fewer than the specified number of results.
  */
-@property(assign) NSInteger pageSize;
+@property(nonatomic, assign) NSInteger pageSize;
 
 /**
  *  nextPageToken value returned from a previous list call, indicating that the
  *  subsequent page of results should be returned. The list request must be
  *  otherwise identical to the one that resulted in this token.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /**
  *  Fetches a @c GTLRClassroom_ListTeachersResponse.
@@ -1658,7 +1692,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  Fetches a @c GTLRClassroom_Course.
@@ -1705,7 +1739,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  Fetches a @c GTLRClassroom_Empty.
@@ -1789,7 +1823,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  Fetches a @c GTLRClassroom_Empty.
@@ -1828,7 +1862,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *
  *  identifier property maps to 'id' in JSON (to avoid Objective C's 'id').
  */
-@property(copy, nullable) NSString *identifier;
+@property(nonatomic, copy, nullable) NSString *identifier;
 
 /**
  *  Fetches a @c GTLRClassroom_Invitation.
@@ -1867,20 +1901,20 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  Restricts returned invitations to those for a course with the specified
  *  identifier.
  */
-@property(copy, nullable) NSString *courseId;
+@property(nonatomic, copy, nullable) NSString *courseId;
 
 /**
  *  Maximum number of items to return. Zero means no maximum. The server may
  *  return fewer than the specified number of results.
  */
-@property(assign) NSInteger pageSize;
+@property(nonatomic, assign) NSInteger pageSize;
 
 /**
  *  nextPageToken value returned from a previous list call, indicating that the
  *  subsequent page of results should be returned. The list request must be
  *  otherwise identical to the one that resulted in this token.
  */
-@property(copy, nullable) NSString *pageToken;
+@property(nonatomic, copy, nullable) NSString *pageToken;
 
 /**
  *  Restricts returned invitations to those for a specific user. The identifier
@@ -1888,7 +1922,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  email address of the user * the string literal `"me"`, indicating the
  *  requesting user
  */
-@property(copy, nullable) NSString *userId;
+@property(nonatomic, copy, nullable) NSString *userId;
 
 /**
  *  Fetches a @c GTLRClassroom_ListInvitationsResponse.
@@ -1932,7 +1966,7 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  following: * the numeric identifier for the user * the email address of the
  *  user * the string literal `"me"`, indicating the requesting user
  */
-@property(copy, nullable) NSString *userId;
+@property(nonatomic, copy, nullable) NSString *userId;
 
 /**
  *  Fetches a @c GTLRClassroom_UserProfile.
@@ -1950,6 +1984,483 @@ GTLR_EXTERN NSString * const kGTLRClassroomStatesTurnedIn;
  *  @returns GTLRClassroomQuery_UserProfilesGet
  */
 + (instancetype)queryWithUserId:(NSString *)userId;
+
+@end
+
+/**
+ *  Creates a guardian invitation, and sends an email to the guardian asking
+ *  them to confirm that they are the student's guardian. Once the guardian
+ *  accepts the invitation, their `state` will change to `COMPLETED` and they
+ *  will start receiving guardian notifications. A `Guardian` resource will also
+ *  be created to represent the active guardian. The request object must have
+ *  the `student_id` and `invited_email_address` fields set. Failing to set
+ *  these fields, or setting any other fields in the request, will result in an
+ *  error. This method returns the following error codes: * `PERMISSION_DENIED`
+ *  if the current user does not have permission to manage guardians, if the
+ *  guardian in question has already rejected too many requests for that
+ *  student, if guardians are not enabled for the domain in question, or for
+ *  other access errors. * `RESOURCE_EXHAUSTED` if the student or guardian has
+ *  exceeded the guardian link limit. * `INVALID_ARGUMENT` if the guardian email
+ *  address is not valid (for example, if it is too long), or if the format of
+ *  the student ID provided cannot be recognized (it is not an email address,
+ *  nor a `user_id` from this API). This error will also be returned if
+ *  read-only fields are set, or if the `state` field is set to to a value other
+ *  than `PENDING`. * `NOT_FOUND` if the student ID provided is a valid student
+ *  ID, but Classroom has no record of that student. * `ALREADY_EXISTS` if there
+ *  is already a pending guardian invitation for the student and
+ *  `invited_email_address` provided, or if the provided `invited_email_address`
+ *  matches the Google account of an existing `Guardian` for this user.
+ *
+ *  Method: classroom.userProfiles.guardianInvitations.create
+ */
+@interface GTLRClassroomQuery_UserProfilesGuardianInvitationsCreate : GTLRClassroomQuery
+// Previous library name was
+//   +[GTLQueryClassroom queryForUserProfilesGuardianInvitationsCreateWithObject:studentId:]
+
+/** ID of the student (in standard format) */
+@property(nonatomic, copy, nullable) NSString *studentId;
+
+/**
+ *  Fetches a @c GTLRClassroom_GuardianInvitation.
+ *
+ *  Creates a guardian invitation, and sends an email to the guardian asking
+ *  them to confirm that they are the student's guardian. Once the guardian
+ *  accepts the invitation, their `state` will change to `COMPLETED` and they
+ *  will start receiving guardian notifications. A `Guardian` resource will also
+ *  be created to represent the active guardian. The request object must have
+ *  the `student_id` and `invited_email_address` fields set. Failing to set
+ *  these fields, or setting any other fields in the request, will result in an
+ *  error. This method returns the following error codes: * `PERMISSION_DENIED`
+ *  if the current user does not have permission to manage guardians, if the
+ *  guardian in question has already rejected too many requests for that
+ *  student, if guardians are not enabled for the domain in question, or for
+ *  other access errors. * `RESOURCE_EXHAUSTED` if the student or guardian has
+ *  exceeded the guardian link limit. * `INVALID_ARGUMENT` if the guardian email
+ *  address is not valid (for example, if it is too long), or if the format of
+ *  the student ID provided cannot be recognized (it is not an email address,
+ *  nor a `user_id` from this API). This error will also be returned if
+ *  read-only fields are set, or if the `state` field is set to to a value other
+ *  than `PENDING`. * `NOT_FOUND` if the student ID provided is a valid student
+ *  ID, but Classroom has no record of that student. * `ALREADY_EXISTS` if there
+ *  is already a pending guardian invitation for the student and
+ *  `invited_email_address` provided, or if the provided `invited_email_address`
+ *  matches the Google account of an existing `Guardian` for this user.
+ *
+ *  @param object The @c GTLRClassroom_GuardianInvitation to include in the
+ *    query.
+ *  @param studentId ID of the student (in standard format)
+ *
+ *  @returns GTLRClassroomQuery_UserProfilesGuardianInvitationsCreate
+ */
++ (instancetype)queryWithObject:(GTLRClassroom_GuardianInvitation *)object
+                      studentId:(NSString *)studentId;
+
+@end
+
+/**
+ *  Returns a specific guardian invitation. This method returns the following
+ *  error codes: * `PERMISSION_DENIED` if the requesting user is not permitted
+ *  to view guardian invitations for the student identified by the `student_id`,
+ *  if guardians are not enabled for the domain in question, or for other access
+ *  errors. * `INVALID_ARGUMENT` if a `student_id` is specified, but its format
+ *  cannot be recognized (it is not an email address, nor a `student_id` from
+ *  the API, nor the literal string `me`). * `NOT_FOUND` if Classroom cannot
+ *  find any record of the given student or `invitation_id`. May also be
+ *  returned if the student exists, but the requesting user does not have access
+ *  to see that student.
+ *
+ *  Method: classroom.userProfiles.guardianInvitations.get
+ */
+@interface GTLRClassroomQuery_UserProfilesGuardianInvitationsGet : GTLRClassroomQuery
+// Previous library name was
+//   +[GTLQueryClassroom queryForUserProfilesGuardianInvitationsGetWithstudentId:invitationId:]
+
+/** The `id` field of the `GuardianInvitation` being requested. */
+@property(nonatomic, copy, nullable) NSString *invitationId;
+
+/** The ID of the student whose guardian invitation is being requested. */
+@property(nonatomic, copy, nullable) NSString *studentId;
+
+/**
+ *  Fetches a @c GTLRClassroom_GuardianInvitation.
+ *
+ *  Returns a specific guardian invitation. This method returns the following
+ *  error codes: * `PERMISSION_DENIED` if the requesting user is not permitted
+ *  to view guardian invitations for the student identified by the `student_id`,
+ *  if guardians are not enabled for the domain in question, or for other access
+ *  errors. * `INVALID_ARGUMENT` if a `student_id` is specified, but its format
+ *  cannot be recognized (it is not an email address, nor a `student_id` from
+ *  the API, nor the literal string `me`). * `NOT_FOUND` if Classroom cannot
+ *  find any record of the given student or `invitation_id`. May also be
+ *  returned if the student exists, but the requesting user does not have access
+ *  to see that student.
+ *
+ *  @param studentId The ID of the student whose guardian invitation is being
+ *    requested.
+ *  @param invitationId The `id` field of the `GuardianInvitation` being
+ *    requested.
+ *
+ *  @returns GTLRClassroomQuery_UserProfilesGuardianInvitationsGet
+ */
++ (instancetype)queryWithStudentId:(NSString *)studentId
+                      invitationId:(NSString *)invitationId;
+
+@end
+
+/**
+ *  Returns a list of guardian invitations that the requesting user is permitted
+ *  to view, filtered by the parameters provided. This method returns the
+ *  following error codes: * `PERMISSION_DENIED` if a `student_id` is specified,
+ *  and the requesting user is not permitted to view guardian invitations for
+ *  that student, if `"-"` is specified as the `student_id` and the user is not
+ *  a domain administrator, if guardians are not enabled for the domain in
+ *  question, or for other access errors. * `INVALID_ARGUMENT` if a `student_id`
+ *  is specified, but its format cannot be recognized (it is not an email
+ *  address, nor a `student_id` from the API, nor the literal string `me`). May
+ *  also be returned if an invalid `page_token` or `state` is provided. *
+ *  `NOT_FOUND` if a `student_id` is specified, and its format can be
+ *  recognized, but Classroom has no record of that student.
+ *
+ *  Method: classroom.userProfiles.guardianInvitations.list
+ */
+@interface GTLRClassroomQuery_UserProfilesGuardianInvitationsList : GTLRClassroomQuery
+// Previous library name was
+//   +[GTLQueryClassroom queryForUserProfilesGuardianInvitationsListWithstudentId:]
+
+/**
+ *  If specified, only results with the specified `invited_email_address` will
+ *  be returned.
+ */
+@property(nonatomic, copy, nullable) NSString *invitedEmailAddress;
+
+/**
+ *  Maximum number of items to return. Zero or unspecified indicates that the
+ *  server may assign a maximum. The server may return fewer than the specified
+ *  number of results.
+ */
+@property(nonatomic, assign) NSInteger pageSize;
+
+/**
+ *  nextPageToken value returned from a previous list call, indicating that the
+ *  subsequent page of results should be returned. The list request must be
+ *  otherwise identical to the one that resulted in this token.
+ */
+@property(nonatomic, copy, nullable) NSString *pageToken;
+
+/**
+ *  If specified, only results with the specified `state` values will be
+ *  returned. Otherwise, results with a `state` of `PENDING` will be returned.
+ *
+ *  Likely values:
+ *    @arg @c kGTLRClassroomStatesGuardianInvitationStateUnspecified Value
+ *        "GUARDIAN_INVITATION_STATE_UNSPECIFIED"
+ *    @arg @c kGTLRClassroomStatesPending Value "PENDING"
+ *    @arg @c kGTLRClassroomStatesComplete Value "COMPLETE"
+ */
+@property(nonatomic, strong, nullable) NSArray<NSString *> *states;
+
+/**
+ *  The ID of the student whose guardian invitations are to be returned. The
+ *  identifier can be one of the following: * the numeric identifier for the
+ *  user * the email address of the user * the string literal `"me"`, indicating
+ *  the requesting user * the string literal `"-"`, indicating that results
+ *  should be returned for all students that the requesting user is permitted to
+ *  view guardian invitations.
+ */
+@property(nonatomic, copy, nullable) NSString *studentId;
+
+/**
+ *  Fetches a @c GTLRClassroom_ListGuardianInvitationsResponse.
+ *
+ *  Returns a list of guardian invitations that the requesting user is permitted
+ *  to view, filtered by the parameters provided. This method returns the
+ *  following error codes: * `PERMISSION_DENIED` if a `student_id` is specified,
+ *  and the requesting user is not permitted to view guardian invitations for
+ *  that student, if `"-"` is specified as the `student_id` and the user is not
+ *  a domain administrator, if guardians are not enabled for the domain in
+ *  question, or for other access errors. * `INVALID_ARGUMENT` if a `student_id`
+ *  is specified, but its format cannot be recognized (it is not an email
+ *  address, nor a `student_id` from the API, nor the literal string `me`). May
+ *  also be returned if an invalid `page_token` or `state` is provided. *
+ *  `NOT_FOUND` if a `student_id` is specified, and its format can be
+ *  recognized, but Classroom has no record of that student.
+ *
+ *  @param studentId The ID of the student whose guardian invitations are to be
+ *    returned. The identifier can be one of the following: * the numeric
+ *    identifier for the user * the email address of the user * the string
+ *    literal `"me"`, indicating the requesting user * the string literal `"-"`,
+ *    indicating that results should be returned for all students that the
+ *    requesting user is permitted to view guardian invitations.
+ *
+ *  @returns GTLRClassroomQuery_UserProfilesGuardianInvitationsList
+ *
+ *  @note Automatic pagination will be done when @c shouldFetchNextPages is
+ *        enabled. See @c shouldFetchNextPages on @c GTLRService for more
+ *        information.
+ */
++ (instancetype)queryWithStudentId:(NSString *)studentId;
+
+@end
+
+/**
+ *  Modifies a guardian invitation. Currently, the only valid modification is to
+ *  change the `state` from `PENDING` to `COMPLETE`. This has the effect of
+ *  withdrawing the invitation. This method returns the following error codes: *
+ *  `PERMISSION_DENIED` if the current user does not have permission to manage
+ *  guardians, if guardians are not enabled for the domain in question or for
+ *  other access errors. * `FAILED_PRECONDITION` if the guardian link is not in
+ *  the `PENDING` state. * `INVALID_ARGUMENT` if the format of the student ID
+ *  provided cannot be recognized (it is not an email address, nor a `user_id`
+ *  from this API), or if the passed `GuardianInvitation` has a `state` other
+ *  than `COMPLETE`, or if it modifies fields other than `state`. * `NOT_FOUND`
+ *  if the student ID provided is a valid student ID, but Classroom has no
+ *  record of that student, or if the `id` field does not refer to a guardian
+ *  invitation known to Classroom.
+ *
+ *  Method: classroom.userProfiles.guardianInvitations.patch
+ */
+@interface GTLRClassroomQuery_UserProfilesGuardianInvitationsPatch : GTLRClassroomQuery
+// Previous library name was
+//   +[GTLQueryClassroom queryForUserProfilesGuardianInvitationsPatchWithObject:studentId:invitationId:]
+
+/** The `id` field of the `GuardianInvitation` to be modified. */
+@property(nonatomic, copy, nullable) NSString *invitationId;
+
+/** The ID of the student whose guardian invitation is to be modified. */
+@property(nonatomic, copy, nullable) NSString *studentId;
+
+/**
+ *  Mask that identifies which fields on the course to update. This field is
+ *  required to do an update. The update will fail if invalid fields are
+ *  specified. The following fields are valid: * `state` When set in a query
+ *  parameter, this field should be specified as `updateMask=,,...`
+ */
+@property(nonatomic, copy, nullable) NSString *updateMask;
+
+/**
+ *  Fetches a @c GTLRClassroom_GuardianInvitation.
+ *
+ *  Modifies a guardian invitation. Currently, the only valid modification is to
+ *  change the `state` from `PENDING` to `COMPLETE`. This has the effect of
+ *  withdrawing the invitation. This method returns the following error codes: *
+ *  `PERMISSION_DENIED` if the current user does not have permission to manage
+ *  guardians, if guardians are not enabled for the domain in question or for
+ *  other access errors. * `FAILED_PRECONDITION` if the guardian link is not in
+ *  the `PENDING` state. * `INVALID_ARGUMENT` if the format of the student ID
+ *  provided cannot be recognized (it is not an email address, nor a `user_id`
+ *  from this API), or if the passed `GuardianInvitation` has a `state` other
+ *  than `COMPLETE`, or if it modifies fields other than `state`. * `NOT_FOUND`
+ *  if the student ID provided is a valid student ID, but Classroom has no
+ *  record of that student, or if the `id` field does not refer to a guardian
+ *  invitation known to Classroom.
+ *
+ *  @param object The @c GTLRClassroom_GuardianInvitation to include in the
+ *    query.
+ *  @param studentId The ID of the student whose guardian invitation is to be
+ *    modified.
+ *  @param invitationId The `id` field of the `GuardianInvitation` to be
+ *    modified.
+ *
+ *  @returns GTLRClassroomQuery_UserProfilesGuardianInvitationsPatch
+ */
++ (instancetype)queryWithObject:(GTLRClassroom_GuardianInvitation *)object
+                      studentId:(NSString *)studentId
+                   invitationId:(NSString *)invitationId;
+
+@end
+
+/**
+ *  Deletes a guardian. The guardian will no longer receive guardian
+ *  notifications and the guardian will no longer be accessible via the API.
+ *  This method returns the following error codes: * `PERMISSION_DENIED` if the
+ *  requesting user is not permitted to manage guardians for the student
+ *  identified by the `student_id`, if guardians are not enabled for the domain
+ *  in question, or for other access errors. * `INVALID_ARGUMENT` if a
+ *  `student_id` is specified, but its format cannot be recognized (it is not an
+ *  email address, nor a `student_id` from the API). * `NOT_FOUND` if Classroom
+ *  cannot find any record of the given `student_id` or `guardian_id`, or if the
+ *  guardian has already been disabled.
+ *
+ *  Method: classroom.userProfiles.guardians.delete
+ */
+@interface GTLRClassroomQuery_UserProfilesGuardiansDelete : GTLRClassroomQuery
+// Previous library name was
+//   +[GTLQueryClassroom queryForUserProfilesGuardiansDeleteWithstudentId:guardianId:]
+
+/** The `id` field from a `Guardian`. */
+@property(nonatomic, copy, nullable) NSString *guardianId;
+
+/**
+ *  The student whose guardian is to be deleted. One of the following: * the
+ *  numeric identifier for the user * the email address of the user * the string
+ *  literal `"me"`, indicating the requesting user
+ */
+@property(nonatomic, copy, nullable) NSString *studentId;
+
+/**
+ *  Fetches a @c GTLRClassroom_Empty.
+ *
+ *  Deletes a guardian. The guardian will no longer receive guardian
+ *  notifications and the guardian will no longer be accessible via the API.
+ *  This method returns the following error codes: * `PERMISSION_DENIED` if the
+ *  requesting user is not permitted to manage guardians for the student
+ *  identified by the `student_id`, if guardians are not enabled for the domain
+ *  in question, or for other access errors. * `INVALID_ARGUMENT` if a
+ *  `student_id` is specified, but its format cannot be recognized (it is not an
+ *  email address, nor a `student_id` from the API). * `NOT_FOUND` if Classroom
+ *  cannot find any record of the given `student_id` or `guardian_id`, or if the
+ *  guardian has already been disabled.
+ *
+ *  @param studentId The student whose guardian is to be deleted. One of the
+ *    following: * the numeric identifier for the user * the email address of
+ *    the user * the string literal `"me"`, indicating the requesting user
+ *  @param guardianId The `id` field from a `Guardian`.
+ *
+ *  @returns GTLRClassroomQuery_UserProfilesGuardiansDelete
+ */
++ (instancetype)queryWithStudentId:(NSString *)studentId
+                        guardianId:(NSString *)guardianId;
+
+@end
+
+/**
+ *  Returns a specific guardian. This method returns the following error codes:
+ *  * `PERMISSION_DENIED` if the requesting user is not permitted to view
+ *  guardian information for the student identified by the `student_id`, if
+ *  guardians are not enabled for the domain in question, or for other access
+ *  errors. * `INVALID_ARGUMENT` if a `student_id` is specified, but its format
+ *  cannot be recognized (it is not an email address, nor a `student_id` from
+ *  the API, nor the literal string `me`). * `NOT_FOUND` if Classroom cannot
+ *  find any record of the given student or `guardian_id`, or if the guardian
+ *  has been disabled.
+ *
+ *  Method: classroom.userProfiles.guardians.get
+ */
+@interface GTLRClassroomQuery_UserProfilesGuardiansGet : GTLRClassroomQuery
+// Previous library name was
+//   +[GTLQueryClassroom queryForUserProfilesGuardiansGetWithstudentId:guardianId:]
+
+/** The `id` field from a `Guardian`. */
+@property(nonatomic, copy, nullable) NSString *guardianId;
+
+/**
+ *  The student whose guardian is being requested. One of the following: * the
+ *  numeric identifier for the user * the email address of the user * the string
+ *  literal `"me"`, indicating the requesting user
+ */
+@property(nonatomic, copy, nullable) NSString *studentId;
+
+/**
+ *  Fetches a @c GTLRClassroom_Guardian.
+ *
+ *  Returns a specific guardian. This method returns the following error codes:
+ *  * `PERMISSION_DENIED` if the requesting user is not permitted to view
+ *  guardian information for the student identified by the `student_id`, if
+ *  guardians are not enabled for the domain in question, or for other access
+ *  errors. * `INVALID_ARGUMENT` if a `student_id` is specified, but its format
+ *  cannot be recognized (it is not an email address, nor a `student_id` from
+ *  the API, nor the literal string `me`). * `NOT_FOUND` if Classroom cannot
+ *  find any record of the given student or `guardian_id`, or if the guardian
+ *  has been disabled.
+ *
+ *  @param studentId The student whose guardian is being requested. One of the
+ *    following: * the numeric identifier for the user * the email address of
+ *    the user * the string literal `"me"`, indicating the requesting user
+ *  @param guardianId The `id` field from a `Guardian`.
+ *
+ *  @returns GTLRClassroomQuery_UserProfilesGuardiansGet
+ */
++ (instancetype)queryWithStudentId:(NSString *)studentId
+                        guardianId:(NSString *)guardianId;
+
+@end
+
+/**
+ *  Returns a list of guardians that the requesting user is permitted to view,
+ *  restricted to those that match the request. To list guardians for any
+ *  student that the requesting user may view guardians for, use the literal
+ *  character `-` for the student ID. This method returns the following error
+ *  codes: * `PERMISSION_DENIED` if a `student_id` is specified, and the
+ *  requesting user is not permitted to view guardian information for that
+ *  student, if `"-"` is specified as the `student_id` and the user is not a
+ *  domain administrator, if guardians are not enabled for the domain in
+ *  question, if the `invited_email_address` filter is set by a user who is not
+ *  a domain administrator, or for other access errors. * `INVALID_ARGUMENT` if
+ *  a `student_id` is specified, but its format cannot be recognized (it is not
+ *  an email address, nor a `student_id` from the API, nor the literal string
+ *  `me`). May also be returned if an invalid `page_token` is provided. *
+ *  `NOT_FOUND` if a `student_id` is specified, and its format can be
+ *  recognized, but Classroom has no record of that student.
+ *
+ *  Method: classroom.userProfiles.guardians.list
+ */
+@interface GTLRClassroomQuery_UserProfilesGuardiansList : GTLRClassroomQuery
+// Previous library name was
+//   +[GTLQueryClassroom queryForUserProfilesGuardiansListWithstudentId:]
+
+/**
+ *  Filter results by the email address that the original invitation was sent
+ *  to, resulting in this guardian link. This filter can only be used by domain
+ *  administrators.
+ */
+@property(nonatomic, copy, nullable) NSString *invitedEmailAddress;
+
+/**
+ *  Maximum number of items to return. Zero or unspecified indicates that the
+ *  server may assign a maximum. The server may return fewer than the specified
+ *  number of results.
+ */
+@property(nonatomic, assign) NSInteger pageSize;
+
+/**
+ *  nextPageToken value returned from a previous list call, indicating that the
+ *  subsequent page of results should be returned. The list request must be
+ *  otherwise identical to the one that resulted in this token.
+ */
+@property(nonatomic, copy, nullable) NSString *pageToken;
+
+/**
+ *  Filter results by the student who the guardian is linked to. The identifier
+ *  can be one of the following: * the numeric identifier for the user * the
+ *  email address of the user * the string literal `"me"`, indicating the
+ *  requesting user * the string literal `"-"`, indicating that results should
+ *  be returned for all students that the requesting user has access to view.
+ */
+@property(nonatomic, copy, nullable) NSString *studentId;
+
+/**
+ *  Fetches a @c GTLRClassroom_ListGuardiansResponse.
+ *
+ *  Returns a list of guardians that the requesting user is permitted to view,
+ *  restricted to those that match the request. To list guardians for any
+ *  student that the requesting user may view guardians for, use the literal
+ *  character `-` for the student ID. This method returns the following error
+ *  codes: * `PERMISSION_DENIED` if a `student_id` is specified, and the
+ *  requesting user is not permitted to view guardian information for that
+ *  student, if `"-"` is specified as the `student_id` and the user is not a
+ *  domain administrator, if guardians are not enabled for the domain in
+ *  question, if the `invited_email_address` filter is set by a user who is not
+ *  a domain administrator, or for other access errors. * `INVALID_ARGUMENT` if
+ *  a `student_id` is specified, but its format cannot be recognized (it is not
+ *  an email address, nor a `student_id` from the API, nor the literal string
+ *  `me`). May also be returned if an invalid `page_token` is provided. *
+ *  `NOT_FOUND` if a `student_id` is specified, and its format can be
+ *  recognized, but Classroom has no record of that student.
+ *
+ *  @param studentId Filter results by the student who the guardian is linked
+ *    to. The identifier can be one of the following: * the numeric identifier
+ *    for the user * the email address of the user * the string literal `"me"`,
+ *    indicating the requesting user * the string literal `"-"`, indicating that
+ *    results should be returned for all students that the requesting user has
+ *    access to view.
+ *
+ *  @returns GTLRClassroomQuery_UserProfilesGuardiansList
+ *
+ *  @note Automatic pagination will be done when @c shouldFetchNextPages is
+ *        enabled. See @c shouldFetchNextPages on @c GTLRService for more
+ *        information.
+ */
++ (instancetype)queryWithStudentId:(NSString *)studentId;
 
 @end
 

@@ -16,6 +16,7 @@
 // Constants
 
 // acquireMethod
+NSString * const kGTLRBooksAcquireMethodFamilyShared     = @"FAMILY_SHARED";
 NSString * const kGTLRBooksAcquireMethodPreordered       = @"PREORDERED";
 NSString * const kGTLRBooksAcquireMethodPreviouslyRented = @"PREVIOUSLY_RENTED";
 NSString * const kGTLRBooksAcquireMethodPublicDomain     = @"PUBLIC_DOMAIN";
@@ -1044,8 +1045,9 @@ NSString * const kGTLRBooksReasonOnboarding = @"ONBOARDING";
 
 @implementation GTLRBooksQuery_VolumesList
 
-@dynamic download, filter, langRestrict, libraryRestrict, maxResults, orderBy,
-         partner, printType, projection, q, showPreorders, source, startIndex;
+@dynamic download, filter, langRestrict, libraryRestrict,
+         maxAllowedMaturityRating, maxResults, orderBy, partner, printType,
+         projection, q, showPreorders, source, startIndex;
 
 + (instancetype)queryWithQ:(NSString *)q {
   NSString *pathURITemplate = @"volumes";
