@@ -77,41 +77,6 @@ static NSString *kEnumMapKey                      = @"enumMap";
 
 
 
-<<<<<<< HEAD
-=======
-- (void)sg_getQueryParamObjCType:(NSString **)objcType
-                       asPointer:(BOOL *)asPointer
-           objcPropertySemantics:(NSString **)objcPropertySemantics
-                         comment:(NSString **)comment
-                  itemsClassName:(NSString **)itemsClassName;
-@end
-
-@interface GTLRDiscovery_RestResource (SGGeneratorAdditions)
-@property(readonly) NSString *sg_name;
-@end
-
-@interface GTLRDiscovery_RestMethod (SGGeneratorAdditions)
-@property(readonly) NSString *sg_name;
-@property(readonly) NSArray *sg_sortedParameters;
-@property(readonly) NSArray *sg_sortedParametersWithRequest;
-@property(readonly) NSString *sg_resumableUploadPathOverride;
-@property(readonly) NSString *sg_simpleUploadPathOverride;
-@end
-
-@interface GTLRDiscovery_RestMethodRequest (SGGeneratorAdditions)
-@property(readonly) GTLRDiscovery_JsonSchema *sg_resolvedSchema;
-@end
-
-@interface GTLRDiscovery_RestMethodResponse (SGGeneratorAdditions)
-@property(readonly) GTLRDiscovery_JsonSchema *sg_resolvedSchema;
-@end
-
-@interface SGGenerator ()
-@property(strong) NSMutableArray *warnings;
-@property(strong) NSMutableArray *infos;
-@property(readonly) BOOL useLegacyObjectNaming;
-@end
->>>>>>> google/master
 
 // Helper to get the objects of a dictionary out in a sorted order.
   static NSArray *DictionaryObjectsSortedByKeys(NSDictionary *dict) {
@@ -2546,18 +2511,17 @@ static NSString *MappedParamName(NSString *name) {
       } else {
         comment = [@"    // " stringByAppendingString:comment];
       }
-<<<<<<< HEAD
 
       NSString *propertyLine = [NSString stringWithFormat:@"    public let %@:%@ %@\n",
                                          @"items",
                                          objcType,
                                          comment];
-=======
-      NSString *propertyLine = [NSString stringWithFormat:@"@property(nonatomic, %@, readonly) %@%@%@;%@\n",
-                                objcPropertySemantics, objcType,
-                                (asPtr ? @" *" : @" "),
-                                @"items", comment];
->>>>>>> google/master
+
+//      NSString *propertyLine = [NSString stringWithFormat:@"@property(nonatomic, %@, readonly) %@%@%@;%@\n",
+//                                objcPropertySemantics, objcType,
+//                                (asPtr ? @" *" : @" "),
+//                                @"items", comment];
+
       [parts addObject:propertyLine];
 
       
@@ -2679,22 +2643,16 @@ static NSString *MappedParamName(NSString *name) {
           extraAttributes =
             [extraAttributes stringByAppendingFormat:@", getter=valueOf_%@", propertyObjCName];
         }
-<<<<<<< HEAD
-        // NSString *clangDirective = @"";
-        // if ([_notRetainedPredicate evaluateWithObject:propertyObjCName]) {
-        //   clangDirective = @" NS_RETURNS_NOT_RETAINED";
-        // }
 
-=======
-        NSString *clangDirective = @"";
-        if ([_notRetainedPredicate evaluateWithObject:propertyObjCName]) {
-          clangDirective = @" NS_RETURNS_NOT_RETAINED";
-        }
-        NSString *propertyLine = [NSString stringWithFormat:@"@property(nonatomic, %@%@) %@%@%@%@;\n",
-                                  objcPropertySemantics, extraAttributes, objcType,
-                                  (asPtr ? @" *" : @" "),
-                                  propertyObjCName, clangDirective];
->>>>>>> google/master
+//        NSString *clangDirective = @"";
+//        if ([_notRetainedPredicate evaluateWithObject:propertyObjCName]) {
+//          clangDirective = @" NS_RETURNS_NOT_RETAINED";
+//        }
+//        NSString *propertyLine = [NSString stringWithFormat:@"@property(nonatomic, %@%@) %@%@%@%@;\n",
+//                                  objcPropertySemantics, extraAttributes, objcType,
+//                                  (asPtr ? @" *" : @" "),
+//                                  propertyObjCName, clangDirective];
+
 
         if (hd.hasText) {
           if (!lastLineWasBlank) {
