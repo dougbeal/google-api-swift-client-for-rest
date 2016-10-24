@@ -42,42 +42,42 @@ public extension SGGenerator {
         let offset = UInt32(UnicodeScalar("A").value)
         let rangeOffset = UInt32(UnicodeScalar("Z").value) - offset 
         let digitCount = rangeOffset + 1
-        for arity in curry.sort() {
+        for arity in curry.sorted() {
             guard arity > maxExistingCurryArity else { continue }
-            let types: Array<String> = Range<UInt32>(0..<arity).map {
+            let types: Array<String> = CountableRange<UInt32>(0..<arity).map {
                 (position) in
                 var string = ""
                 let digits = arity/digitCount
                 if digits > 1 {
                     if position > (digitCount - 1) {
-                        for digit in (2...digits).reverse() {
+                        for digit in (2...digits).reversed() {
                             let div = UInt32(digitCount*digit)
                             let ch = position/div
-                            string += String(Character(UnicodeScalar(offset + ch)))
+                            string += String(Character(UnicodeScalar(offset + ch)!))
                         }
                     } else {
                         string += " "
                     }
                 } 
-                string += String(Character(UnicodeScalar(offset + (position%digitCount))))
+                string += String(Character(UnicodeScalar(offset + (position%digitCount))!))
                 return string
             }
             let count = types.count
-            let genericTypeList = types.joinWithSeparator(",")
-            let functionArgumentList = types[0..<count-1].joinWithSeparator(",")
+            let genericTypeList = types.joined(separator: ",")
+            let functionArgumentList = types[0..<count-1].joined(separator: ",")
             let functionReturnType = types[count-1]
-            let returnChain = types.joinWithSeparator(" -> ")
-            let labels = types.map { return "`\($0.lowercaseString)`" }
-            var bodyArray: Array<String> = labels[0..<count-1].enumerate().map { (index, label) in  
+            let returnChain = types.joined(separator: " -> ")
+            let labels = types.map { return "`\($0.lowercased())`" }
+            var bodyArray: Array<String> = labels[0..<count-1].enumerated().map { (index, label) in  
                 let `type` = types[index]
                 let function = "(\(label): \(`type`)) ->"
-                let typeChain = types[index+1..<types.count].joinWithSeparator(" -> ")
+                let typeChain = types[index+1..<types.count].joined(separator: " -> ")
                 return "\(function) \(typeChain) in {"
             }
-            let functionCall = labels[0..<count-1].joinWithSeparator(",")
+            let functionCall = labels[0..<count-1].joined(separator: ",")
             bodyArray.append("function(\(functionCall))")
-            bodyArray.append(String(count: count-2, repeatedValue: Character("}")))
-            let body = bodyArray.joinWithSeparator("")
+            bodyArray.append(String(repeating: "}", count: count-2))
+            let body = bodyArray.joined(separator: "")
             let curryFunc = "func curry<\(genericTypeList)>" +
                             "(function: (\(functionArgumentList)) -> \(functionReturnType))" +
                             " -> \(returnChain) {\n" +
@@ -86,13 +86,13 @@ public extension SGGenerator {
             customCurry.append(curryFunc)
             
         }
-        parts.append(customCurry.joinWithSeparator("\n"))
+        parts.append(customCurry.joined(separator: "\n"))
         // Two blank lines between classes.
-        parts.append(classParts.joinWithSeparator("\n\n"))
-        return parts.joinWithSeparator("\n")
+        parts.append(classParts.joined(separator: "\n\n"))
+        return parts.joined(separator: "\n")
     }
 
-    public func generateObjectArgoExtension(schema: GTLRDiscovery_JsonSchema,
+    public func generateObjectArgoExtension(_ schema: GTLRDiscovery_JsonSchema,
                                              forMode mode: GeneratorMode )
     -> (body: String, curry: Set<UInt32>) {
         let schemaClassName = schema.sg_objcClassName
@@ -115,10 +115,12 @@ public extension SGGenerator {
             chunkIndex += 1
             body.append(curry)
             var count = UInt32(0)
-            for (index,(name,schema)) in (properties.sort { $0.0 < $1.0 } ).enumerate() {
-                guard let schema = schema as? GTLRDiscovery_JsonSchema else { fatalError() }
+            for tuple in (properties.sorted { $0.0 < $1.0 } ).enumerated() {
+                guard let schema = tuple.element.value as? GTLRDiscovery_JsonSchema else { fatalError() }
+                let name = tuple.element.key
+                let index = tuple.offset                      
                 let op = (index == 0) ? "<^>": "<*>"
-                let property = SchemaSwiftWrapper(schema: schema.sg_resolvedSchema)
+                let property = SchemaSwiftWrapper(schema: schema.sg_resolved)
                 if index > 0 && index % chunkSize == 0 {
                     body.append(indent(2) +
                                   "let part\(chunkIndex) = part\(chunkIndex-1)")
@@ -143,6 +145,6 @@ public extension SGGenerator {
         body.append(decodeClose)
 
         body.append(declClose)
-        return (body: body.joinWithSeparator("\n"), curry: curryArgSet)
+        return (body: body.joined(separator: "\n"), curry: curryArgSet)
     }
 }

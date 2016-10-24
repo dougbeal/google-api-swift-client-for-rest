@@ -8,7 +8,7 @@
 
 import Foundation
 public let indentString = "    "
-func indent(level: Int = 0) -> String {
+func indent(_ level: Int = 0) -> String {
     var string = ""
     for _ in 0..<level {
         string = string + indentString
@@ -17,7 +17,7 @@ func indent(level: Int = 0) -> String {
 }
 
 struct SchemaSwiftWrapper: CustomStringConvertible {
-    private let schema: GTLRDiscovery_JsonSchema
+    fileprivate let schema: GTLRDiscovery_JsonSchema
     //private var _type: SGTypeInfo? = nil
     // var type: SGTypeInfo {
     //     if _type == nil {
@@ -72,35 +72,35 @@ public enum JsonTypeMapping: String {
 
 }
 
-public func jsonTypeToSwift( `type`:String, format:String?) -> String {
+public func jsonTypeToSwift( _ type:String, format:String?) -> String {
         let jsonType = JsonTypeMapping(rawValue: `type`)!
         let jsonFormat: JsonTypeMapping? = format != nil ? JsonTypeMapping(rawValue: format!): nil
         switch (jsonType, jsonFormat) {
-        case (.any, .None):
+        case (.any, .none):
             return "Any"
-        case (.array, .None):
+        case (.array, .none):
             return "Array"
-        case (.boolean, .None):
+        case (.boolean, .none):
             return "Bool"
-        case (.object, .None):
+        case (.object, .none):
             return JsonTypeMapping.use_item_class.rawValue
-        case (.string, .None):
+        case (.string, .none):
             return "String"
-        case (.integer, .Some(.int32)):
+        case (.integer, .some(.int32)):
             return "Int32"
-        case (.integer, .Some(.uint32)):
+        case (.integer, .some(.uint32)):
             return "UInt32"
-        case (.string, .Some(.int64)):
+        case (.string, .some(.int64)):
             return "Int64"
-        case (.string, .Some(.uint64)):
+        case (.string, .some(.uint64)):
             return "UInt64"
-        case (.number, .Some(.double)):
+        case (.number, .some(.double)):
             return "Double"
-        case (.number, .Some(.float)):
+        case (.number, .some(.float)):
             return "Float"
-        case (.string, .Some(.date_time)):
+        case (.string, .some(.date_time)):
             return "GTLRDateTime"
-        case (.string, .Some(.byte)):
+        case (.string, .some(.byte)):
             return "GTLRBase64"                   
         default:
             fatalError("not implemented/found '\(jsonType)' '\(jsonFormat)'")
@@ -108,9 +108,13 @@ public func jsonTypeToSwift( `type`:String, format:String?) -> String {
     }                             
                              
 public extension SGGenerator {
-    public func generateSwiftObjectForSchema(schema: GTLRDiscovery_JsonSchema,
+    public func generateSwiftObjectForSchema(_ schema: GTLRDiscovery_JsonSchema,
                                              forMode: GeneratorMode ) -> String {
-        let schemaClassName = schema.sg_objcClassName
+
+        guard let schemaClassName = schema.sg_objcClassName else {
+                fatalError()
+        }
+
         var collectionSupportsPagination: ObjCBool = ObjCBool(false)
 
         let collectionsItemKey = schema.sg_collectionItemsKey(&collectionSupportsPagination)
@@ -127,22 +131,28 @@ public extension SGGenerator {
         body.append(declOpen)
 
         if let properties = schema.properties?.additionalProperties() {
-            for (name,schema) in properties.sort({ $0.0 < $1.0 }) {
-                guard let schema = schema as? GTLRDiscovery_JsonSchema else { fatalError() }
-                let property = SchemaSwiftWrapper(schema: schema.sg_resolvedSchema)
+            for (name,propertySchema) in properties.sorted(by: { $0.0 < $1.0 }) {
+                guard let propertySchema = propertySchema as? GTLRDiscovery_JsonSchema,
+                    let propertySchemaClassName = schema.sg_objcClassName,
+                let objectSchema = self.api.sg_objectEnumsMap[schemaClassName] as? Dictionary<String, Dictionary<String, Dictionary<String,String>>>,
+                    let enumSchema = objectSchema[propertySchemaClassName]
+                    else {
+                        fatalError()
+                }
+                
+                let property = SchemaSwiftWrapper(schema: schema.sg_resolved)
                 let propertyType = property.type
                 let propertyClass = property.className
                 
                 let isClass = property.type == JsonTypeMapping.use_item_class.rawValue
                 var type = isClass ? propertyClass : propertyType
                 if let enumProperty = schema.enumProperty,
-                    enumSchema = self.api.sg_objectEnumsMap[schemaClassName] as? NSDictionary,
-                    cases = enumSchema[name] as? NSDictionary
+                    let cases = enumSchema[name]
                 {
-                    type = name.capitalizedString
+                    type = name.capitalized
                     body.append(indent(1) + "public enum \(type): String {")
-                    for (`case`, valueArray) in cases {
-                        let literal = valueArray[0]
+                    for (`case`, value) in cases {
+                        let literal = value
                         body.append(indent(2) + "case \(`case`) = \"\(literal)\"")
                     }
                     body.append(indent(1) + "}")
@@ -154,11 +164,9 @@ public extension SGGenerator {
         }
         body.append(declClose)
 
-        return body.joinWithSeparator("\n")
+        return body.joined(separator: "\n")
     }
-
-
-}
+} 
 /*
 - (NSString *)sg_objcClassName {
   // Always use the resolved schema so we get real names.
@@ -178,15 +186,15 @@ public extension SGGenerator {
 }*/
 public extension GTLRDiscovery_JsonSchema {
     public var resolvedSchema: GTLRDiscovery_JsonSchema {
-        return self.sg_resolvedSchema
+        return self.sg_resolved
     }
 
     public func sg_SwiftClassName() -> String {
-        if let result = resolvedSchema.sg_propertyForKey(SwiftSchemaKeys.ClassName.rawValue) as? String {
+        if let result = resolvedSchema.sg_property(forKey: SwiftSchemaKeys.ClassName.rawValue) as? String {
             return result
         } else {
             if let parts = resolvedSchema.sg_fullSchemaPath(true, foldArrayItems: true) as? Array<String> {
-                let fullName = parts.joinWithSeparator("")
+                let fullName = parts.joined(separator: "")
                 let result = "\(fullName)"
                 resolvedSchema.sg_setProperty(result, forKey: SwiftSchemaKeys.ClassName.rawValue)
                 return result

@@ -100,13 +100,9 @@
 		F483B88B13A7ACEB001F030B /* GTLRDiscovery.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GTLRDiscovery.h; sourceTree = "<group>"; };
 		F4BB4A7F12B7BF4F008B2FB4 /* GTLRDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTLRDefines.h; path = ../../GTLRDefines.h; sourceTree = SOURCE_ROOT; };
 		F4CC66DD1237D33800522D45 /* SGGenerator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGGenerator.h; sourceTree = "<group>"; };
-<<<<<<< HEAD
-		F4CC66DE1237D33800522D45 /* SGGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 2; lastKnownFileType = sourcecode.c.objc; path = SGGenerator.m; sourceTree = "<group>"; tabWidth = 2; };
-=======
 		F4CC66DE1237D33800522D45 /* SGGenerator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGGenerator.m; sourceTree = "<group>"; };
-		F4D9D5221D832EE7000EBBED /* GTLRDuration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTLRDuration.h; path = ../../Objects/GTLRDuration.h; sourceTree = "<group>"; };
+		F4D9D5221D832EE7000EBBED /* GTLRDuration.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GTLRDuration.h; path = ../../Objects/GTLRDuration.h; sourceTree = "<group>"; tabWidth = 2; };
 		F4D9D5231D832EE7000EBBED /* GTLRDuration.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = GTLRDuration.m; path = ../../Objects/GTLRDuration.m; sourceTree = "<group>"; };
->>>>>>> google/master
 		F4F407631C21B3B9001B1A59 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		F4F9D45D1313E9C0002E77E6 /* SGUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SGUtils.h; sourceTree = "<group>"; };
 		F4F9D45E1313E9C0002E77E6 /* SGUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SGUtils.m; sourceTree = "<group>"; };
@@ -300,12 +296,13 @@
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-<<<<<<< HEAD
 				LastSwiftUpdateCheck = 0730;
-				LastUpgradeCheck = 0720;
-=======
 				LastUpgradeCheck = 0800;
->>>>>>> google/master
+				TargetAttributes = {
+					8DD76F960486AA7600D96B5E = {
+						LastSwiftMigration = 0800;
+					};
+				};
 			};
 			buildConfigurationList = 1DEB927808733DD40010E9CD /* Build configuration list for PBXProject "ServiceGenerator" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -373,6 +370,7 @@
 				PRODUCT_NAME = ServiceGenerator;
 				SWIFT_OBJC_BRIDGING_HEADER = "ServiceGenerator-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -384,6 +382,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				PRODUCT_NAME = ServiceGenerator;
 				SWIFT_OBJC_BRIDGING_HEADER = "ServiceGenerator-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};
@@ -484,6 +483,7 @@
 				);
 				RUN_CLANG_STATIC_ANALYZER = YES;
 				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 			};
 			name = Release;
 		};
